@@ -6,7 +6,23 @@
   "scripts": {
     "test": "make test"
   },
-  "repository": "trekjs/trek"
+  "repository": "trekjs/trek",
   "author": "Fangdun Cai <cfddream@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "co": "4.1.0",
+    "core-js": "^0.4.6",
+    "glob": "4.3.5",
+    "koa": "0.15.0",
+    "lodash-node": "lodash/lodash-node#master",
+    "route-mapper": "0.0.3",
+    "thenify": "3.1.0"
+  },
+  "devDependencies": {
+    "6to5": "2.13.5",
+    "gulp": "3.8.10",
+    "gulp-6to5": "2.0.2",
+    "mocha": "2.1.0",
+    "should": "4.6.1"
+  }
 }
