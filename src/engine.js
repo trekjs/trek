@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 import {Root} from './paths';
 import {MiddlewareStackProxy, Generators} from './configuration';
 import {Trekking, Configuration as TrekkingConfiguration} from './trekking';
@@ -9,9 +10,9 @@ class Configuration extends TrekkingConfiguration {
 
   constructor(root = null) {
     super();
-    //this._root = root;
-    //// copy
-    //this._generators = Object.create(this.appGenerators);
+    this._root = root;
+    // copy
+    this._generators = Object.create(this.appGenerators);
   }
 
   get middleware() {
@@ -68,13 +69,33 @@ class MiddlewareStack {}
 
 class Engine extends Trekking {
 
-  static find(path) {
+  get calledFrom() {
+    return process.cwd();
   }
 
-  static findRoot(from) {
+  find(path) {
+    path = path.resolve(path);
   }
 
-  static findRootWithFlag(flag, from, _default) {
+  findRoot(from) {
+    return this.findRootWithFlag('lib', from);
+  }
+
+  findRootWithFlag(flag, rootPath, _default) {
+    if (rootPath) {
+      while (fs.existsSync(rootPath) && fs.lstatSync(rootPath).isDirectory() && !fs.existsSync(`${rootPath}/${flag}`)) {
+        let parent = path.dirname(rootPath);
+        if (parent !== rootPath) rootPath = parent;
+
+      }
+    }
+
+    let root = fs.existsSync(`${rootPath}/${flag}`) ? rootPath: _default;
+    if (!root) {
+      throw new Error(`Could not find root path for ${this}`);
+    }
+
+    return fs.realpathSync(root);
   }
 
   constructor() {
@@ -87,7 +108,7 @@ class Engine extends Trekking {
   }
 
   get config() {
-    return this._config || (this._config = new Configuration());
+    return this._config || (this._config = new Configuration(this.findRoot(this.calledFrom)));
   }
   get middleware() {
     return this.config.middleware;
@@ -105,9 +126,9 @@ class Engine extends Trekking {
   }
 
   get envConfig() {
-    return this._envConfig || (this._envConfig = Object.create({
+    return this._envConfig || (this._envConfig = {
       routes: this.routes
-    }));
+    });
   }
 
   get app() {

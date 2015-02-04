@@ -104,11 +104,11 @@ class Path {
     return result;
   }
 
-  existent() {
+  get existent() {
     return this.expanded().filter(f => fs.existsSync(f));
   }
 
-  existentDirectories() {
+  get existentDirectories() {
     return this.expanded().filter(f => fs.existsSync(f) && fs.lstatSync(f).isDirectory());
   }
 

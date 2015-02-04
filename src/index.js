@@ -4,7 +4,7 @@ import {Application} from './application';
 class Trek {
 
   static get env() {
-    return this._env ?= process.env.TREK_ENV || process.env.IOJS_ENV || process.env.NODE_ENV || 'development';
+    return this._env ?= (process.env.TREK_ENV || process.env.IOJS_ENV || process.env.NODE_ENV || 'development');
   }
 
   static set env(environment) {
