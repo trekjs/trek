@@ -28,7 +28,7 @@ class DefaultMiddlewareStack {
       let ms = koaLoadMiddlewares();
       middleware.use(ms.responseTime());
       middleware.use(ms.methodoverride());
-      middleware.use(ms.xRequestId(null, true));
+      middleware.use(ms.xRequestId());
 
       // add logger
       // add remoteIp
@@ -102,8 +102,14 @@ class Application extends Engine {
     super();
   }
 
+  // callback or call, run
+  run(env) {
+    super.run(env)
+  }
+
   get config() {
-    return this._config || (this._config = new Configuration(this.findRoot(this.calledFrom)));
+    return this._config ||
+      (this._config = new Configuration(this.findRoot(this.calledFrom)));
   }
 
   set config(configuration) {
@@ -126,9 +132,15 @@ class Application extends Engine {
   }
 
   get envConfig() {
-    return this._appEnvConfig || (this.validateSecretKeyConfig(), this._appEnvConfig = Object.assign({}, super.envConfig, {
-      secretKeyBase: this.secrets.secretKeyBase
-    }));
+    return this._appEnvConfig ||
+      (
+        this.validateSecretKeyConfig(),
+        this._appEnvConfig = Object.assign(
+          {},
+          super.envConfig,
+          { secretKeyBase: this.secrets.secretKeyBase }
+        )
+      );
   }
 
   get secrets() {
@@ -158,7 +170,8 @@ class Application extends Engine {
 
   validateSecretKeyConfig() {
     if (!this.secrets.secretKeyBase) {
-      throw new Error(`Missing \`secretKeyBase\` for '${Trek.env}' environment, set these values in \`config/secrets.js\``);
+      throw new Error(`Missing \`secretKeyBase\` for '${Trek.env}' environment, \
+       set these values in \`config/secrets.js\``);
     }
   }
 

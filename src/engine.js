@@ -1,5 +1,5 @@
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 import {Root} from './paths';
 import {MiddlewareStackProxy, Generators} from './configuration';
 import {Trekking, Configuration as TrekkingConfiguration} from './trekking';
@@ -121,7 +121,7 @@ class Engine extends Trekking {
   }
 
   get routes() {
-    //this._routes ? = 
+    //this._routes ? =
     return this._routes;
   }
 
@@ -132,7 +132,10 @@ class Engine extends Trekking {
   }
 
   get app() {
-    //this._app ?=
+    this._app || (this._app = () => {
+      //this.config.middleware = this.config.middleware.mergeInto(this.defaultMiddlewareStack);
+      //this.config.middleware.build(this.endpoint);
+    }());
   }
 
   endpoint(endpoint) {
@@ -141,8 +144,10 @@ class Engine extends Trekking {
     return this._endpoint;
   }
 
+  // callback or call, run
   run(env) {
-    //this.app.call(env);
+    env = Object.assign(env, this.envConfig);
+    this.app.run(env);
   }
 
   get defaultMiddlewareStack() {
