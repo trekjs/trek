@@ -6,13 +6,13 @@ class Middleware {
 
   constructor(/*name, */cb, args) {
     //this._name  = name;
-    this._cb    = cb;
-    this._args  = args;
+    this.callback = cb;
+    this.args  = args;
   }
 
   build(app) {
     // app;
-    return this._cb;
+    return this.callback;
   }
 
 }
@@ -46,28 +46,28 @@ class MiddlewareStack {
     return this.middlewares[i];
   }
 
-  unshift(cb, args) {
-    let middleware = new Middleware(cb, args);
+  unshift(cb, ...args) {
+    let middleware = this._createMiddleware(cb, args)
     this.middleware.unshift(middleware);
   }
 
-  insert(index, cb, args) {
+  insert(index, cb, ...args) {
     let index = this.assertIndex(index, 'before');
-    let middleware = new Middleware(cb, args);
+    let middleware = this._createMiddleware(cb, args)
     this.middlewares.splice(index, 0, middleware);
   }
 
-  insertBefore(index, cb, args) {
+  insertBefore(index, cb, ...args) {
     return this.insert(index, cb, args);
   }
 
-  insertAfter(index, cb, args) {
+  insertAfter(index, cb, ...args) {
     let index = this.assertIndex(index, 'after');
     this.insert(index + 1, cb, args);
   }
 
-  swap(target, cb, args) {
-    let index = this.assertIndex(index, 'before');
+  swap(target, cb, ...args) {
+    let index = this.assertIndex(target, 'before');
     this.insert(index, cb, args);
     this.middlewares.splice(index + 1, 1);
   }
@@ -77,8 +77,8 @@ class MiddlewareStack {
     this.middlewares.splice(index, 1);
   }
 
-  use(cb, args) {
-    let middleware = new Middleware(cb, args);
+  use(cb, ...args) {
+    let middleware = this._createMiddleware(cb, args)
     this.middlewares.push(middleware);
   }
 
@@ -92,10 +92,19 @@ class MiddlewareStack {
 
   assertIndex(index, where) {
     let i = typeof index === 'number' ? index : this.middlewares.indexOf(index);
-    if (i < 0 || i >= this.size) {
+    if (i < 0 || i > this.size) {
       throw new Error(`No such middleware to insert ${where}: ${index}`);
     }
     return i;
+  }
+
+  _createMiddleware(cb, args) {
+    let middleware;
+    if (cb instanceof Middleware) {
+      middleware = cb;
+      middleware.args = args;
+    } else middleware = new Middleware(cb, args);
+    return middleware;
   }
 
 }
