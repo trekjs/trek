@@ -19,6 +19,10 @@ class Configuration extends TrekkingConfiguration {
     return this._middleware || (this._middleware = new MiddlewareStackProxy);
   }
 
+  set middleware(middleware) {
+    this._middleware = middleware;
+  }
+
   generators(cb) {
     this._generators || (this._generators = new Generators);
     if (cb) {
@@ -133,7 +137,8 @@ class Engine extends Trekking {
 
   get app() {
     this._app || (this._app = () => {
-      //this.config.middleware = this.config.middleware.mergeInto(this.defaultMiddlewareStack);
+      this.config.middleware = this.config.middleware.mergeInto(this.defaultMiddlewareStack);
+      console.log(this.endpoint)
       //this.config.middleware.build(this.endpoint);
     }());
   }
