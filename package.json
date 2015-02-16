@@ -23,12 +23,12 @@
     "koa-x-request-id": "0.0.1",
     "lodash-node": "^3.2.0",
     "route-mapper": "trekjs/route-mapper",
-    "thenify": "3.1.0"
+    "thenify": "^3.1.0"
   },
   "devDependencies": {
-    "6to5": "^3.6.5",
+    "babel": "^4.0.1",
     "gulp": "^3.8.11",
-    "gulp-6to5": "^3.0.0",
+    "gulp-babel": "^4.0.0",
     "mocha": "^2.1.0",
     "should": "^5.0.0"
   }

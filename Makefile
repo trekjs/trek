@@ -1,6 +1,6 @@
 
 MOCHA = ./node_modules/.bin/mocha
-TO5 = ./node_modules/.bin/6to5-node
+BABEL = ./node_modules/.bin/babel-node
 SRC = lib/*.js
 
 TESTS = test/*.test.js
@@ -9,7 +9,7 @@ IOJS_ENV ?= test
 
 test:
 	@IOJS_ENV=$(IOJS_ENV) $(MOCHA) \
-		--require test/6to5 \
+		--require test/babel \
 		--require should \
 		$(TESTS) \
 		--bail
