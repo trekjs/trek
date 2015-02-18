@@ -26,7 +26,7 @@
     "thenify": "^3.1.0"
   },
   "devDependencies": {
-    "babel": "^4.0.1",
+    "babel": "^4.3.0",
     "gulp": "^3.8.11",
     "gulp-babel": "^4.0.0",
     "mocha": "^2.1.0",
