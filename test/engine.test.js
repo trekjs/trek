@@ -2,6 +2,7 @@ import '../src/';
 import isFunction from 'lodash-node/modern/lang/isFunction';
 import {Engine} from '../src/engine';
 import {Root, Path} from '../src/paths';
+import {MiddlewareStackProxy, Generators} from '../src/configuration';
 
 describe('Engine', () => {
   var myEngine, config;
@@ -10,9 +11,13 @@ describe('Engine', () => {
     config = myEngine.config;
   });
 
-  describe('', () => {
-    it('', () => {
-      console.log('calledFrom', myEngine.calledFrom);
+  describe('app path', () => {
+    it('get path', () => {
+      myEngine.calledFrom.should.equal(process.cwd());
+    });
+
+    it('find root path', () => {
+      myEngine.findRoot(__dirname).should.equal(process.cwd());
     });
   });
 
@@ -22,17 +27,29 @@ describe('Engine', () => {
     });
 
     describe('generators', () => {
-      it('generators', () => {
-        console.log(config.generators);
-        config.generators().colorizeLogging = false;
-        config.generators((g) => {
-         g.orm             = 'mysql';
-         g.templateEngile  = 'jade';
-        });
+      it('should be a function', () => {
+        isFunction(config.generators).should.equal(true);
+      });
+
+      it('should be a Generators instance', () => {
+        (config.generators() instanceof Generators).should.equal(true);
+      });
+
+      it('set generator', () => {
         config.appGenerators.orm = 'datamapper';
 
-        console.log(myEngine.config.generators());
-        console.log(myEngine.config.appGenerators);
+        config.appGenerators.orm.should.equal('datamapper');
+        config.generators().orm.should.equal('datamapper');
+
+        config.generators().colorizeLogging = false;
+        config.generators((g) => {
+          g.orm             = 'mysql';
+          g.templateEngine  = 'jade';
+        });
+
+        config.generators().colorizeLogging.should.equal(false);
+        config.generators().orm.should.equal('mysql');
+        config.generators().templateEngine.should.equal('jade');
       });
     });
   });

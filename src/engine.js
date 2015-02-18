@@ -78,7 +78,7 @@ class Engine extends Trekking {
   }
 
   find(path) {
-    path = path.resolve(path);
+    return path = path.resolve(path);
   }
 
   findRoot(from) {
@@ -87,10 +87,11 @@ class Engine extends Trekking {
 
   findRootWithFlag(flag, rootPath, _default) {
     if (rootPath) {
-      while (fs.existsSync(rootPath) && fs.lstatSync(rootPath).isDirectory() && !fs.existsSync(`${rootPath}/${flag}`)) {
+      while (fs.existsSync(rootPath)
+        && fs.lstatSync(rootPath).isDirectory()
+        && !fs.existsSync(`${rootPath}/${flag}`)) {
         let parent = path.dirname(rootPath);
-        if (parent !== rootPath) rootPath = parent;
-
+        rootPath = parent !== rootPath && parent;
       }
     }
 
@@ -112,7 +113,8 @@ class Engine extends Trekking {
   }
 
   get config() {
-    return this._config || (this._config = new Configuration(this.findRoot(this.calledFrom)));
+    return this._config
+      || (this._config = new Configuration(this.findRoot(this.calledFrom)));
   }
   get middleware() {
     return this.config.middleware;
