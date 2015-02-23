@@ -1,51 +1,50 @@
+import path from 'path';
 import isObject from 'lodash-node/modern/lang/isObject';
 import compact from 'lodash-node/modern/array/compact';
 import uniq from 'lodash-node/modern/array/uniq';
-import path from 'path';
-import {Application} from './application';
+import { Application } from './application';
 
-class Trek {
+var Trek = {
 
-  static get application() {
+  get application() {
     return this._application || (this._application = new Application);
-  }
+  },
 
-  static set application(application) {
+  set application(application) {
     this._application = application;
-  }
+  },
 
-  static get configuration() {
+  get configuration() {
     return this.application.config;
-  }
+  },
 
-  static get root() {
+  get root() {
     return this.application && this.application.config.root;
-  }
+  },
 
-  static get env() {
-    return this._env ?= (process.env.TREK_ENV
-      || process.env.IOJS_ENV
-      || process.env.NODE_ENV
-      || 'development');
-  }
+  get env() {
+    return this._env ?= (
+      process.env.TREK_ENV ||
+      process.env.IOJS_ENV ||
+      process.env.NODE_ENV ||
+      'development');
+  },
 
-  static set env(environment) {
+  set env(environment) {
     return this._env = environment;
-  }
+  },
 
-  static groups(...groups) {
+  groups(...groups) {
     let hash = isObject(groups[groups.length - 1]) ? groups.pop() : {};
     let env = Trek.env;
     groups.unshift('default', env);
     return uniq(compact(groups
       .concat((process.env.TREK_GROUPS || '').split(','))
-      .concat(
-        Object.keys(hash)
-          .filter(k => { return hash[k].includes(env); })
-      )));
-  }
+      .concat(Object.keys(hash).filter(k => { return hash[k].includes(env); }))
+    ));
+  },
 
-  static get publicPath() {
+  get publicPath() {
     return this.application && path.resolve(this.application.paths.get('public').first);
   }
 
