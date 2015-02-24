@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import glob from 'glob';
 import uniq from 'lodash-node/modern/array/uniq';
+import path from 'path';
+import fs from 'fs';
+import glob from 'glob';
 
 class Root {
 
@@ -14,10 +14,6 @@ class Root {
   set(path, value) {
     var glob = this.path ? this.page.glob : null;
     this.add(path, { 'with': value, glob: glob });
-  }
-
-  get(path) {
-    return this.root[path];
   }
 
   add(path, options = Object.create(null)) {
@@ -69,10 +65,6 @@ class Path {
     this.paths.forEach(cb);
   }
 
-  push(path) {
-    this.paths.push(path);
-  }
-
   concat(paths) {
     this.paths.concat(paths);
   }
@@ -100,14 +92,16 @@ class Path {
     return result;
   }
 
-  get existent() {
+  existent() {
     return this.expanded().filter(f => fs.existsSync(f));
   }
 
-  get existentDirectories() {
+  existentDirectories() {
     return this.expanded().filter(f => fs.existsSync(f) && fs.lstatSync(f).isDirectory());
   }
 
+
 }
 
-export { Root, Path };
+export {Path};
+export default Root;

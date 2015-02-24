@@ -1,60 +1,53 @@
+import isFunction from 'lodash-node/modern/lang/isFunction';
 import compose from 'koa-compose';
-
-
 
 class Middleware {
 
-  constructor(/*name, */cb, args) {
-    //this._name  = name;
+  constructor(cb, args) {
     this.callback = cb;
     this.args  = args;
   }
 
-  build(app) {
-    // app;
-    return this.callback;
+  /*
+    function callback(app, args) {
+      return function* (next) {
+        yield* next;
+      }
+    }
+  */
+  build(app = null) {
+    return this.callback.apply(app, this.args);
   }
 
 }
 
-
-
-class MiddlewareStack {
+class MiddlewareStack extends Array {
 
   constructor(cb) {
-    this._middlewares = [];
-    cb && cb(this);
-  }
-
-  get middlewares() {
-    return this._middlewares;
+    if (isFunction(cb)) cb(this);
   }
 
   each(cb) {
-    this.middleware.forEach(x => cb && cb(x));
+    if (isFunction(cb)) this.forEach(x => cb(x));
   }
 
   get size() {
-    return this.middlewares.length;
+    return this.length;
   }
 
   get last() {
-    return this.middlewares[this.size - 1];
-  }
-
-  get(i) {
-    return this.middlewares[i];
+    return this[this.length - 1];
   }
 
   unshift(cb, ...args) {
     let middleware = this._createMiddleware(cb, args)
-    this.middleware.unshift(middleware);
+    super.unshift(middleware);
   }
 
   insert(index, cb, ...args) {
     let index = this.assertIndex(index, 'before');
     let middleware = this._createMiddleware(cb, args)
-    this.middlewares.splice(index, 0, middleware);
+    this.splice(index, 0, middleware);
   }
 
   insertBefore(index, cb, ...args) {
@@ -69,30 +62,27 @@ class MiddlewareStack {
   swap(target, cb, ...args) {
     let index = this.assertIndex(target, 'before');
     this.insert(index, cb, args);
-    this.middlewares.splice(index + 1, 1);
+    this.splice(index + 1, 1);
   }
 
   delete(target) {
-    let index = this.middlewares.indexOf(target);
-    this.middlewares.splice(index, 1);
+    let index = this.indexOf(target);
+    this.splice(index, 1);
   }
 
   use(cb, ...args) {
     let middleware = this._createMiddleware(cb, args)
-    this.middlewares.push(middleware);
+    this.push(middleware);
   }
 
-  build(app, cb) {
-    app = app || cb;
-    if (!app) {
-      throw new Error('MiddlewareStack#build requires an app');
-    }
-    return compose(this.middlewares.map((m) => m.build(app)));
+  build(app) {
+    if (!app) throw new Error('MiddlewareStack#build requires an app');
+    return compose(this.map(m => m.build(app)));
   }
 
   assertIndex(index, where) {
-    let i = typeof index === 'number' ? index : this.middlewares.indexOf(index);
-    if (i < 0 || i > this.size) {
+    let i = typeof index === 'number' ? index : this.indexOf(index);
+    if (i < 0 || i > this.length) {
       throw new Error(`No such middleware to insert ${where}: ${index}`);
     }
     return i;
@@ -109,6 +99,4 @@ class MiddlewareStack {
 
 }
 
-
-
-export {Middleware, MiddlewareStack};
+export { Middleware, MiddlewareStack };

@@ -1,6 +1,5 @@
-import {MiddlewareStackProxy, Generators} from './configuration';
-
-
+import isFunction from 'lodash-node/modern/lang/isFunction';
+import { MiddlewareStackProxy, Generators } from './configuration';
 
 class Configuration {
 
@@ -16,25 +15,19 @@ class Configuration {
     return Configuration.appGenerators ?= new Generators;
   }
 
-  beforeConfiguration(cb) {
-  }
+  beforeConfiguration(cb) {}
 
-  beforeInitialize(cb) {
-  }
+  beforeInitialize(cb) {}
 
   afterInitialize(cb) {}
 
 }
 
-
-
 class Trekking {
-
-  constructor() {}
 
   static generators(cb) {
     this._generators || (this._generators = []);
-    if (cb) {
+    if (isFunction(cb)) {
       this._generators.push(cb);
     }
     return this._generators;
@@ -48,6 +41,8 @@ class Trekking {
     this._instance.configure(cb);
   }
 
+  constructor() {}
+
   configure(cb) {
     cb.call(this);
   }
@@ -58,6 +53,4 @@ class Trekking {
 
 }
 
-
-
-export {Trekking, Configuration};
+export { Trekking, Configuration };

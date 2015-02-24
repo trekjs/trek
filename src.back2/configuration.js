@@ -1,3 +1,4 @@
+
 class MiddlewareStackProxy {
 
   constructor() {
@@ -47,4 +48,4 @@ class Generators {
 
 }
 
-export { MiddlewareStackProxy, Generators };
+export {MiddlewareStackProxy, Generators};

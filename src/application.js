@@ -1,41 +1,35 @@
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 import koaLoadMiddlewares from 'koa-load-middlewares';
-import {MiddlewareStack} from './stack';
-import {Engine, Configuration as EngineConfiguration} from './engine';
-
+import { MiddlewareStack } from './stack';
+import { Engine, Configuration as EngineConfiguration } from './engine';
 
 class DefaultMiddlewareStack {
 
   constructor(app, config, paths) {
-    this._app = app;
-    this._config = config;
-    this._paths = paths;
-  }
-
-  get app() {
-    return this._app;
-  }
-  get config() {
-    return this._config;
-  }
-  get paths() {
-    return this._paths;
+    this.app = app;
+    this.config = config;
+    this.paths = paths;
   }
 
   buildStack() {
     return new MiddlewareStack((middleware) => {
       let ms = koaLoadMiddlewares();
-      middleware.use(ms.responseTime());
-      middleware.use(ms.methodoverride());
-      middleware.use(ms.xRequestId());
+      middleware.use(ms.responseTime);
+      middleware.use(ms.methodoverride);
+      middleware.use(ms.xRequestId, undefined, true);
+
 
       // add logger
       // add remoteIp
       // add cookies
       // add session
 
-      middleware.use(ms.bodyparser());
+      middleware.use(ms.bodyparser);
+      middleware.use(function router() {
+        // `this` is a koa app.
+        return ms.router(this);
+      });
     });
   }
 
@@ -93,18 +87,11 @@ class Configuration extends EngineConfiguration {
 
 }
 
-
-
 class Application extends Engine {
 
   constructor() {
-    if (!(this instanceof Application)) { return new Application; }
+    if (!(this instanceof Application)) return new Application;
     super();
-  }
-
-  // callback or call, run
-  run(env) {
-    super.run(env)
   }
 
   get config() {
@@ -144,20 +131,21 @@ class Application extends Engine {
   }
 
   get secrets() {
-    return this._secrets || (this._secrets = () => {
-      let secrets = {};
-      let file = path.resolve(this.config.paths.get('config/secrets').first);
-      if (fs.existsSync(file)) {
-        let allSecrets = require(file);
-        let envSecrets = allSecrets[Trek.env];
-        if (envSecrets) {
-          Object.assign(secrets, envSecrets);
+    return this._secrets ||
+      (this._secrets = () => {
+        let secrets = {};
+        let file = path.resolve(this.config.paths.get('config/secrets').first);
+        if (fs.existsSync(file)) {
+          let allSecrets = require(file);
+          let envSecrets = allSecrets[Trek.env];
+          if (envSecrets) {
+            Object.assign(secrets, envSecrets);
+          }
         }
-      }
-      secrets.secretKeyBase ?= this.config.secretKeyBase;
+        secrets.secretKeyBase ?= this.config.secretKeyBase;
 
-      return secrets;
-    }());
+        return secrets;
+      }());
   }
 
   set secrets(secrets) {
@@ -182,4 +170,4 @@ class Application extends Engine {
 
 }
 
-export {Configuration, Application};
+export { Configuration, Application };

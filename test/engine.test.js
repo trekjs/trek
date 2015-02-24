@@ -100,4 +100,13 @@ describe('Engine', () => {
     });
   });
 
+  describe('.run()', () => {
+    beforeEach(() => {
+      myEngine.app;
+    });
+    it('runs the app', () => {
+      //myEngine.run();
+    });
+  });
+
 });

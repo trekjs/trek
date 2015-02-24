@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import glob from 'glob';
 import uniq from 'lodash-node/modern/array/uniq';
+import path from 'path';
+import fs from 'fs';
+import glob from 'glob';
 
 class Root {
 
@@ -100,14 +100,16 @@ class Path {
     return result;
   }
 
-  get existent() {
+  existent() {
     return this.expanded().filter(f => fs.existsSync(f));
   }
 
-  get existentDirectories() {
+  existentDirectories() {
     return this.expanded().filter(f => fs.existsSync(f) && fs.lstatSync(f).isDirectory());
   }
 
+
 }
 
-export { Root, Path };
+export {Path};
+export default Root;

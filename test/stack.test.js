@@ -13,8 +13,8 @@ describe('MiddlewareStack', () => {
     stack.use(barMiddleware)
   });
 
-  it('middlewares should return an array', () => {
-    Array.isArray(stack.middlewares).should.equal(true);
+  it('stack should be an Array instance', () => {
+    (stack instanceof Array).should.equal(true);
   });
 
   it('use should push middleware as a GeneratorFunction onto the stack', () => {
@@ -35,30 +35,32 @@ describe('MiddlewareStack', () => {
 
   it('insert inserts middleware at the integer index', () => {
     stack.insert(1, barMiddleware);
-    barMiddleware.should.equal(stack.get(1));
+    barMiddleware.should.equal(stack[1]);
   });
 
   it('insertAfter inserts middleware after the integer index', () => {
     stack.insertAfter(1, barMiddleware);
-    barMiddleware.should.equal(stack.get(2));
+    barMiddleware.should.equal(stack[2]);
   });
 
   it('insertBefore inserts middleware before anthor middleware class', () => {
     stack.insertBefore(barMiddleware, barMiddleware);
-    barMiddleware.should.equal(stack.get(1));
+    barMiddleware.should.equal(stack[1]);
   });
 
   it('insertAfter inserts middleware after another middleware class', () => {
     stack.insertAfter(barMiddleware, barMiddleware);
-    barMiddleware.should.equal(stack.get(2));
+    barMiddleware.should.equal(stack[2]);
   });
 
   it('swaps one middleware out for another', () => {
-    fooMiddleware.should.equal(stack.get(0));
+    fooMiddleware.should.equal(stack[0]);
     stack.swap(fooMiddleware, barMiddleware);
-    barMiddleware.should.equal(stack.get(0));
+    barMiddleware.should.equal(stack[0]);
   });
 
+  describe('build for app', () => {
+  });
 });
 
 describe('Middleware', () => {

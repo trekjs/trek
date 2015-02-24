@@ -1,17 +1,19 @@
 import fs from 'fs';
 import path from 'path';
-import {Root} from './paths';
-import {MiddlewareStackProxy, Generators} from './configuration';
-import {Trekking, Configuration as TrekkingConfiguration} from './trekking';
-
-
+import Koa from 'koa';
+import isObject from 'lodash-node/modern/lang/isObject';
+import isFunction from 'lodash-node/modern/lang/isFunction';
+import { Root } from './paths';
+import { MiddlewareStack } from './stack';
+import { MiddlewareStackProxy, Generators } from './configuration';
+import { Trekking, Configuration as TrekkingConfiguration } from './trekking';
 
 class Configuration extends TrekkingConfiguration {
 
   constructor(root = null) {
     super();
     this._root = root;
-    // copy
+    // copy from `appGenerators`
     this._generators = Object.create(this.appGenerators);
   }
 
@@ -24,10 +26,8 @@ class Configuration extends TrekkingConfiguration {
   }
 
   generators(cb) {
-    this._generators || (this._generators = new Generators);
-    if (cb) {
-      cb(this._generators);
-    }
+    this._generators ?= new Generators;
+    if (isFunction(cb)) cb(this._generators);
     return this._generators;
   }
 
@@ -44,7 +44,7 @@ class Configuration extends TrekkingConfiguration {
   }
 }
 
-var generatePaths= (root) => {
+var generatePaths = (root) => {
   let paths = new Root(root);
 
   paths.add('app');
@@ -64,12 +64,6 @@ var generatePaths= (root) => {
 
   return paths;
 };
-
-
-
-class MiddlewareStack {}
-
-
 
 class Engine extends Trekking {
 
@@ -113,17 +107,25 @@ class Engine extends Trekking {
   }
 
   get config() {
-    return this._config
-      || (this._config = new Configuration(this.findRoot(this.calledFrom)));
+    return this._config ||
+      (this._config = new Configuration(this.findRoot(this.calledFrom)));
   }
+
   get middleware() {
     return this.config.middleware;
   }
+
   get root() {
     return this.config.root;
   }
+
   get paths() {
     return this.config.paths;
+  }
+
+  // Returns all registered helpers paths.
+  get helpersPaths() {
+    return this.paths.get('app/helpers').existent;
   }
 
   get routes() {
@@ -137,24 +139,29 @@ class Engine extends Trekking {
     });
   }
 
+  // Returns the underlying koa application for this engine.
   get app() {
-    this._app || (this._app = () => {
+    return this._app || (this._app = () => {
+      let app = new Koa;
+      app.env = Trek.env;
       this.config.middleware = this.config.middleware.mergeInto(this.defaultMiddlewareStack);
-      console.log(this.endpoint)
-      //this.config.middleware.build(this.endpoint);
+      app.use(this.config.middleware.build(app));
+      return app;
     }());
   }
 
-  endpoint(endpoint) {
-    this._endpoint ?= null;
-    if (endpoint) this._endpoint = endpoint;
-    return this._endpoint;
+  get endpoint() {
+    return this._endpoint ?= new Koa;
+  }
+
+  set endpoint(endpoint) {
+    return this._endpoint = endpoint;
   }
 
   // callback or call, run
-  run(env) {
-    env = Object.assign(env, this.envConfig);
-    this.app.run(env);
+  run(env = {}) {
+    if (isObject(env)) env = Object.assign(env, this.envConfig);
+    this.app.listen(env.port || 3000);
   }
 
   get defaultMiddlewareStack() {
@@ -163,6 +170,4 @@ class Engine extends Trekking {
 
 }
 
-
-
-export {Engine, Configuration};
+export { Engine, Configuration };
