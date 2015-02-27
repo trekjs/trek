@@ -3,6 +3,7 @@ import path from 'path';
 import Koa from 'koa';
 import isObject from 'lodash-node/modern/lang/isObject';
 import isFunction from 'lodash-node/modern/lang/isFunction';
+import RouteMapper from 'route-mapper';
 import { Root } from './paths';
 import { MiddlewareStack } from './stack';
 import { MiddlewareStackProxy, Generators } from './configuration';
@@ -68,7 +69,7 @@ var generatePaths = (root) => {
 class Engine extends Trekking {
 
   get calledFrom() {
-    return process.cwd();
+    return path.dirname(require.main.filename);
   }
 
   find(path) {
@@ -129,8 +130,7 @@ class Engine extends Trekking {
   }
 
   get routes() {
-    //this._routes ? =
-    return this._routes;
+    return this._routes || (this._routes = new RouteMapper);
   }
 
   get envConfig() {
@@ -150,6 +150,7 @@ class Engine extends Trekking {
     }());
   }
 
+  /*
   get endpoint() {
     return this._endpoint ?= new Koa;
   }
@@ -157,6 +158,7 @@ class Engine extends Trekking {
   set endpoint(endpoint) {
     return this._endpoint = endpoint;
   }
+  */
 
   // callback or call, run
   run(env = {}) {

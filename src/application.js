@@ -74,7 +74,7 @@ class Configuration extends EngineConfiguration {
   }
 
   get logLevel() {
-    return this._logLevel ?= (Trek.env === 'production' ? 'inof' : 'debug');
+    return this._logLevel ?= (Trek.env === 'production' ? 'info' : 'debug');
   }
 
   get helpersPaths() {
