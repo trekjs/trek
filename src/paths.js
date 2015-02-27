@@ -88,7 +88,7 @@ class Path {
 
     let result = [];
     this.each(p => {
-      p = path.relative(this.root.path, p);
+      p = path.join(this.root.path, p);
 
       if (this.glob && fs.existsSync(p) && fs.lstatSync(p).isDirectory()) {
         process.chdir(p);

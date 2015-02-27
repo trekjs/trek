@@ -23,4 +23,4 @@ console.log(myApp.root)
 myApp.app.get('/', function* () {
   this.body = 'Star Trek!';
 });
-myApp.run(3333);
+myApp.run({ port: 3333 });

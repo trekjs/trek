@@ -158,8 +158,8 @@ class Application extends Engine {
 
   validateSecretKeyConfig() {
     if (!this.secrets.secretKeyBase) {
-      throw new Error(`Missing \`secretKeyBase\` for '${Trek.env}' environment, \
-       set these values in \`config/secrets.js\``);
+      throw new Error(`Missing \`secretKeyBase\` for '${Trek.env}' environment,\
+ set these values in \`config/secrets.js\``);
     }
   }
 
