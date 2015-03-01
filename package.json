@@ -14,7 +14,7 @@
     "co": "^4.4.0",
     "composition": "^2.1.1",
     "glob": "^4.4.1",
-    "koa": "^0.18.0",
+    "koa": "^0.18.1",
     "koa-bodyparser": "^1.4.0",
     "koa-compose": "^2.3.0",
     "koa-generic-session": "^1.7.0",
