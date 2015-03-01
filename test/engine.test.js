@@ -1,23 +1,25 @@
 import '../src/';
 import isFunction from 'lodash-node/modern/lang/isFunction';
-import {Engine} from '../src/engine';
-import {Root, Path} from '../src/paths';
-import {MiddlewareStackProxy, Generators} from '../src/configuration';
+import path from 'path';
+import { Engine } from '../src/engine';
+import { Root, Path } from '../src/paths';
+import { MiddlewareStackProxy, Generators } from '../src/configuration';
 
 describe('Engine', () => {
   var myEngine, config;
   beforeEach(() => {
     myEngine = new Engine;
+    myEngine.calledFrom = path.dirname(__filename);
     config = myEngine.config;
   });
 
   describe('app path', () => {
     it('get path', () => {
-      myEngine.calledFrom.should.equal(process.cwd());
+      myEngine.calledFrom.should.equal(__dirname);
     });
 
     it('find root path', () => {
-      myEngine.findRoot(__dirname).should.equal(process.cwd());
+      myEngine.findRoot(__dirname).should.equal(__dirname);
     });
   });
 

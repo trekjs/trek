@@ -18,9 +18,11 @@ myApp.routes.routes.forEach((r) => {
   });
 });
 */
-console.log(myApp.root)
 
 myApp.app.get('/', function* () {
+  if (!this.session.user) {
+    this.session.user = 'spock';
+  }
   this.body = 'Star Trek!';
 });
 myApp.run({ port: 3333 });

@@ -14,6 +14,7 @@ class DefaultMiddlewareStack {
 
   buildStack() {
     return new MiddlewareStack((middleware) => {
+      let self = this;
       let ms = koaLoadMiddlewares();
       middleware.use(ms.responseTime);
       middleware.use(ms.methodoverride);
@@ -22,9 +23,15 @@ class DefaultMiddlewareStack {
 
       // add logger
       // add remoteIp
-      // add cookies
-      // add session
 
+      middleware.use(function session() {
+        var secretKeyBase = self.app.secrets.secretKeyBase;
+        this.keys = Array.isArray(secretKeyBase) ? secretKeyBase : [secretKeyBase];
+        return ms.genericSession(self.app.secrets.session);
+      });
+      middleware.use(function lusca() {
+        return ms.lusca(self.app.secrets);
+      });
       middleware.use(ms.bodyparser);
       middleware.use(function router() {
         // `this` is a koa app.

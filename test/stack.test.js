@@ -1,5 +1,5 @@
 import '../src/';
-import {Middleware, MiddlewareStack} from '../src/stack';
+import { Middleware, MiddlewareStack } from '../src/stack';
 
 describe('MiddlewareStack', () => {
   var stack, foo, bar, fooMiddleware, barMiddleware;

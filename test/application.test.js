@@ -1,5 +1,5 @@
 import '../src/';
-import {Application} from '../src/application';
+import { Application } from '../src/application';
 
 describe('Application', () => {
 	var app;

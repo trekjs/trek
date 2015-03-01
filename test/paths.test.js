@@ -1,4 +1,4 @@
-import {Root} from '../src/paths';
+import { Root } from '../src/paths';
 
 let paths = new Root('.');
 

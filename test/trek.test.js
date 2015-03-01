@@ -1,6 +1,6 @@
 import path from 'path';
 import '../src';
-import {Application} from '../src/application';
+import { Application } from '../src/application';
 
 describe('Trek', () => {
   it('Trek should be a global variable', () => {
@@ -30,8 +30,9 @@ describe('Trek', () => {
 
   describe('Trek.publicPath', () => {
     var app = Trek.application;
+    app.calledFrom = path.dirname(__filename);
     it('should return a public path', () => {
-      path.relative(__dirname, Trek.publicPath)
+      path.resolve(__dirname, Trek.publicPath)
         .should.equal(app.paths.get('public').first);
     });
   });

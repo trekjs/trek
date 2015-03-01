@@ -69,7 +69,11 @@ var generatePaths = (root) => {
 class Engine extends Trekking {
 
   get calledFrom() {
-    return path.dirname(require.main.filename);
+    return this._calledFrom || (this._calledFrom = path.dirname(require.main.filename));
+  }
+
+  set calledFrom(path) {
+    this._calledFrom = path;
   }
 
   find(path) {

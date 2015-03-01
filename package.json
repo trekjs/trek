@@ -17,8 +17,11 @@
     "koa": "^0.18.0",
     "koa-bodyparser": "^1.4.0",
     "koa-compose": "^2.3.0",
+    "koa-generic-session": "^1.7.0",
     "koa-load-middlewares": "0.0.1",
+    "koa-lusca": "^2.0.0",
     "koa-methodoverride": "^0.4.1",
+    "koa-redis": "^1.0.0",
     "koa-response-time": "^1.0.2",
     "koa-router": "^4.2.0",
     "koa-swig": "^1.2.0",
@@ -28,8 +31,8 @@
     "thenify": "^3.1.0"
   },
   "devDependencies": {
-    "babel": "^4.5.5",
-    "babel-core": "^4.5.5",
+    "babel": "^4.6.3",
+    "babel-core": "^4.6.3",
     "gulp": "^3.8.11",
     "gulp-babel": "^4.0.0",
     "mocha": "^2.1.0",
