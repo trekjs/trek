@@ -1,0 +1,59 @@
+/**
+ * helpers
+ */
+
+var splitKeyPath = (keyPath) => {
+  let startIndex = 0;
+  let keyPathArray = [];
+  let len = keyPath.length;
+  let i = 0;
+  if (!len) return keyPathArray
+  while (i < len) {
+    let char = keyPath[i];
+    if (char === '.' && (i === 0 || keyPath[i-1] !== '\\')) {
+      keyPathArray.push(keyPath.substring(startIndex, i))
+      startIndex = i + 1;
+    }
+    i++;
+  }
+  keyPathArray.push(keyPath.substr(startIndex, len))
+  return keyPathArray;
+};
+
+var valueForKeyPath = (object, keyPath) => {
+  let keys = splitKeyPath(keyPath);
+  for (let key of keys) {
+    object = object[key];
+    if (!object) return;
+  }
+  return object;
+};
+
+var setValueForKeyPath = (object, keyPath, value) => {
+  let keys = splitKeyPath(keyPath)
+  while (keys.length > 1) {
+    let key = keys.shift()
+    object[key] ?= {}
+    object = object[key]
+  }
+  if (value)
+    object[keys.shift()] = value
+  else
+    delete object[keys.shift()]
+};
+
+var hasKeyPath = (object, keyPath) => {
+  let keys = splitKeyPath(keyPath)
+  for (let key of keys) {
+    if (!object.hasOwnProperty(key)) return false;
+    object = object[key]
+  }
+  return true
+};
+
+export {
+  splitKeyPath,
+  valueForKeyPath,
+  setValueForKeyPath,
+  hasKeyPath
+};
