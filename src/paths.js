@@ -45,7 +45,7 @@ class Path {
     this.root = root;
     this.current = current;
     this.paths = paths;
-    //this.options = options;
+    this.options = options;
     this.glob = options.glob;
   }
 

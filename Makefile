@@ -28,6 +28,6 @@ bench:
 	@$(MAKE) -C benchmarks
 
 helloworld:
-	@DEBUG=* $(BABEL) -r -g --blacklist 'regenerator,es6.templateLiterals' examples/hello-world/app.js
+	@DEBUG=* $(BABEL) -r -g --blacklist 'regenerator,es6.templateLiterals' examples/hello-world/server.js
 
 .PHONY: test bench
