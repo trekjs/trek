@@ -31,13 +31,6 @@ export var defaultStack = (app) => {
   app.keys = Array.isArray(secretKeyBase) ? secretKeyBase : [secretKeyBase || STARTREK];
   app.use(ms.genericSession(config.secrets.session));
 
-  /*
-  function session() {
-    var secretKeyBase = app.secrets.secretKeyBase;
-    this.keys = Array.isArray(secretKeyBase) ? secretKeyBase : [secretKeyBase];
-    return ms.genericSession(app.secrets.session);
-  });
-  */
   app.use(ms.lusca(config.secrets));
   app.use(ms.bodyparser());
   app.use(ms.router(app));
