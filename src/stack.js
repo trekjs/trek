@@ -18,12 +18,8 @@ export var defaultStack = (app) => {
   app.use(ms.xRequestId(undefined, true, true));
 
   let morgan = ms.morgan;
-  /*
-  morgan.token('id', function getId(_, res) {
-    return res._headers['x-request-id'];
-  });
-  */
-  app.use(morgan.middleware('combined'))
+  let logStream = fs.createWriteStream(config.paths.get('log').first, { flags: 'a' });
+  app.use(morgan.middleware('combined', { stream: logStream }));
 
   // add remoteIp
 
