@@ -8,7 +8,7 @@ gulp.task('default', function () {
    .pipe(babel({
      experimental: true,
      playground: true,
-     blacklist: ['regenerator', 'es6.templateLiterals']
+     blacklist: ['regenerator', 'es6.constants', 'es6.templateLiterals']
    }))
   .pipe(gulp.dest('lib'));
 });
