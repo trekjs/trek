@@ -1,6 +1,9 @@
 import Trek from '../../';
-import path from 'path';
 
 var app = new Trek;
 
-app.run({ port: 3333 });
+app.get('/', function* (next) {
+  this.body = 'Hello World';
+});
+
+app.run(3000);
