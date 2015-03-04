@@ -26,13 +26,21 @@ const defaultStack = (app) => {
   app.use(ms.xRequestId(undefined, true, true));
 
   let morgan = ms.morgan;
-  let logStream = fs.createWriteStream(config.paths.get('log').first, { flags: 'a' });
-  app.use(morgan.middleware(isProduction ? 'combined' : 'dev', { stream: logStream }));
+  let logStream = fs.createWriteStream(
+    config.paths.get('log').first,
+    { flags: 'a' }
+  );
+  app.use(morgan.middleware(
+    isProduction ? 'combined' : 'dev',
+    { stream: logStream }
+  ));
 
   // add remoteIp
 
   let secretKeyBase = config.secrets.secretKeyBase;
-  app.keys = Array.isArray(secretKeyBase) ? secretKeyBase : [secretKeyBase || STARTREK];
+  app.keys = Array.isArray(secretKeyBase)
+    ? secretKeyBase
+    : [secretKeyBase || STARTREK];
   app.use(ms.genericSession(config.secrets.session));
 
   app.use(ms.lusca(config.secrets));

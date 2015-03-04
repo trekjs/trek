@@ -26,7 +26,7 @@ class Trek extends Koa {
   }
 
   static get package() {
-    return this._package = (this._package = require('../package'));
+    return this._package || (this._package = require('../package'));
   }
 
   static get version() {
@@ -34,8 +34,8 @@ class Trek extends Koa {
   }
 
   get calledFrom() {
-    return this._calledFrom ||
-      (this._calledFrom = path.dirname(require.main.filename));
+    return this._calledFrom
+      || (this._calledFrom = path.dirname(require.main.filename));
   }
 
   set calledFrom(path) {
@@ -75,8 +75,8 @@ class Trek extends Koa {
   }
 
   get config() {
-    return this._config ||
-      (this._config = new Config(this.findRoot(this.calledFrom)));
+    return this._config
+      || (this._config = new Config(this.findRoot(this.calledFrom)));
   }
 
   set config(config) {
