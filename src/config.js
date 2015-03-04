@@ -22,6 +22,7 @@ class Config {
       paths.add('app/models');
       paths.add('app/views');
 
+      paths.add('lib');
       paths.add('config');
       paths.add('config/envs',          { glob: `${Trek.env}.js` });
       paths.add('config/secrets',       { glob: `${Trek.env}.js` });
@@ -29,7 +30,7 @@ class Config {
       paths.add('config/routes.js');
 
       paths.add('public');
-      paths.add('log',                  { 'with': `log/${Trek.env}.log` });
+      paths.add('log',                  { with: `log/${Trek.env}.log` });
       paths.add('tmp');
 
       return paths;
