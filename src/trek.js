@@ -83,6 +83,10 @@ class Trek extends Koa {
     this._config = config;
   }
 
+  get root() {
+    return this.config.root;
+  }
+
   get paths() {
     return this.config.paths;
   }
