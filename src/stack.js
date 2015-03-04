@@ -5,8 +5,15 @@ import klm from 'koa-load-middlewares';
 const STARTREK = 'Star Trek';
 
 export var defaultStack = (app) => {
-  let [config, ms] = [app.config, klm()];
-  let isProduction = app.env === 'production';
+  let [
+    config,
+    ms,
+    isProduction
+  ] = [
+    app.config,
+    klm(),
+    app.env === 'production'
+  ];
 
   if (!isProduction) {
     app.use(ms.logger());
