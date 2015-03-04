@@ -6,8 +6,9 @@ const STARTREK = 'Star Trek';
 
 export var defaultStack = (app) => {
   let [config, ms] = [app.config, klm()];
+  let isProduction = app.env === 'production';
 
-  if (app.env !== 'production') {
+  if (!isProduction) {
     app.use(ms.logger());
   }
 
@@ -19,7 +20,7 @@ export var defaultStack = (app) => {
 
   let morgan = ms.morgan;
   let logStream = fs.createWriteStream(config.paths.get('log').first, { flags: 'a' });
-  app.use(morgan.middleware('combined', { stream: logStream }));
+  app.use(morgan.middleware(isProduction ? 'combined' : 'dev', { stream: logStream }));
 
   // add remoteIp
 

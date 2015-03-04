@@ -67,6 +67,7 @@ class Trek extends Koa {
   constructor() {
     super();
     this.env = Trek.env;
+    this.initialize();
   }
 
   initialize() {
@@ -91,7 +92,6 @@ class Trek extends Koa {
   }
 
   run(...args) {
-    this.initialize();
     this.listen(...args);
   }
 
