@@ -1,10 +1,31 @@
-# Trek.JS
+# trek
 
-TREK.JS is a next generation full-stack JavaScript open source solution.
+Next generation full-stack JavaScript open source solution, based on [Koa.js][].
 
-Based on [Koa.js][].
+```js
+import Trek from 'trek';
 
-**No Ready** Everything is just starting.
+var app = new Trek;
 
+app.get('/', function* (next) {
+  this.body = 'Hello World';
+});
+
+app.listen(3000);
+```
+
+## Installation
+
+```bash
+$ npm install trek
+```
+
+## Features
+
+## Quick Start
+
+## License
+
+  [MIT](LICENSE)
 
 [Koa.js]: http://koajs.com
