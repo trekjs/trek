@@ -4,7 +4,7 @@ import klm from 'koa-load-middlewares';
 
 const STARTREK = 'Star Trek';
 
-export var defaultStack = (app) => {
+const defaultStack = (app) => {
   let [
     config,
     ms,
@@ -39,3 +39,5 @@ export var defaultStack = (app) => {
   app.use(ms.bodyparser());
   app.use(ms.router(app));
 };
+
+export { defaultStack };
