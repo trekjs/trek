@@ -11,6 +11,7 @@
   "author": "Fangdun Cai <cfddream@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "debug": "^2.1.2",
     "glob": "^4.4.2",
     "koa": "^0.18.1",
     "koa-bodyparser": "^1.4.0",

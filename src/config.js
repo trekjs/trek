@@ -6,9 +6,12 @@ import {
   isPlainObject
 } from 'lodash-node/modern/lang';
 import defaults from 'lodash-node/modern/object/defaults';
+import _debug from 'debug';
 import { EventEmitter } from 'events';
 import { valueForKeyPath, setValueForKeyPath } from './utils';
 import { Root } from './paths';
+
+const debug = _debug('trek:config');
 
 class Config {
 
@@ -69,7 +72,7 @@ class Config {
   }
 
   load(path) {
-    console.log(path)
+    debug('load %s', path);
     try {
       require(path)(this);
     } catch(e) {

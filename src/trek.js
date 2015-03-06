@@ -12,10 +12,13 @@ import fs from 'fs';
 import path from 'path';
 import Koa from 'koa';
 import koaLoadMiddlewares from 'koa-load-middlewares';
+import _debug from 'debug';
 import RouteMapper from 'route-mapper';
 import Config from './config';
 import extraContext from './context';
 import { defaultStack } from './stack';
+
+const debug = _debug('trek');
 
 class Trek extends Koa {
 
@@ -67,8 +70,12 @@ class Trek extends Koa {
   }
 
   constructor(calledFrom) {
-    super();
     this.calledFrom = calledFrom;
+
+    debug('init %s', this.calledFrom);
+
+    super()
+
     this.env = Trek.env;
     this.initialize();
   }
@@ -101,8 +108,8 @@ class Trek extends Koa {
     return this._routeMapper || (this._routeMapper = new RouteMapper);
   }
 
-  run(...args) {
-    this.listen(...args);
+  run() {
+    this.listen(...arguments);
   }
 
 }
