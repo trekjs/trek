@@ -1,5 +1,11 @@
 import fs from 'fs';
 import path from 'path';
+import {
+  cloneDeep,
+  isObject,
+  isPlainObject
+} from 'lodash-node/modern/lang';
+import defaults from 'lodash-node/modern/object/defaults';
 import { EventEmitter } from 'events';
 import { valueForKeyPath, setValueForKeyPath } from './utils';
 import { Root } from './paths';
@@ -75,7 +81,16 @@ class Config {
     let value, defaultValue;
     defaultValue = valueForKeyPath(this.defaultSettings, keyPath);
     if (!isDefault) value = valueForKeyPath(this.settings, keyPath);
-    if (!value) value = defaultValue;
+
+    if (value) {
+      value = cloneDeep(value);
+      if (isPlainObject(value) && isPlainObject(defaultValue)) {
+        defaults(value, defaultValue);
+      }
+    } else {
+      value = cloneDeep(defaultValue);
+    }
+
     return value;
   }
 
