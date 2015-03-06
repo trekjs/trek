@@ -20,6 +20,11 @@ const defaultStack = (app) => {
   }
 
   ms.qs(app);
+  ms.swig(app, {
+    root: config.viewsPath,
+    autoescape: true,
+    ext: 'html'
+  });
   app.use(ms.favicon(path.join(config.publicPath, 'favicon.icon')));
   app.use(ms.responseTime());
   app.use(ms.methodoverride());

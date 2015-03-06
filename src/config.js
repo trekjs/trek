@@ -57,6 +57,10 @@ class Config {
     return this.paths.get('public').first;
   }
 
+  get viewsPath() {
+    return this.paths.get('app/views').first;
+  }
+
   get() {}
 
   set() {}
