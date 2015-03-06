@@ -22,6 +22,9 @@ $ npm install trek
 
 ## Features
 
+  * Use **ES6+**
+  * MVC
+
 ## Quick Start
 
 ## License
