@@ -64,8 +64,9 @@ class Trek extends Koa {
     return fs.realpathSync(root);
   }
 
-  constructor() {
+  constructor(calledFrom) {
     super();
+    this.calledFrom = calledFrom;
     this.env = Trek.env;
     this.initialize();
   }
