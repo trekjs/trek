@@ -24,6 +24,7 @@ const defaultStack = (app) => {
   app.use(ms.responseTime());
   app.use(ms.methodoverride());
   app.use(ms.xRequestId(undefined, true, true));
+  app.use(ms.staticCache(config.publicPath));
 
   let morgan = ms.morgan;
   let logStream = fs.createWriteStream(

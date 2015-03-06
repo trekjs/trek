@@ -13,7 +13,7 @@
   "dependencies": {
     "co": "^4.4.0",
     "composition": "^2.1.1",
-    "glob": "^4.4.1",
+    "glob": "^4.4.2",
     "koa": "^0.18.1",
     "koa-bodyparser": "^1.4.0",
     "koa-favicon": "^1.2.0",
@@ -27,6 +27,7 @@
     "koa-redis": "^1.0.0",
     "koa-response-time": "^1.0.2",
     "koa-router": "^4.2.0",
+    "koa-static-cache": "^3.0.1",
     "koa-swig": "^1.2.0",
     "koa-x-request-id": "^0.1.0",
     "lodash-node": "^3.3.1",
@@ -34,12 +35,12 @@
     "thenify": "^3.1.0"
   },
   "devDependencies": {
-    "babel": "^4.6.5",
-    "babel-core": "^4.6.5",
+    "babel": "^4.6.6",
+    "babel-core": "^4.6.6",
     "gulp": "^3.8.11",
     "gulp-babel": "^4.0.0",
     "mocha": "^2.1.0",
-    "should": "^5.0.1",
+    "should": "^5.1.0",
     "supertest": "^0.15.0"
   }
 }
