@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { EventEmitter } from 'events';
-import { valueForKeyPath } from './utils';
+import { valueForKeyPath, setValueForKeyPath } from './utils';
 import { Root } from './paths';
 
 class Config {
@@ -25,10 +25,11 @@ class Config {
 
         paths.add('lib');
         paths.add('config');
-        paths.add('config/envs',          { glob: `${Trek.env}.js` });
+        paths.add('config/application',   { with: 'config/application.js' });
+        paths.add('config/environments',  { glob: `${Trek.env}.js` });
         paths.add('config/secrets',       { glob: `${Trek.env}.js` });
         paths.add('config/locales',       { glob: '*.{js,json}' });
-        paths.add('config/routes.js');
+        paths.add('config/routes',        { with: 'config/routes.js' });
 
         paths.add('public');
         paths.add('log',                  { with: `log/${Trek.env}.log` });
@@ -61,9 +62,30 @@ class Config {
     return this.paths.get('app/views').first;
   }
 
-  get() {}
+  load(path) {
+    console.log(path)
+    try {
+      require(path)(this);
+    } catch(e) {
+      console.log(`Missing ${path} file.`);
+    }
+  }
 
-  set() {}
+  get(keyPath, isDefault) {
+    let value, defaultValue;
+    defaultValue = valueForKeyPath(this.defaultSettings, keyPath);
+    if (!isDefault) value = valueForKeyPath(this.settings, keyPath);
+    if (!value) value = defaultValue;
+    return value;
+  }
+
+  set(keyPath, value, isDefault) {
+    setValueForKeyPath(
+      isDefault ? this.defaultSettings : this.settings,
+      keyPath,
+      value
+    );
+  }
 
 }
 

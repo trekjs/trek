@@ -33,7 +33,7 @@ var setValueForKeyPath = (object, keyPath, value) => {
   let keys = splitKeyPath(keyPath)
   while (keys.length > 1) {
     let key = keys.shift()
-    object[key] ?= {}
+    object[key] ?= Object.create(null);
     object = object[key]
   }
   if (value)
