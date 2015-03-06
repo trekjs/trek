@@ -14,8 +14,17 @@ import Koa from 'koa';
 import koaLoadMiddlewares from 'koa-load-middlewares';
 import RouteMapper from 'route-mapper';
 import Config from './config';
-import extraContext from './context';
 import { defaultStack } from './stack';
+
+/**
+ * Extra Context
+ */
+
+import './context';
+
+/**
+ * Trek Class
+ */
 
 class Trek extends Koa {
 
@@ -76,7 +85,6 @@ class Trek extends Koa {
   initialize() {
     this.config.load(this.paths.get('config/application').first);
     this.config.load(this.paths.get('config/environments').first);
-    extraContext(this.context);
     defaultStack(this);
   }
 
