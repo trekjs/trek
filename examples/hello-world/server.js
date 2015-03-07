@@ -13,6 +13,7 @@ app.get('/', function* (next) {
   //console.log(info);
   */
   this.body = yield this.render('index', Trek.package);
+  this.body += `\nIs Authenticated ${this.isAuthenticated()}.`;
 });
 
 app.run(3000);
