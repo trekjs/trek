@@ -76,7 +76,7 @@ class Config {
     try {
       require(path)(this);
     } catch(e) {
-      console.log(chalk.bold.red(`Missing ${path} file or syntax error: ${e}.`));
+      console.log(chalk.bold.red(`${e}`));
     }
   }
 
