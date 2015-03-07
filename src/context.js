@@ -1,5 +1,4 @@
 import chalk from 'chalk';
-import thenify from 'thenify';
 import jwt from 'jsonwebtoken';
 import { createTransport } from 'nodemailer';
 
@@ -47,7 +46,6 @@ export default (context) => {
   Object.defineProperty(context, 'jwt', {
     get: function () {
       return this._jwt || (() => {
-        jwt.verify = thenify(jwt.verify);
         return this._jwt = jwt;
       })();
     },

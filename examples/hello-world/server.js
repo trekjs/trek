@@ -12,8 +12,9 @@ app.get('/', function* (next) {
   });
   //console.log(info);
   */
-  //var token = this.jwt.sign({ name: 'trek' }, 'test');
-  //var payload = yield this.jwt.verify(token, 'test');
+  var token = this.jwt.sign({ name: 'trek' }, 'test');
+  var payload = yield this.jwt.verify(token, 'test');
+  console.log(payload);
   this.body = yield this.render('index', Trek.package);
   this.body += `\nIs Authenticated ${this.isAuthenticated()}.`;
 });
