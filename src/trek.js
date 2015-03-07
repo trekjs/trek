@@ -108,6 +108,7 @@ class Trek extends Koa {
   }
 
   run() {
+    // TODO: https
     this.listen(...arguments);
   }
 
