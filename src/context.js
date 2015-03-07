@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import jwt from 'jsonwebtoken';
 import { createTransport } from 'nodemailer';
 
 export default (context) => {
@@ -39,6 +40,13 @@ export default (context) => {
       }
     },
     writable: true,
+    configurable: true
+  });
+
+  Object.defineProperty(context, 'jwt', {
+    get: function () {
+      return jwt;
+    },
     configurable: true
   });
 };
