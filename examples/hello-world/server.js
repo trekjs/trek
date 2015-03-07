@@ -12,6 +12,8 @@ app.get('/', function* (next) {
   });
   //console.log(info);
   */
+  //var token = this.jwt.sign({ name: 'trek' }, 'test');
+  //var payload = yield this.jwt.verify(token, 'test');
   this.body = yield this.render('index', Trek.package);
   this.body += `\nIs Authenticated ${this.isAuthenticated()}.`;
 });
