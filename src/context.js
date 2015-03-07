@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { createTransport } from 'nodemailer';
 
 export default (context) => {
@@ -18,7 +19,7 @@ export default (context) => {
           try {
             transporter = require(`nodemailer-${transport}-transport`);
           } catch(e) {
-            console.log(`Missing nodemailer-${transport}-transport.`);
+            console.log(chalk.bold.red(`Missing nodemailer-${transport}-transport.`));
           }
         }
         return this._transporter = createTransport(

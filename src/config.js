@@ -2,13 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import {
   cloneDeep,
-  isObject,
   isPlainObject
 } from 'lodash-node/modern/lang';
 import defaults from 'lodash-node/modern/object/defaults';
 import _debug from 'debug';
+import chalk from 'chalk';
 import { EventEmitter } from 'events';
-import { valueForKeyPath, setValueForKeyPath } from './utils';
+import { valueForKeyPath, setValueForKeyPath, hasKeyPath } from './utils';
 import { Root } from './paths';
 
 const debug = _debug('trek:config');
@@ -76,7 +76,7 @@ class Config {
     try {
       require(path)(this);
     } catch(e) {
-      console.log(`Missing ${path} file.`);
+      console.log(chalk.bold.red(`Missing ${path} file or syntax error: ${e}.`));
     }
   }
 

@@ -5,15 +5,8 @@ import klm from 'koa-load-middlewares';
 const STARTREK = 'Star Trek';
 
 const defaultStack = (app) => {
-  let [
-    config,
-    ms,
-    isProduction
-  ] = [
-    app.config,
-    klm(),
-    app.env === 'production'
-  ];
+  let [ config, ms, isProduction ]
+    = [ app.config, klm(), app.env === 'production' ];
 
   if (!isProduction) {
     app.use(ms.logger());
@@ -28,13 +21,14 @@ const defaultStack = (app) => {
   app.use(ms.staticCache(config.publicPath));
 
   let morgan = ms.morgan;
-  let logStream = fs.createWriteStream(
-    config.paths.get('log').first,
-    { flags: 'a' }
-  );
+
   app.use(morgan.middleware(
-    isProduction ? 'combined' : 'dev',
-    { stream: logStream }
+    config.get('morgan.mode'),
+    config.get('morgan.stream')
+      ? {
+          stream: fs.createWriteStream(config.paths.get('log').first, { flags: 'a' })
+        }
+      : null
   ));
 
   // add remoteIp
@@ -44,6 +38,16 @@ const defaultStack = (app) => {
     ? secretKeyBase
     : [secretKeyBase || STARTREK];
   app.use(ms.genericSession(config.secrets.session));
+
+  let passport = ms.passport;
+  app.use(passport.initialize());
+  app.use(passport.session());
+  Object.defineProperty(app, 'passport', {
+    get: function () {
+      return passport;
+    },
+    configurable: true
+  });
 
   app.use(ms.lusca(config.secrets));
   app.use(ms.bodyparser());

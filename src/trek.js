@@ -11,7 +11,6 @@
 import fs from 'fs';
 import path from 'path';
 import Koa from 'koa';
-import koaLoadMiddlewares from 'koa-load-middlewares';
 import _debug from 'debug';
 import RouteMapper from 'route-mapper';
 import Config from './config';

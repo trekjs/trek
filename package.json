@@ -11,6 +11,7 @@
   "author": "Fangdun Cai <cfddream@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "chalk": "^1.0.0",
     "debug": "^2.1.2",
     "glob": "^4.4.2",
     "koa": "^0.18.1",
@@ -22,6 +23,7 @@
     "koa-lusca": "^2.0.1",
     "koa-methodoverride": "^0.4.1",
     "koa-morgan": "^0.1.0",
+    "koa-passport": "^1.1.4",
     "koa-qs": "^2.0.0",
     "koa-redis": "^1.0.0",
     "koa-response-time": "^1.0.2",

@@ -1,3 +1,5 @@
+import has from 'lodash-node/modern/object/has';
+
 /**
  * helpers
  */
@@ -45,7 +47,7 @@ var setValueForKeyPath = (object, keyPath, value) => {
 var hasKeyPath = (object, keyPath) => {
   let keys = splitKeyPath(keyPath)
   for (let key of keys) {
-    if (!object.hasOwnProperty(key)) return false;
+    if (!has(object, key)) return false;
     object = object[key]
   }
   return true
