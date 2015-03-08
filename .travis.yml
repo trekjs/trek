@@ -3,6 +3,7 @@ branches:
   only:
     - dev
 node_js:
+  - "0.12"
   - "iojs"
 script:
   - "npm run prepublish"
