@@ -10,6 +10,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import chalk from 'chalk';
 import Koa from 'koa';
 import _debug from 'debug';
 import RouteMapper from 'route-mapper';
@@ -109,7 +110,14 @@ class Trek extends Koa {
 
   run() {
     // TODO: https
-    this.listen(...arguments);
+    let app = this.listen(...arguments);
+    console.log(
+      chalk.green('  * Trek %s application starting in %s on http://%s:%s'),
+      Trek.version,
+      Trek.env,
+      app.address().address === '::' ? 'localhost' : app.address().address,
+      app.address().port
+    );
   }
 
 }

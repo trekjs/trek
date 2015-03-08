@@ -21,7 +21,6 @@ const defaultStack = (app) => {
   app.use(ms.staticCache(config.publicPath));
 
   let morgan = ms.morgan;
-
   app.use(morgan.middleware(
     config.get('morgan.mode'),
     config.get('morgan.stream')
