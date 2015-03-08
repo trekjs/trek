@@ -18,15 +18,18 @@ const defaultStack = (app) => {
   app.use(ms.xRequestId(undefined, true, true));
   app.use(ms.staticCache(config.publicPath));
 
-  let morgan = ms.morgan;
-  app.use(morgan.middleware(
-    config.get('morgan.mode'),
-    config.get('morgan.stream') ? {
-      stream: fs.createWriteStream(config.paths.get('log').first, {
-        flags: 'a'
-      })
-    } : null
-  ));
+  let morganSettings = config.get('morgan');
+  if (morganSettings) {
+    let morgan = ms.morgan;
+    app.use(morgan.middleware(
+      config.get('morgan.mode'),
+      config.get('morgan.stream') ? {
+        stream: fs.createWriteStream(config.paths.get('log').first, {
+          flags: 'a'
+        })
+      } : null
+    ));
+  }
 
   ms.locale(app);
   ms.qs(app);
