@@ -39,7 +39,6 @@ export default (context) => {
         this.transporter.sendMail(data, done);
       }
     },
-    writable: true,
     configurable: true
   });
 
