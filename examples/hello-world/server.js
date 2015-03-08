@@ -16,7 +16,8 @@ app.get('/', function* (next) {
   var payload = yield this.jwt.verify(token, 'test');
   console.log(payload);
   this.body = yield this.render('index', Trek.package);
-  this.body += `\nIs Authenticated ${this.isAuthenticated()}.`;
+  this.body += `\nIs Authenticated ${this.isAuthenticated()}.\n`;
+  this.body += this.i18n.__('i18n');
 });
 
 app.run(3000);
