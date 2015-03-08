@@ -1,5 +1,8 @@
 import path from 'path';
+import assert from 'assert';
+import request from 'supertest';
 import Trek from '..';
 
-var app = new Trek(__dirname);
-app.run(3000);
+describe('Trek', () => {
+
+});
