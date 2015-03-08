@@ -5,8 +5,8 @@ import klm from 'koa-load-middlewares';
 const STARTREK = 'Star Trek';
 
 const defaultStack = (app) => {
-  let [ config, ms, isProduction ]
-    = [ app.config, klm(), app.env === 'production' ];
+  let [config, ms, isProduction]
+    = [app.config, klm(), app.env === 'production'];
 
   if (!isProduction) {
     app.use(ms.logger());
@@ -21,11 +21,11 @@ const defaultStack = (app) => {
   let morgan = ms.morgan;
   app.use(morgan.middleware(
     config.get('morgan.mode'),
-    config.get('morgan.stream')
-      ? {
-          stream: fs.createWriteStream(config.paths.get('log').first, { flags: 'a' })
-        }
-      : null
+    config.get('morgan.stream') ? {
+      stream: fs.createWriteStream(config.paths.get('log').first, {
+        flags: 'a'
+      })
+    } : null
   ));
 
   ms.locale(app);
@@ -49,7 +49,7 @@ const defaultStack = (app) => {
   app.use(passport.initialize());
   app.use(passport.session());
   Object.defineProperty(app, 'passport', {
-    get: function () {
+    get: function() {
       return passport;
     },
     configurable: true
@@ -60,4 +60,6 @@ const defaultStack = (app) => {
   app.use(ms.router(app));
 };
 
-export { defaultStack };
+export {
+  defaultStack
+};

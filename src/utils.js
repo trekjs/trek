@@ -12,7 +12,7 @@ var splitKeyPath = (keyPath) => {
   if (!len) return keyPathArray
   while (i < len) {
     let char = keyPath[i];
-    if (char === '.' && (i === 0 || keyPath[i-1] !== '\\')) {
+    if (char === '.' && (i === 0 || keyPath[i - 1] !== '\\')) {
       keyPathArray.push(keyPath.substring(startIndex, i))
       startIndex = i + 1;
     }

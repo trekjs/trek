@@ -1,17 +1,20 @@
 import chalk from 'chalk';
 import jwt from 'jsonwebtoken';
-import { createTransport } from 'nodemailer';
+import {
+  createTransport
+}
+from 'nodemailer';
 
 export default (context) => {
   Object.defineProperty(context, 'config', {
-    get: function () {
+    get: function() {
       return this.app.config;
     },
     configurable: true
   });
 
   Object.defineProperty(context, 'transporter', {
-    get: function () {
+    get: function() {
       return this._transporter || (() => {
         let transport = this.config.get('mailer.transport');
         let options = this.config.get('mailer.options');
@@ -19,14 +22,12 @@ export default (context) => {
         if (transport) {
           try {
             transporter = require(`nodemailer-${transport}-transport`);
-          } catch(e) {
+          } catch (e) {
             console.log(chalk.bold.red(`Missing nodemailer-${transport}-transport.`));
           }
         }
         return this._transporter = createTransport(
-          transport
-          ? transporter(options)
-          : options
+          transport ? transporter(options) : options
         );
       })();
     },
@@ -35,7 +36,7 @@ export default (context) => {
 
   Object.defineProperty(context, 'sendMail', {
     value: function sendMail(data) {
-      return function (done) {
+      return function(done) {
         this.transporter.sendMail(data, done);
       }
     },
@@ -43,7 +44,7 @@ export default (context) => {
   });
 
   Object.defineProperty(context, 'jwt', {
-    get: function () {
+    get: function() {
       return this._jwt || (() => {
         return this._jwt = jwt;
       })();

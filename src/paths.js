@@ -114,4 +114,7 @@ class Path {
 
 }
 
-export { Root, Path };
+export {
+  Root,
+  Path
+};

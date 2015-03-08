@@ -61,7 +61,7 @@ class Trek extends Koa {
       }
     }
 
-    let root = fs.existsSync(`${rootPath}/${flag}`) ? rootPath: _default;
+    let root = fs.existsSync(`${rootPath}/${flag}`) ? rootPath : _default;
     if (!root) {
       throw new Error(`Could not find root path for ${this}`);
     }
