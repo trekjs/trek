@@ -8,7 +8,7 @@
     "prepublish": "gulp"
   },
   "repository": "trekjs/trek",
-  "author": "Fangdun Cai <cfddream@gmail.com>",
+  "author": "Fangdun Cai <cfddream@gmail.com> (https://github.com/fundon)",
   "license": "MIT",
   "dependencies": {
     "chalk": "^1.0.0",
