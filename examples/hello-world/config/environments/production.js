@@ -3,4 +3,10 @@ export default (config) => {
     mode: 'combined',
     stream: true
   });
+
+  config.set('lusca', {
+    csrf: true,
+    xframe: 'deny',
+    xssProtection: true
+  });
 };

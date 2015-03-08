@@ -6,7 +6,6 @@ import redisStore from 'koa-redis';
 // http://redis.io/commands/monitor
 
 var secrets = {
-  csrf: true,
   secretKeyBase: 'star trek',
   session: {
     cookie: {
