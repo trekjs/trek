@@ -12,9 +12,6 @@ const defaultStack = (app) => {
     app.use(ms.logger());
   }
 
-  ms.locale(app);
-  ms.qs(app);
-  ms.swig(app, config.get('views'));
   app.use(ms.favicon(path.join(config.publicPath, 'favicon.icon')));
   app.use(ms.responseTime());
   app.use(ms.methodoverride());
@@ -30,6 +27,15 @@ const defaultStack = (app) => {
         }
       : null
   ));
+
+  ms.locale(app);
+  ms.qs(app);
+  ms.swig(app, config.get('views'));
+
+  let i18nSettings = config.get('i18n');
+  if (i18nSettings) {
+    app.use(ms.i18n(app, i18nSettings));
+  }
 
   // add remoteIp
 

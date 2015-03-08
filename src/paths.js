@@ -56,6 +56,10 @@ class Path {
     return keys.map((k) => this.root[k]);
   }
 
+  get path() {
+    return path.join(this.root.path, this.current);
+  }
+
   get first() {
     return this.expanded()[0];
   }

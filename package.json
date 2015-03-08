@@ -19,6 +19,7 @@
     "koa-bodyparser": "^1.4.0",
     "koa-favicon": "^1.2.0",
     "koa-generic-session": "^1.7.0",
+    "koa-i18n": "git://github.com/koa-modules/i18n",
     "koa-jwt": "^0.1.7",
     "koa-load-middlewares": "0.0.1",
     "koa-locale": "git://github.com/koa-modules/locale",
