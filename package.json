@@ -53,6 +53,8 @@
     "supertest": "^0.15.0"
   },
   "files": [
-    "lib"
+    "lib",
+    "src",
+    "gulpfile.js"
   ]
 }
