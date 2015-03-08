@@ -21,6 +21,7 @@
     "koa-generic-session": "^1.7.0",
     "koa-jwt": "^0.1.7",
     "koa-load-middlewares": "0.0.1",
+    "koa-locale": "git://github.com/koa-modules/locale",
     "koa-logger": "^1.2.2",
     "koa-lusca": "^2.0.1",
     "koa-methodoverride": "^0.4.1",

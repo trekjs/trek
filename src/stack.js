@@ -12,6 +12,7 @@ const defaultStack = (app) => {
     app.use(ms.logger());
   }
 
+  ms.locale(app);
   ms.qs(app);
   ms.swig(app, config.get('views'));
   app.use(ms.favicon(path.join(config.publicPath, 'favicon.icon')));
