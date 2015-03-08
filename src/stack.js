@@ -55,7 +55,10 @@ const defaultStack = (app) => {
     configurable: true
   });
 
-  app.use(ms.lusca(config.secrets));
+  let luscaSettings = config.get('lusca');
+  if (luscaSettings) {
+    app.use(ms.lusca(luscaSettings));
+  }
   app.use(ms.bodyparser());
   app.use(ms.router(app));
 };
