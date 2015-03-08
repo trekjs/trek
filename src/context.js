@@ -1,9 +1,6 @@
 import chalk from 'chalk';
 import jwt from 'jsonwebtoken';
-import {
-  createTransport
-}
-from 'nodemailer';
+import { createTransport } from 'nodemailer';
 
 export default (context) => {
   Object.defineProperty(context, 'config', {
