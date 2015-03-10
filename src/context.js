@@ -10,17 +10,25 @@ export default (context) => {
     configurable: true
   });
 
+  Object.defineProperty(context, 'logger', {
+    get: function() {
+      return this.app.logger;
+    },
+    configurable: true
+  });
+
   Object.defineProperty(context, 'transporter', {
     get: function() {
       return this._transporter || (() => {
         let transport = this.config.get('mailer.transport');
         let options = this.config.get('mailer.options');
+        let moduleName = `nodemailer-${transport}-transport`;
         let transporter;
         if (transport) {
           try {
-            transporter = require(`nodemailer-${transport}-transport`);
+            transporter = require(moduleName);
           } catch (e) {
-            console.log(chalk.bold.red(`Missing nodemailer-${transport}-transport.`));
+            this.app.logger.error(chalk.bold.red(`Missing ${moduleName}.`));
           }
         }
         return this._transporter = createTransport(

@@ -58,6 +58,8 @@ const defaultStack = (app) => {
     configurable: true
   });
 
+  app.use(ms.flash({ key: 'flash' }));
+
   let luscaSettings = config.get('lusca');
   if (luscaSettings) {
     app.use(ms.lusca(luscaSettings));
@@ -66,6 +68,4 @@ const defaultStack = (app) => {
   app.use(ms.router(app));
 };
 
-export {
-  defaultStack
-};
+export { defaultStack };

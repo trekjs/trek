@@ -4,7 +4,10 @@ import {
   cloneDeep,
   isPlainObject
 } from 'lodash-node/modern/lang';
-import defaults from 'lodash-node/modern/object/defaults';
+import {
+  defaults,
+  has
+} from 'lodash-node/modern/object';
 import _debug from 'debug';
 import chalk from 'chalk';
 import { EventEmitter } from 'events';
@@ -22,9 +25,14 @@ class Config {
     this.settings = Object.create(null);
   }
 
+  initialize() {
+    this.load(this.paths.get('config/application').first);
+    this.load(this.paths.get('config/environments').first);
+  }
+
   get paths() {
     return this._paths
-      || (this._paths = (root) => {
+      || (this._paths = ((root) => {
         let paths = new Root(root);
 
         paths.add('app');
@@ -34,6 +42,7 @@ class Config {
 
         paths.add('lib');
         paths.add('config');
+        paths.add('config/database',      { with: 'config/database.js' });
         paths.add('config/application',   { with: 'config/application.js' });
         paths.add('config/environments',  { glob: `${Trek.env}.js` });
         paths.add('config/secrets',       { glob: `${Trek.env}.js` });
@@ -45,12 +54,12 @@ class Config {
         paths.add('tmp');
 
         return paths;
-      }(this.root));
+      })(this.root));
   }
 
   get secrets() {
     return this._secrets
-      || (this._secrets = () => {
+      || (this._secrets = (() => {
         let secrets = {};
         let filepath = this.paths.get('config/secrets').first;
         if (!filepath) return filepath;
@@ -58,9 +67,11 @@ class Config {
         if (fs.existsSync(file)) {
           secrets = require(file);
         }
-        secrets.secretKeyBase ?= this.secretKeyBase;
+        if (!has(secrets, 'secretKeyBase')) {
+          secrets.secretKeyBase = this.secretKeyBase;
+        }
         return secrets;
-      }());
+      })());
   }
 
   get publicPath() {

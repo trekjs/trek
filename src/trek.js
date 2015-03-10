@@ -10,7 +10,10 @@
 
 import fs from 'fs';
 import path from 'path';
+import has from 'lodash-node/modern/object/has';
 import chalk from 'chalk';
+import Promise from 'bluebird';
+import winston from 'winston';
 import Koa from 'koa';
 import _debug from 'debug';
 import RouteMapper from 'route-mapper';
@@ -23,7 +26,7 @@ const debug = _debug('trek');
 class Trek extends Koa {
 
   static get env() {
-    return this._env ?= (
+    return this._env || (
       process.env.TREK_ENV ||
       process.env.IOJS_ENV ||
       process.env.NODE_ENV ||
@@ -63,7 +66,7 @@ class Trek extends Koa {
 
     let root = fs.existsSync(`${rootPath}/${flag}`) ? rootPath : _default;
     if (!root) {
-      throw new Error(`Could not find root path for ${this}`);
+      this.logger.error(` * Could not find root path for ${this}`);
     }
 
     return fs.realpathSync(root);
@@ -81,8 +84,7 @@ class Trek extends Koa {
   }
 
   initialize() {
-    this.config.load(this.paths.get('config/application').first);
-    this.config.load(this.paths.get('config/environments').first);
+    this.config.initialize();
     extraContext(this.context);
     defaultStack(this);
   }
@@ -108,18 +110,70 @@ class Trek extends Koa {
     return this._routeMapper || (this._routeMapper = new RouteMapper);
   }
 
+  get services() {
+    return this._services || (this._services = new Map);
+  }
+
+  getService(key) {
+    return this.services.get(key);
+  }
+
+  setService(key, value) {
+    this.logger.log('info', chalk.yellow('* Service: %s'), key);
+    this.services.set(key, value);
+  }
+
+  get logger() {
+    return this._logger || (this._logger = new(winston.Logger)({
+      transports: [
+        new(winston.transports.Console)({
+          //prettyPrint: true,
+          colorize: true,
+          timestamp: true
+        })
+      ]
+    }));
+  }
+
   run() {
-    // TODO: https
-    let app = this.listen(...arguments);
-    console.log(
-      chalk.green('  * Trek %s application starting in %s on http://%s:%s'),
-      Trek.version,
-      Trek.env,
-      app.address().address === '::' ? 'localhost' : app.address().address,
-      app.address().port
-    );
+    let arr = [];
+
+    this.services.forEach((value, key) => {
+      if (value.promise) {
+        arr.push(value.promise)
+      }
+    });
+
+    let booted = false;
+    return Promise
+      .some(arr, arr.length)
+      .then(() => {
+        // TODO: https
+        let app = this.listen(...arguments);
+        this.logger.info(
+          chalk.green(' * Trek %s application starting in %s on http://%s:%s'),
+          Trek.version,
+          Trek.env,
+          app.address().address === '::' ? 'localhost' : app.address().address,
+          app.address().port
+        );
+        booted = true;
+      })
+      .catch(Promise.AggregateError, (errors) => {
+        errors.forEach((e) => {
+          this.logger.error(chalk.bold.red(`${e}`));
+        })
+        booted = false;
+      })
+      .finally(() => {
+        if (!booted) {
+          this.logger.error(chalk.red(' * Trek boots failed.'));
+        }
+      });
   }
 
 }
 
-export default (global.Trek ?= Trek);
+if (!has(global, 'Trek')) global.Trek = Trek;
+
+export default global.Trek;
