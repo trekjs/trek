@@ -1,0 +1,52 @@
+{
+  "esnext": true,
+
+  "disallowKeywordsOnNewLine": ["else"],
+  "disallowNewlineBeforeBlockStatements": true,
+  "disallowSpacesInCallExpression": true,
+  "disallowEmptyBlocks": true,
+  "disallowSpacesInsideArrayBrackets": "all",
+  "disallowTrailingWhitespace": true,
+  "disallowTrailingComma": true,
+  "validateLineBreaks": "LF",
+  "validateIndentation": 2,
+  "validateParameterSeparator": ", ",
+  "requireSpaceBeforeObjectValues": true,
+  "requireCommaBeforeLineBreak": true,
+  "requireBlocksOnNewline": 1,
+  "requireSpacesInConditionalExpression": {
+    "afterTest": true,
+    "beforeConsequent": true,
+    "afterConsequent": true,
+    "beforeAlternate": true
+  },
+  "requireSpaceBeforeBlockStatements": true,
+  "requireSpacesInsideObjectBrackets": {
+    "allExcept": [ "}", ")" ]
+  },
+  "requireCurlyBraces": [
+    "for",
+    "while",
+    "do",
+    "try",
+    "catch"
+  ],
+  "requireSpaceBeforeKeywords": [
+    "else",
+    "while",
+    "catch"
+  ],
+  "requireSpaceAfterKeywords": [
+    "do",
+    "for",
+    "if",
+    "else",
+    "switch",
+    "case",
+    "try",
+    "while",
+    "with",
+    "return"
+  ],
+  "requireSpaceBetweenArguments": true
+}
