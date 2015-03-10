@@ -1,19 +1,12 @@
 'use strict';
 
-var gulp = require('gulp');
-var babel = require('gulp-babel');
+const fs = require('fs');
+const gulp = require('gulp');
+const babel = require('gulp-babel');
+const rc = JSON.parse(fs.readFileSync('.babelrc', 'utf8'));
 
 gulp.task('default', function () {
   return gulp.src('src/**/*.js')
-    .pipe(babel({
-      experimental: true,
-      playground: true,
-      blacklist: [
-        'regenerator',
-        'es6.blockScoping',
-        'es6.constants',
-        'es6.templateLiterals'
-      ]
-    }))
+    .pipe(babel(rc))
     .pipe(gulp.dest('lib'));
 });
