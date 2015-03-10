@@ -18,6 +18,10 @@ ifeq (node, $(BIN))
 	FLAGS = --harmony
 endif
 
+build:
+	rm -rf $(SRC)
+	gulp
+
 test:
 	@IOJS_ENV=$(IOJS_ENV) $(BIN) $(FLAGS) \
 		$(MOCHA) \
