@@ -38,6 +38,7 @@ class Config {
         paths.add('app');
         paths.add('app/controllers');
         paths.add('app/models');
+        paths.add('app/services',         { glob: '*.js' });
         paths.add('app/views');
 
         paths.add('lib');

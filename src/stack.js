@@ -18,6 +18,11 @@ const defaultStack = (app) => {
   app.use(ms.xRequestId(undefined, true, true));
   app.use(ms.staticCache(config.publicPath));
 
+  let luscaSettings = config.get('lusca');
+  if (luscaSettings) {
+    app.use(ms.lusca(luscaSettings));
+  }
+
   let morganSettings = config.get('morgan');
   if (morganSettings) {
     let morgan = ms.morgan;
@@ -51,19 +56,15 @@ const defaultStack = (app) => {
   let passport = ms.passport;
   app.use(passport.initialize());
   app.use(passport.session());
-  Object.defineProperty(app, 'passport', {
+  app.cache.set('passport', passport);
+  Object.defineProperty(passport, 'strategies', {
     get: function() {
-      return passport;
+      return passport._strategies;
     },
     configurable: true
   });
 
-  app.use(ms.flash({ key: 'flash' }));
-
-  let luscaSettings = config.get('lusca');
-  if (luscaSettings) {
-    app.use(ms.lusca(luscaSettings));
-  }
+  app.use(ms.connectFlash());
   app.use(ms.bodyparser());
   app.use(ms.router(app));
 };

@@ -12,7 +12,7 @@ import fs from 'fs';
 import path from 'path';
 import has from 'lodash-node/modern/object/has';
 import chalk from 'chalk';
-import Promise from 'bluebird';
+import co from 'co';
 import winston from 'winston';
 import Koa from 'koa';
 import _debug from 'debug';
@@ -66,7 +66,7 @@ class Trek extends Koa {
 
     let root = fs.existsSync(`${rootPath}/${flag}`) ? rootPath : _default;
     if (!root) {
-      this.logger.error(` * Could not find root path for ${this}`);
+      this.logger.error(`* Could not find root path for ${this}`);
     }
 
     return fs.realpathSync(root);
@@ -110,6 +110,10 @@ class Trek extends Koa {
     return this._routeMapper || (this._routeMapper = new RouteMapper);
   }
 
+  get cache() {
+    return this._cache || (this._cache = new Map);
+  }
+
   get services() {
     return this._services || (this._services = new Map);
   }
@@ -119,7 +123,7 @@ class Trek extends Koa {
   }
 
   setService(key, value) {
-    this.logger.log('info', chalk.yellow('* Service: %s'), key);
+    this.logger.log('info', chalk.yellow('* Trek service:%s'), key);
     this.services.set(key, value);
   }
 
@@ -136,40 +140,37 @@ class Trek extends Koa {
   }
 
   run() {
-    let arr = [];
-
-    this.services.forEach((value, key) => {
-      if (value.promise) {
-        arr.push(value.promise)
+    let self = this;
+    self.logger.info(chalk.green('* Trek booting ...'));
+    let config = self.config;
+    let servicesPath = self.paths.get('app/services').path
+    return co(function* () {
+      let seq = [];
+      let files = self.paths.get('app/services').existent //(yield mzfs.readdir(servicesPath)).sort();
+      for (let file of files) {
+        let name = path.basename(file, '.js').replace(/^[0-9]+-/, '');
+        let service = require(file)(self, config);
+        self.setService(name, service);
+        self.logger.info(chalk.green(`* Trek service:${name} init ...`));
+        if (service.promise) yield service.promise;
+        self.logger.info(chalk.green(`* Trek service:${name} booted`));
       }
-    });
-
-    let booted = false;
-    return Promise
-      .some(arr, arr.length)
+    })
       .then(() => {
         // TODO: https
         let app = this.listen(...arguments);
         this.logger.info(
-          chalk.green(' * Trek %s application starting in %s on http://%s:%s'),
+          chalk.green('* Trek %s application starting in %s on http://%s:%s'),
           Trek.version,
           Trek.env,
           app.address().address === '::' ? 'localhost' : app.address().address,
           app.address().port
         );
-        booted = true;
       })
-      .catch(Promise.AggregateError, (errors) => {
-        errors.forEach((e) => {
-          this.logger.error(chalk.bold.red(`${e}`));
-        })
-        booted = false;
+      .catch((e) => {
+        this.logger.error(chalk.bold.red(`${e}`));
+        this.logger.error(chalk.red('* Trek boots failed.'));
       })
-      .finally(() => {
-        if (!booted) {
-          this.logger.error(chalk.red(' * Trek boots failed.'));
-        }
-      });
   }
 
 }
