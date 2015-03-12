@@ -6,7 +6,7 @@ ISTANBUL = ./node_modules/.bin/istanbul
 NODEMON = ./node_modules/.bin/nodemon
 
 TESTS = test/*.test.js
-IOJS_ENV ?= test
+TREK_ENV ?= test
 
 BIN = iojs
 
@@ -23,7 +23,7 @@ build:
 	gulp
 
 test:
-	@IOJS_ENV=$(IOJS_ENV) $(BIN) $(FLAGS) \
+		@TREK_ENV=$(TREK_ENV) $(BIN) $(FLAGS) \
 		$(MOCHA) \
 		--compilers js:babel/register \
 		--require should \
@@ -32,7 +32,7 @@ test:
 
 test-cov:
 	rm -rf coverage
-	@IOJS_ENV=$(IOJS_ENV) $(BIN) $(FLAGS) \
+	@TREK_ENV=$(TREK_ENV) $(BIN) $(FLAGS) \
 		$(ISTANBUL) cover \
 		$(MOCHA) \
 		-- -u exports \
@@ -44,7 +44,7 @@ test-cov:
 bench:
 	@$(MAKE) -C benchmarks
 
-helloworld:
-	@DEBUG=* $(NODEMON) $(BABEL) examples/hello-world/server.js
+trek-auth:
+	@DEBUG=* $(NODEMON) $(BABEL) examples/trek-auth/server.js
 
 .PHONY: test bench
