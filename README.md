@@ -28,8 +28,10 @@ $ npm install trek
 
 ## Features
 
-  * Use **ES6+**
+  * **ES6**+
   * MVC
+  * dotenv
+  * Loads configuration & environment variables(.env) automagically
 
 ## Quick Start
 
