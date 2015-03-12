@@ -16,6 +16,7 @@ import {
   setValueForKeyPath,
   hasKeyPath
 } from './utils';
+import dotenv from 'dotenv';
 import { Root } from './paths';
 
 const debug = _debug('trek:config');
@@ -27,9 +28,20 @@ class Config {
     this.emitter = new EventEmitter;
     this.defaultSettings = Object.create(null);
     this.settings = Object.create(null);
+    this.env = Object.create(null);
+  }
+
+  dotenv() {
+    let defaultEnvPath = path.join(this.root, '.env');
+    // env defaults
+    dotenv._getKeysAndValuesFromEnvFilePath(defaultEnvPath);
+    // env overrides with Trek.env
+    dotenv._getKeysAndValuesFromEnvFilePath(`${defaultEnvPath}.${Trek.env}`);
+    this.env = Object.create(dotenv.keys_and_values);
   }
 
   initialize() {
+    this.dotenv();
     this.load(this.paths.get('config/application').first);
     this.load(this.paths.get('config/environments').first);
   }

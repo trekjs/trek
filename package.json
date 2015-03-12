@@ -1,7 +1,7 @@
 {
   "name": "trek",
   "version": "0.0.0",
-  "description": "Next generation fullstack JavaScript open source solution.",
+  "description": "Next generation full-stack JavaScript open source solution.",
   "main": "lib/trek.js",
   "scripts": {
     "test": "make test",
@@ -16,6 +16,7 @@
     "chalk": "^1.0.0",
     "co": "^4.4.0",
     "debug": "^2.x.x",
+    "dotenv": "^0.5.1",
     "glob": "^5.x.x",
     "grant": "^2.0.1",
     "joi": "^6.x.x",
@@ -44,9 +45,9 @@
     "lodash-node": "^3.5.0",
     "mz": "^1.3.0",
     "nodemailer": "^1.3.2",
+    "nodemailer-stub-transport": "^0.1.5",
     "passport-local": "^1.0.0",
     "pbkdf2-utils": "^1.0.0",
-    "thenify": "^3.1.0",
     "validator": "^3.33.0",
     "winston": "^0.9.0"
   },
@@ -74,7 +75,11 @@
     "sequelize": "^2.0.4",
     "sequelize-cli": "^1.3.1",
     "should": "^5.x.x",
-    "supertest": "^0.x.x"
+    "supertest": "^0.x.x",
+    "thenify": "^3.1.0"
+  },
+  "engines": {
+    "iojs": "1.x.x"
   },
   "files": [
     "lib",
