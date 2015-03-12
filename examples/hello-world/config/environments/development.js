@@ -1,4 +1,7 @@
 export default (config) => {
+  config.set('views', {
+    cache: false
+  });
   // mail
   config.set('mailer', {
     transport: 'mailgun',

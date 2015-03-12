@@ -20,9 +20,7 @@ export default (app, config) => {
   const db = Object.create(null);
 
   db.promise = co(function* () {
-      return yield fs.readdir(modelsPath)
-    })
-    .then((files) => {
+      let files = yield fs.readdir(modelsPath)
       files
         .filter((file) => {
           return (file.indexOf(".") !== 0);
@@ -36,8 +34,7 @@ export default (app, config) => {
             app.logger.error(chalk.bold.red(e.stack));
           }
         });
-    })
-    .then(() => {
+
       Object.keys(db).forEach((modelName) => {
         if ("associate" in db[modelName]) {
           db[modelName].associate(db);
@@ -47,9 +44,8 @@ export default (app, config) => {
       db.sequelize = sequelize;
       db.Sequelize = Sequelize;
 
-      return sequelize
-        .sync({ force: env !== 'production' })
-    });
+      return yield sequelize.sync({ force: env !== 'production' });
+    })
 
   return db;
 };

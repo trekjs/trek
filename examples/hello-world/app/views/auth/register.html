@@ -1,0 +1,18 @@
+<div>Sign up</div>
+
+{% if errors && errors.length %}
+<ul>
+{% for error in errors %}
+  <li>
+    {{ error }}
+  </li>
+{% endfor %}
+</ul>
+{% endif %}
+
+<form role="form" action="/auth/local/register" method="post">
+  <input type="text" name="username" placeholder="Username">
+  <input type="email" name="email" placeholder="Email">
+  <input type="password" name="password" placeholder="Password">
+  <button type="submit">Sign up</button>
+</form>

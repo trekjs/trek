@@ -1,4 +1,5 @@
 import { pbkdf2, randomBytes } from 'mz/crypto';
+import Joi from 'joi';
 
 export default (sequelize, DataTypes) => {
   const User = sequelize.define("User", {
@@ -12,7 +13,7 @@ export default (sequelize, DataTypes) => {
         // https://github.com/regexps/regex-username
         is: /^\w[\w-]+$/,
         notEmpty: true,
-        len: [1, 30]
+        len: [3, 30]
       }
     },
 
@@ -48,7 +49,7 @@ export default (sequelize, DataTypes) => {
 
     avatar_url: {
       type: DataTypes.STRING,
-      allowNull: false
+      //allowNull: false
     },
 
     last_seen_at: { type: DataTypes.DATE },
@@ -96,6 +97,19 @@ export default (sequelize, DataTypes) => {
         return pbkdf2(password, salt, 64000, 32, 'sha256').then((buf) => {
           return hash === buf.toString('hex');
         });
+      },
+
+      get registerSchema() {
+        return this._schema || (this._schema = {
+          username: Joi.string().regex(/^\w[\w-]+$/).min(3).max(30).required(),
+          //email: Joi.string().regex(/^([\w_\.\-\+])+\@([\w\-]+\.)+([\w]{2,10})+$/).email({minDomainAtoms: 1}).min(5).max(256).required(),
+          email: Joi.string().email({ minDomainAtoms: 2 }).min(5).max(256).required(),
+          password: Joi.string().min(8).max(200).required()
+        });
+      },
+
+      validate(object, done) {
+        return Joi.validate(object, User.registerSchema, done);
       }
     },
     instanceMethods: {
