@@ -16,7 +16,7 @@ import co from 'co';
 import winston from 'winston';
 import Koa from 'koa';
 import _debug from 'debug';
-import RouteMapper from 'route-mapper';
+//import RouteMapper from 'route-mapper';
 import Config from './config';
 import extraContext from './context';
 import { defaultStack } from './stack';
@@ -106,9 +106,11 @@ class Trek extends Koa {
     return this.config.paths;
   }
 
+  /*
   get routeMapper() {
     return this._routeMapper || (this._routeMapper = new RouteMapper);
   }
+  */
 
   get cache() {
     return this._cache || (this._cache = new Map);
