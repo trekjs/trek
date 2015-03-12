@@ -1,9 +1,9 @@
 'use strict';
 
-const fs = require('fs');
-const gulp = require('gulp');
-const babel = require('gulp-babel');
-const rc = JSON.parse(fs.readFileSync('.babelrc', 'utf8'));
+var fs = require('fs');
+var gulp = require('gulp');
+var babel = require('gulp-babel');
+var rc = JSON.parse(fs.readFileSync('.babelrc', 'utf8'));
 
 gulp.task('default', function () {
   return gulp.src('src/**/*.js')
