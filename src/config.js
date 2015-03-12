@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { EventEmitter } from 'events';
 import {
   cloneDeep,
   isPlainObject
@@ -10,8 +11,11 @@ import {
 } from 'lodash-node/modern/object';
 import _debug from 'debug';
 import chalk from 'chalk';
-import { EventEmitter } from 'events';
-import { valueForKeyPath, setValueForKeyPath, hasKeyPath } from './utils';
+import {
+  valueForKeyPath,
+  setValueForKeyPath,
+  hasKeyPath
+} from './utils';
 import { Root } from './paths';
 
 const debug = _debug('trek:config');
@@ -31,48 +35,62 @@ class Config {
   }
 
   get paths() {
-    return this._paths
-      || (this._paths = ((root) => {
-        let paths = new Root(root);
+    return this._paths || (this._paths = ((root) => {
+      let paths = new Root(root);
 
-        paths.add('app');
-        paths.add('app/controllers');
-        paths.add('app/models');
-        paths.add('app/services',         { glob: '*.js' });
-        paths.add('app/views');
+      paths.add('app');
+      paths.add('app/controllers');
+      paths.add('app/models');
+      paths.add('app/services', {
+        glob: '*.js'
+      });
+      paths.add('app/views');
 
-        paths.add('lib');
-        paths.add('config');
-        paths.add('config/database',      { with: 'config/database.js' });
-        paths.add('config/application',   { with: 'config/application.js' });
-        paths.add('config/environments',  { glob: `${Trek.env}.js` });
-        paths.add('config/secrets',       { glob: `${Trek.env}.js` });
-        paths.add('config/locales',       { glob: '*.{js,json}' });
-        paths.add('config/routes',        { with: 'config/routes.js' });
+      paths.add('lib');
+      paths.add('config');
+      paths.add('config/database', {
+        with: 'config/database.js'
+      });
+      paths.add('config/application', {
+        with: 'config/application.js'
+      });
+      paths.add('config/environments', {
+        glob: `${Trek.env}.js`
+      });
+      paths.add('config/secrets', {
+        glob: `${Trek.env}.js`
+      });
+      paths.add('config/locales', {
+        glob: '*.{js,json}'
+      });
+      paths.add('config/routes', {
+        with: 'config/routes.js'
+      });
 
-        paths.add('public');
-        paths.add('log',                  { with: `log/${Trek.env}.log` });
-        paths.add('tmp');
+      paths.add('public');
+      paths.add('log', {
+        with: `log/${Trek.env}.log`
+      });
+      paths.add('tmp');
 
-        return paths;
-      })(this.root));
+      return paths;
+    })(this.root));
   }
 
   get secrets() {
-    return this._secrets
-      || (this._secrets = (() => {
-        let secrets = {};
-        let filepath = this.paths.get('config/secrets').first;
-        if (!filepath) return filepath;
-        let file = path.resolve(filepath);
-        if (fs.existsSync(file)) {
-          secrets = require(file);
-        }
-        if (!has(secrets, 'secretKeyBase')) {
-          secrets.secretKeyBase = this.secretKeyBase;
-        }
-        return secrets;
-      })());
+    return this._secrets || (this._secrets = (() => {
+      let secrets = {};
+      let filepath = this.paths.get('config/secrets').first;
+      if (!filepath) return filepath;
+      let file = path.resolve(filepath);
+      if (fs.existsSync(file)) {
+        secrets = require(file);
+      }
+      if (!has(secrets, 'secretKeyBase')) {
+        secrets.secretKeyBase = this.secretKeyBase;
+      }
+      return secrets;
+    })());
   }
 
   get publicPath() {
@@ -87,7 +105,7 @@ class Config {
     debug('load %s', path);
     try {
       require(path)(this);
-    } catch(e) {
+    } catch (e) {
       console.log(chalk.bold.red(`${e}`));
     }
   }
