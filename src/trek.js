@@ -73,7 +73,7 @@ class Trek extends Koa {
   }
 
   constructor(calledFrom) {
-    this.calledFrom = calledFrom;
+    if (calledFrom) this.calledFrom = calledFrom;
 
     debug('init %s', this.calledFrom);
 
