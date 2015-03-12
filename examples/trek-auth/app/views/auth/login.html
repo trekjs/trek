@@ -15,3 +15,10 @@
   <input type="password" name="password" placeholder="Password">
   <button type="submit">Sign in</button>
 </form>
+
+{% if providers && providers.length %}
+  <h4>You can also use one of these...</h4>
+  {% for provider in providers %}
+    <a href="/auth/{{provider}}" role="button">{{provider}}</a>
+  {% endfor %}
+{% endif %}

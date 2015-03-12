@@ -8,10 +8,8 @@ export default (app, config) => {
   let UserModel = models.User;
 
   Object.defineProperty(passport, 'strategies', {
-    get: function () {
-      return this._strategiesOptions
-        || (this._strategiesOptions
-          = (config.get('passport') || Object.create(null)));
+    get: function() {
+      return this._strategiesOptions || (this._strategiesOptions = (config.get('passport.strategies') || Object.create(null)));
     }
   });
 
@@ -19,7 +17,9 @@ export default (app, config) => {
     value: function() {
       Object.keys(this.strategies).forEach((key) => {
         let options = this.strategies[key].initialize;
-        let defaultOptions = { passReqToCallback: true };
+        let defaultOptions = {
+          passReqToCallback: true
+        };
         let Strategy;
         let stuffix = key;
         if (key === 'bearer') stuffix = `http-${stuffix}`;
@@ -28,24 +28,24 @@ export default (app, config) => {
           if (key === 'local') {
             // Since we need to allow users to login using both usernames as well as
             // emails, we'll set the username field to something more generic.
-            _.defaults(options, defaultOptions, { usernameField: 'identifier' });
+            _.defaults(options, defaultOptions, {
+              usernameField: 'identifier'
+            });
             console.dir(options);
             this.use(new Strategy(
-              options,
-              (req, identifier, password, done) => {
+              options, (req, identifier, password, done) => {
 
                 UserModel.find({
-                  where: {
-                    $or: {
-                      username: identifier,
-                      email: identifier
+                    where: {
+                      $or: {
+                        username: identifier,
+                        email: identifier
+                      }
                     }
-                  }
-                })
+                  })
                   .then((user) => {
                     if (user) {
-                      let verified
-                        = UserModel.verify(user.password_hash, password, user.salt);
+                      let verified = UserModel.verify(user.password_hash, password, user.salt);
                       if (verified) {
                         done(null, users);
                       } else {
@@ -66,13 +66,12 @@ export default (app, config) => {
             ));
           } else if (key === 'bearer') {
             this.use(new Strategy(
-              options || {},
-              (token, done) => {
+              options || {}, (token, done) => {
                 Passport.find({
-                  where: {
-                    access_token: token
-                  }
-                })
+                    where: {
+                      access_token: token
+                    }
+                  })
                   .then((p) => {
                     console.log(p);
                   });
@@ -81,9 +80,7 @@ export default (app, config) => {
           } else {
             _.defaults(options, defaultOptions);
             this.use(new Strategy(
-              options,
-              (req, token, tokenSecret, done) => {
-              }
+              options, (req, token, tokenSecret, done) => {}
             ));
           }
         } catch (e) {
@@ -128,8 +125,7 @@ export default (app, config) => {
           return this.redirect('/login');
         };
       }
-      let options = this.strategies[provider].authenticate
-        || Object.create(null);
+      let options = this.strategies[provider].authenticate || Object.create(null);
       return this.authenticate(provider, options);
     }
   });
@@ -138,7 +134,7 @@ export default (app, config) => {
     value: function callback(ctx, provider = 'local', action) {
       if (provider === 'local' && action) {
         return function* localCallback() {
-          if (this.isAuthenticated()) return this.redirect('/');
+          if (this.isAuthenticated() || ctx.method === 'get') return this.redirect('/');
           if (action === 'register') {
             let o = _.pick(this.request.body, 'password', 'username', 'email');
             let result = UserModel.validate(o);
@@ -153,9 +149,26 @@ export default (app, config) => {
               salt: salt,
               password_hash: password_hash
             });
-            return { user: user };
+            return {
+              user: user
+            };
           } else if (action === 'connect') {
-
+            let o = _.pick(this.request.body, 'identifier', 'password');
+            let user = yield UserModel.find({
+              where: {
+                $or: {
+                  username: o.identifier,
+                  email: o.identifier
+                }
+              }
+            });
+            if (user && UserModel.verify(user.password_hash, o.password, user.salt)) {
+              return {
+                user: user
+              };
+            } else {
+              return null;
+            }
           } else if (action === 'disconnect') {
 
           }
@@ -164,90 +177,25 @@ export default (app, config) => {
         if (action === 'disconnect' && ctx.req.user) {
           return this.disconnect();
         } else {
-          let options = this.strategies[provider].authenticate
-            || Object.create(null);
+          let options = this.strategies[provider].authenticate || Object.create(null);
           return this.authenticate(provider, options);
         }
       }
     }
   });
 
-  /*
-  let LocalStrategy = require('passport-local').Strategy
-  passport.use(new LocalStrategy(
-    config.get('passport.local.initialize'),
-    function(req, username, password, done) {
-  //}, function(username, password, done) {
-    // retrieve user ...
-    if (username === 'test' && password === 'test') {
-      let user = {
-        id: 233,
-        username: 'test'
-      };
-      done(null, user)
-    } else {
-      done(null, false)
-    }
-  }));
-
-  let GitHubStrategy = require('passport-github').Strategy
-  passport.use(new GitHubStrategy(
-    config.get('passport.github.initialize'),
-    function(token, tokenSecret, profile, done) {
-      console.dir(profile);
-      // retrieve user ...
-      process.nextTick(function() {
-        done(null, profile)
-      });
-    }
-  ));
-  */
-
-  let DigitalOceanStrategy = require('passport-digitalocean').Strategy
-  passport.use(new DigitalOceanStrategy(
-    config.get('passport.digitalocean.initialize'),
-    function(accessToken, refreshToken, profile, done) {
-      console.log('digitalocean');
-      let dataJSON = profile._json;
-      profile.id = dataJSON.account.uuid;
-      profile.email = dataJSON.account.email;
-      console.dir(profile);
-      // retrieve user ...
-      process.nextTick(function() {
-        done(null, profile);
-      });
-    }
-  ));
-
-  let BitBucketStrategy = require('passport-bitbucket').Strategy
-  passport.use(new BitBucketStrategy(
-    config.get('passport.bitbucket.initialize'),
-    function(token, tokenSecret, profile, done) {
-      console.dir(profile);
-      let dataJSON = profile._json;
-      //profile.id = dataJSON.user.username;
-      // retrieve user ...
-      process.nextTick(function() {
-        done(null, profile);
-      });
-    }
-  ));
-
-  passport.serializeUser(function (user, done) {
-    console.log('serializeUser');
-    console.log(user);
-    console.dir(Object.keys(user));
+  passport.serializeUser(function(user, done) {
     done(null, user.id || 0);
   });
   passport.deserializeUser(function(id, done) {
-    console.log('deserializeUser');
-    console.log(id);
     let user = {
       id: id,
       username: 'test'
     };
     UserModel.find({
-      where: { id: id },
+      where: {
+        id: id
+      },
       attributes: [
         'username',
         'email',
@@ -257,8 +205,7 @@ export default (app, config) => {
         'avatar_url',
         'admin'
       ]
-    })
-      .done(done)
+    }).done(done);
   });
 
   passport.loadStrategies();

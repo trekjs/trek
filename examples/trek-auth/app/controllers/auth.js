@@ -6,7 +6,8 @@ export default {
       return this.redirect('/');
     }
     yield this.render('auth/login', {
-      errors: this.flash('error')
+      errors: this.flash('error'),
+      providers:this.config.get('passport.list')
     });
   },
 
@@ -25,6 +26,8 @@ export default {
 
   provider: function* (next) {
     let provider = this.params.provider || 'local';
+    // Ignore local and `GET` HTTP verb.
+    if (this.method != 'post' && provider === 'local') return this.redirect('/login');
     let passport = this.app.getService('passport');
     yield passport.endpoint(this, provider);
     //yield next;
@@ -33,7 +36,7 @@ export default {
   callback: function* (next) {
     let flashError = this.flash('error')[0];
     let provider = this.params.provider || 'local';
-    let action = this.params.action;
+    let action = this.params.action || 'connect';
     let passport = this.app.getService('passport');
     let result = yield passport.callback(this, provider, action);
     if (result && !result.error && result.user) {
