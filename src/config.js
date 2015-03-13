@@ -52,37 +52,21 @@ class Config {
 
       paths.add('app');
       paths.add('app/controllers');
-      paths.add('app/models');
-      paths.add('app/services', {
-        glob: '*.js'
-      });
+      paths.add('app/models',           { glob: '*.js' });
+      paths.add('app/services',         { glob: '*.js' });
       paths.add('app/views');
 
       paths.add('lib');
       paths.add('config');
-      paths.add('config/database', {
-        with: 'config/database.js'
-      });
-      paths.add('config/application', {
-        with: 'config/application.js'
-      });
-      paths.add('config/environments', {
-        glob: `${Trek.env}.js`
-      });
-      paths.add('config/secrets', {
-        glob: `${Trek.env}.js`
-      });
-      paths.add('config/locales', {
-        glob: '*.{js,json}'
-      });
-      paths.add('config/routes', {
-        with: 'config/routes.js'
-      });
+      paths.add('config/database',      { with: 'config/database.js' });
+      paths.add('config/application',   { with: 'config/application.js' });
+      paths.add('config/environments',  { glob: `${Trek.env}.js` });
+      paths.add('config/secrets',       { glob: `${Trek.env}.js` });
+      paths.add('config/locales',       { glob: '*.{js,json}' });
+      paths.add('config/routes',        { with: 'config/routes.js' });
 
       paths.add('public');
-      paths.add('log', {
-        with: `log/${Trek.env}.log`
-      });
+      paths.add('log',                  { with: `log/${Trek.env}.log` });
       paths.add('tmp');
 
       return paths;

@@ -221,24 +221,28 @@ class Trek extends Koa {
     let servicesPath = self.paths.get('app/services').path
     return co(function* () {
       let seq = [];
-      let files = self.paths.get('app/services').existent //(yield mzfs.readdir(servicesPath)).sort();
+      let files = self.paths.get('app/services').existent;
       for (let file of files) {
         let name = path.basename(file, '.js').replace(/^[0-9]+-/, '');
         let service = require(file)(self, config);
-        self.setService(name, service);
-        self.logger.info(chalk.green(`* Trek service:${name} init ...`));
-        if (service.promise) yield service.promise;
-        self.logger.info(chalk.green(`* Trek service:${name} booted`));
+        if (service) {
+          self.setService(name, service);
+          self.logger.info(chalk.green(`* Trek service:${name} init ...`));
+          if (service.promise) yield service.promise;
+          self.logger.info(chalk.green(`* Trek service:${name} booted`));
+        }
       }
     })
       .then(() => {
         // TODO: https
-        let app = this.listen(...arguments);
+        let args = [...arguments];
+        if (!args[0]) args[0] = this.config.get('site.port');
+        let app = this.listen(...args);
         this.logger.info(
           chalk.green('* Trek %s application starting in %s on http://%s:%s'),
           Trek.version,
           Trek.env,
-          app.address().address === '::' ? 'localhost' : app.address().address,
+          app.address().address === '::' ? '127.0.0.1' : app.address().address,
           app.address().port
         );
       })

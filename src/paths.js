@@ -95,8 +95,9 @@ class Path {
       p = path.join(this.root.path, p);
 
       if (this.glob && fs.existsSync(p) && fs.lstatSync(p).isDirectory()) {
-        process.chdir(p);
-        result = result.concat(glob.sync(this.glob).map(_p => path.join(p, _p)));
+        result = result.concat(
+          glob.sync(this.glob, { cwd: p }).map(_p => path.join(p, _p))
+        );
       } else {
         result.push(p);
       }
@@ -114,4 +115,7 @@ class Path {
 
 }
 
-export { Root, Path };
+export {
+  Root,
+  Path
+};

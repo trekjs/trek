@@ -71,6 +71,30 @@ export default (context) => {
           this.app.sendMail(data, done);
         }
       }
+    },
+
+    /**
+     * Delegates `req.user`, the logined user.
+     *
+     * @propertya user
+     * @api public
+     */
+    user: {
+
+      /**
+       * @getter
+       * @return {Object}
+       */
+      get() {
+        return this.req.user;
+      },
+
+      /**
+       * @setter
+       */
+      set(user) {
+        this.req.user = user;
+      }
     }
 
   });
