@@ -1,6 +1,6 @@
 # trek
 
-Next generation full-stack JavaScript open source solution, based on [Koa.js][].
+Next generation full-stack JavaScript open source solution, based on [Koa][].
 
   [![NPM version][npm-img]][npm-url]
   [![Build status][travis-img]][travis-url]
@@ -28,9 +28,8 @@ $ npm install trek
 
 ## Features
 
-  * **ES6**+
+  * **ES6**+, using [Bable][] for writing next generation JavaScript
   * MVC
-  * dotenv
   * Loads configuration & environment variables(.env) automagically
 
 ## Quick Start
@@ -39,7 +38,8 @@ $ npm install trek
 
   [MIT](LICENSE)
 
-[Koa.js]: http://koajs.com
+[Koa]: http://koajs.com/
+[Babel]: https://babeljs.io/
 
 [npm-img]: https://img.shields.io/npm/v/trek.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trek
