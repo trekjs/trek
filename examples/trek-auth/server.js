@@ -1,4 +1,4 @@
-import Trek from '../../src/trek';
+import Trek from '../..';
 
 var app = new Trek;
 
