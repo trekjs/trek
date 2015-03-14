@@ -49,6 +49,29 @@ class Trek extends Koa {
   }
 
   /**
+   * Returns Trek package informations.
+   *
+   * @property package
+   * @return {Object}
+   * @static
+   */
+  static get package() {
+    return this._package
+      || (this._package = require(path.join(__dirname, '../package.json')));
+  }
+
+  /**
+   * Returns Trek current version.
+   *
+   * @property version
+   * @return {String}
+   * @static
+   */
+  static get version() {
+    return this.package.version;
+  }
+
+  /**
    * Initialize a new `Trek` app with a working `root` directory.
    *
    * @constructor
