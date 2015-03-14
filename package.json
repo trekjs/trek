@@ -89,6 +89,7 @@
     "iojs": "1.x.x"
   },
   "files": [
-    "lib"
+    "lib",
+    "index.js"
   ]
 }
