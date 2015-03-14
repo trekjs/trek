@@ -28,7 +28,7 @@ $ npm install trek
 
 ## Features
 
-  * **ES6**+, using [Bable][] for writing next generation JavaScript
+  * **ES6**+, using [Babel][] for writing next generation JavaScript
   * MVC
   * Loads configuration & environment variables(.env) automagically
 
