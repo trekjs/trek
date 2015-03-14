@@ -18,10 +18,6 @@ ifeq (node, $(BIN))
 	FLAGS = --harmony
 endif
 
-build:
-	rm -rf $(SRC)
-	gulp
-
 test:
 		@TREK_ENV=$(TREK_ENV) $(BIN) $(FLAGS) \
 		$(MOCHA) \
