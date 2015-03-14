@@ -40,7 +40,7 @@ export default (config) => {
         initialize: {
           consumerKey: config.env.TWITTER_CONSUMER_KEY,
           consumerSecret: config.env.TWITTER_CONSUMER_SECRET,
-          callbackURL: 'http://127.0.0.1:3000/auth/twitter/callback'
+          callbackURL: '/auth/twitter/callback'
         },
         authenticate: {
           successRedirect: '/',
@@ -54,7 +54,7 @@ export default (config) => {
           //scope: ['user'],
           clientID: config.env.GITHUB_CLIENT_ID,
           clientSecret: config.env.GITHUB_CLIENT_SECRET,
-          callbackURL: 'http://localhost:3000/auth/github/callback'
+          callbackURL: '/auth/github/callback'
         },
         authenticate: {
           successRedirect: '/',
@@ -63,6 +63,7 @@ export default (config) => {
         }
       },
       digitalocean: {
+        protocol: 'oauth2',
         initialize: {
           clientID: config.env.DIGITALOCEAN_CLIENT_ID,
           clientSecret: config.env.DIGITALOCEAN_CLIENT_SECRET,
@@ -73,9 +74,17 @@ export default (config) => {
           successRedirect: '/',
           failureRedirect: '/login',
           failureFlash: true
+        },
+        filter: (req, accessToken, refreshToken, profile, next) => {
+          profile.id = profile._json.account.uuid;
+          profile.email = profile._json.account.email;
+          console.dir(profile)
+          console.log('digitalocean filter')
+          return [req, accessToken, refreshToken, profile, next];
         }
       },
       bitbucket: {
+        protocol: 'oauth',
         initialize: {
           consumerKey: config.env.BITBUCKET_CONSUMER_KEY,
           consumerSecret: config.env.BITBUCKET_CONSUMER_SECRET,

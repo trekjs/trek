@@ -72,6 +72,7 @@ export default (sequelize, DataTypes) => {
 
   }, {
     tableName: 'users',
+    underscored: true,
     classMethods: {
       associate(models) {
         User.hasMany(models.Passport);
@@ -109,10 +110,13 @@ export default (sequelize, DataTypes) => {
       },
 
       validate(object, done) {
-        return Joi.validate(object, User.registerSchema, done);
+        return Joi.validate(object, User.registerSchema, { abortEarly: true }, done);
       }
     },
     instanceMethods: {
+    },
+
+    hooks: {
     }
   });
 

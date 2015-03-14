@@ -1,3 +1,4 @@
+import url from 'url';
 import chalk from 'chalk';
 import _ from 'lodash-node';
 
@@ -13,10 +14,52 @@ export default (app, config) => {
     }
   });
 
+  passport.protocols = {
+    local: ( ) => {
+    },
+
+    oauth: (req, token, tokenSecret, profile, next) => {
+      let query = {
+        identifier : profile.id,
+        protocol   : 'oauth',
+        tokens     : { token: token },
+        profile    : profile
+      };
+      if (tokenSecret) {
+        query.tokens.tokenSecret = tokenSecret;
+      }
+      passport.connect(req, query, profile, next);
+    },
+
+
+    oauth2: (req, accessToken, refreshToken, profile, next) => {
+      let query = {
+        identifier: profile.id,
+        protocol   : 'oauth2',
+        tokens     : { accessToken: accessToken },
+        profile    : profile
+      };
+      if (refreshToken) {
+        query.tokens.refreshToken = refreshToken;
+      }
+      passport.connect(req, query, profile, next);
+    },
+
+    openid: (req, identifier, profile, next) => {
+      let query = {
+        identifier: identifier,
+        protocol   : 'openid',
+        profile    : profile
+      };
+      passport.connect(req, query, profile, next);
+    },
+  };
+
   Object.defineProperty(passport, 'loadStrategies', {
     value: function() {
       Object.keys(this.strategies).forEach((key) => {
         let options = this.strategies[key].initialize;
+        let filter = this.strategies[key].filter;
         let defaultOptions = {
           passReqToCallback: true
         };
@@ -28,10 +71,7 @@ export default (app, config) => {
           if (key === 'local') {
             // Since we need to allow users to login using both usernames as well as
             // emails, we'll set the username field to something more generic.
-            _.defaults(options, defaultOptions, {
-              usernameField: 'identifier'
-            });
-            console.dir(options);
+            _.defaults(options, defaultOptions, { usernameField: 'identifier' });
             this.use(new Strategy(
               options, (req, identifier, password, done) => {
 
@@ -47,7 +87,7 @@ export default (app, config) => {
                     if (user) {
                       let verified = UserModel.verify(user.password_hash, password, user.salt);
                       if (verified) {
-                        done(null, users);
+                        done(null, user);
                       } else {
                         req.flash('error', 'Password or identifier wrong.');
                       }
@@ -79,24 +119,41 @@ export default (app, config) => {
             ));
           } else {
             _.defaults(options, defaultOptions);
+            let protocol = this.strategies[key].protocol;
+            let baseUrl = config.get('site.protocol') + config.get('site.host') + ':' + config.get('site.port');
+            switch (protocol) {
+              case 'oauth':
+              case 'oauth2':
+                options.callbackURL = url.resolve(baseUrl, options.callbackURL);
+                break;
+
+              case 'openid':
+                options.returnURL = url.resolve(baseUrl, callback);
+                options.realm     = baseUrl;
+                options.profile   = true;
+            }
             this.use(new Strategy(
-              options, (req, token, tokenSecret, done) => {}
+              options,
+              filter ? (...args) => {
+                args = filter(...args);
+                this.protocols[protocol](...args)
+              } : this.protocols[protocol]
             ));
           }
         } catch (e) {
-          console.log(e.stack);
-          app.logger.error(chalk.bold.red(`Missing passport-${stuffix} Strategy.`));
+          app.logger.error(chalk.bold.red(`Missing passport-${stuffix} Strategy. ERROR: ${e.stack}.`));
         }
       });
     }
   });
 
   Object.defineProperty(passport, 'connect', {
-    value: function connect(ctx, query, profile) {
+    value: function connect(req, query, profile, done) {
+      console.dir(query)
       let user = Object.create(null);
       let provider;
 
-      query.provider = ctx.params.provider;
+      query.provider = req.ctx.params.provider;
 
       provider = profile.provider || query.provider;
 
@@ -134,21 +191,21 @@ export default (app, config) => {
     value: function callback(ctx, provider = 'local', action) {
       if (provider === 'local' && action) {
         return function* localCallback() {
-          if (this.isAuthenticated() || ctx.method === 'get') return this.redirect('/');
+          //if (this.isAuthenticated() || ctx.method === 'GET') return this.redirect('/');
           if (action === 'register') {
+            //https://github.com/sequelize/sequelize/blob/6a0912ad82915fd7bf20bd71ad7707abd473a137/test/integration/instance.validations.test.js#L917
             let o = _.pick(this.request.body, 'password', 'username', 'email');
             let result = UserModel.validate(o);
             if (result.error) return result;
             o = result.value;
             let salt = yield UserModel.salt();
             let password_hash = yield UserModel.hash(o.password, salt);
-            console.log(salt, password_hash)
-            let user = yield UserModel.create({
+            let user = yield UserModel.build({
               username: o.username,
               email: o.email,
               salt: salt,
               password_hash: password_hash
-            });
+            }).save();
             return {
               user: user
             };
@@ -162,11 +219,12 @@ export default (app, config) => {
                 }
               }
             });
-            if (user && UserModel.verify(user.password_hash, o.password, user.salt)) {
+            if (user && yield UserModel.verify(user.password_hash, o.password, user.salt)) {
               return {
                 user: user
               };
             } else {
+              ctx.flash('error', 'Password or identifier wrong.');
               return null;
             }
           } else if (action === 'disconnect') {
@@ -188,24 +246,17 @@ export default (app, config) => {
     done(null, user.id || 0);
   });
   passport.deserializeUser(function(id, done) {
-    let user = {
-      id: id,
-      username: 'test'
-    };
     UserModel.find({
       where: {
         id: id
       },
-      attributes: [
-        'username',
-        'email',
-        'name',
-        'last_seen_at',
-        'active',
-        'avatar_url',
-        'admin'
-      ]
-    }).done(done);
+    }).done((err, user) => {
+      user = user.toJSON();
+      // Ignores password, password_hash, salt fileds into the session.
+      delete user.password_hash;
+      delete user.salt;
+      done(err, user);
+    });
   });
 
   passport.loadStrategies();

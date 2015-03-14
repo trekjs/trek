@@ -1,8 +1,7 @@
-import fs from 'mz/fs';
-import path from 'path';
 import chalk from 'chalk';
 import co from 'co';
 import glob from 'glob';
+import thenify from 'thenify';
 import Sequelize from 'sequelize';
 
 export default (app, config) => {
@@ -17,19 +16,16 @@ export default (app, config) => {
     dbConfig
   );
   let modelsPath    = config.paths.get('app/models').path;
-  const db = Object.create(null);
+  let db = Object.create(null);
 
   db.promise = co(function* () {
-      let files = yield fs.readdir(modelsPath)
+      let files = config.paths.get('app/models').existent;
       files
-        .filter((file) => {
-          return (file.indexOf(".") !== 0);
-        })
         .forEach((file) => {
           try {
-            let model = sequelize.import(path.join(modelsPath, file));
+            let model = sequelize.import(file);
             db[model.name] = model;
-            app.logger.info(`* Trek modes - ${model.name}`)
+            app.logger.info(`* Trek modes:${chalk.blue(model.name)}`)
           } catch(e) {
             app.logger.error(chalk.bold.red(e.stack));
           }

@@ -1,1 +1,7 @@
 <div>Hello Trek.js</div>
+
+{% if currentUser %}
+<a href="/logout" role="button">Sign out</a>
+{% else %}
+<a href="/login" role="button">Login</a>
+{% endif %}
