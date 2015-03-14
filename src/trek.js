@@ -51,6 +51,7 @@ class Trek extends Koa {
   /**
    * Initialize a new `Trek` app with a working `root` directory.
    *
+   * @constructor
    * @param {String} root
    */
   constructor(root) {
