@@ -23,14 +23,24 @@ app.listen(3000);
 ## Installation
 
 ```bash
-$ npm install trek
+$ npm i trek
+```
+
+OR use **[trek-cli][]** to generate a trek app.
+
+```bash
+$ npm i trek-cli -g
+$ trek new trekapp
+$ cd trekapp
+$ npm i && npm start
 ```
 
 ## Features
 
-  * **ES6**+, using [Babel][] for writing next generation JavaScript
+  * Use [Babel][] for writing next generation JavaScript, **ES6+**
+  * Work with [io.js][] and [Node.js v0.12][]
   * MVC
-  * Loads configuration & environment variables(.env) automagically
+  * Load configurations & environment variables(.env) automagically
 
 ## Quick Start
 
@@ -38,8 +48,12 @@ $ npm install trek
 
   [MIT](LICENSE)
 
+[trek]: http://trekjs.com/
+[trek-cli]: https://github.com/trekjs/trek-cli
 [Koa]: http://koajs.com/
 [Babel]: https://babeljs.io/
+[io.js]: https://iojs.org/
+[Node.js v0.12]: https://nodejs.org/
 
 [npm-img]: https://img.shields.io/npm/v/trek.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trek
