@@ -2,14 +2,23 @@
   "name": "trek",
   "version": "0.0.0",
   "description": "Next generation full-stack JavaScript open source solution.",
-  "main": "lib/trek.js",
-  "scripts": {
-    "test": "make test",
-    "prepublish": "gulp"
-  },
-  "repository": "trekjs/trek",
   "author": "Fangdun Cai <cfddream@gmail.com> (https://github.com/fundon)",
+  "homepage": "https://trekjs.com/",
+  "repository": "trekjs/trek",
   "license": "MIT",
+  "main": "./index.js",
+  "keywords": [
+    "trek",
+    "framework",
+    "web",
+    "mvc",
+    "rest",
+    "es6",
+    "koa"
+  ],
+  "scripts": {
+    "test": "make test"
+  },
   "dependencies": {
     "bcrypt": "^0.8.1",
     "bluebird": "^2.x.x",
@@ -57,8 +66,6 @@
     "babel": "^4.x",
     "babel-core": "^4.x",
     "bookshelf": "^0.7.x",
-    "gulp": "^3.x",
-    "gulp-babel": "^4.x",
     "istanbul": "^0.3.x",
     "knex": "^0.7.x",
     "mocha": "^2.x.x",
@@ -83,8 +90,6 @@
     "iojs": "1.x.x"
   },
   "files": [
-    "lib",
-    "src",
-    "gulpfile.js"
+    "lib"
   ]
 }
