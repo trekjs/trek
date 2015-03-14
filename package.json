@@ -6,7 +6,7 @@
   "homepage": "https://trekjs.com/",
   "repository": "trekjs/trek",
   "license": "MIT",
-  "main": "./index.js",
+  "main": "./lib/trek.js",
   "keywords": [
     "trek",
     "framework",
