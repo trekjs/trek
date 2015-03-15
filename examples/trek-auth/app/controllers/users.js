@@ -1,6 +1,6 @@
 
 export default {
-  index: function* (next) {
+  * index (next) {
     let models = this.app.getService('models');
     let salt = yield models.User.salt();
     let hash = yield models.User.hash('password', salt);

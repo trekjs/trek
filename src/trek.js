@@ -34,6 +34,18 @@ class Trek extends Engine {
       'development');
   }
 
+  static get isProduction() {
+    return this.env === 'production';
+  }
+
+  static get isDevelopment() {
+    return this.env === 'development';
+  }
+
+  static get isTest() {
+    return this.env === 'test';
+  }
+
   /**
    * Returns Trek package informations.
    *

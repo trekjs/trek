@@ -1,7 +1,7 @@
 
 export default {
 
-  login: function* () {
+  * login() {
     if (this.isAuthenticated()) {
       return this.redirect('/');
     }
@@ -12,13 +12,13 @@ export default {
   },
 
   // singout
-  logout: function* () {
+  * logout() {
     this.logout();
     this.redirect('/');
   },
 
   // signup
-  register: function* () {
+  * register() {
     if (this.isAuthenticated()) {
       return this.redirect('/');
     }
@@ -27,7 +27,7 @@ export default {
     });
   },
 
-  provider: function* (next) {
+  * provider(next) {
     let provider = this.params.provider || 'local';
     // Ignore local and `GET` HTTP verb.
     if (this.method !== 'POST' && provider === 'local') return this.redirect('/login');
@@ -36,7 +36,7 @@ export default {
     //yield next;
   },
 
-  callback: function* (next) {
+  * callback(next) {
     let flashError = this.flash('error')[0];
     let provider = this.params.provider || 'local';
     let action = this.params.action;
@@ -63,7 +63,7 @@ export default {
     }
   },
 
-  disconnect: function* () {
+  * disconnect() {
 
   }
 

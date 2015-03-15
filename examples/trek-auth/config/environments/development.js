@@ -1,7 +1,31 @@
 export default (config) => {
+
+  config.set('middleware', {
+    morgan: {
+      mode: 'dev',
+      stream: false
+    },
+
+    staticCache: {
+      buffer: false,
+      maxAge: 0,
+      /*
+      alas: {
+        '/favicon.ico': '/favicon.png'
+      }
+      */
+    },
+
+    methodoverride: null,
+
+    compress: { }
+
+  });
+
   config.set('views', {
     cache: false
   });
+
   // mailer
   config.set('mailer', {
     transport: 'mailgun',
@@ -11,11 +35,6 @@ export default (config) => {
         domain: config.env.MAILGUN_DOMAIN
       }
     }
-  });
-
-  config.set('morgan', {
-    mode: 'dev',
-    stream: false
   });
 
   config.set('passport', {

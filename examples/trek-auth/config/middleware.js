@@ -8,31 +8,8 @@ export default (app) => {
   return [
 
     {
-      handler: ms.morgan.middleware,
-      options: [
-        config.get('morgan.mode') || 'dev',
-        config.get('morgan.stream')
-          ? {
-              stream: fs.createWriteStream(config.paths.get('log').first, {
-                flags: 'a'
-              })
-            } : null
-      ]
-    },
-
-    {
       handler: ms.favicon,
       options: path.join(config.publicPath, 'favicon.ico')
-    },
-
-    {
-      handler: ms.staticCache,
-      options: config.publicPath
-    },
-
-    {
-      handler: ms.lusca,
-      options: config.get('lusca')
     },
 
     {
@@ -47,8 +24,8 @@ export default (app) => {
     },
 
     {
-      handler: ms.genericSession,
-      options: config.session
+      handler: ms.lusca,
+      options: config.get('lusca')
     },
 
     {

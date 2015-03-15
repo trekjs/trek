@@ -11,6 +11,7 @@
 {% endif %}
 
 <form role="form" action="/auth/local/register" method="post">
+  <input type="hidden" name="_csrf" value="{{_csrf}}" />
   <input type="text" name="username" placeholder="Username">
   <input type="email" name="email" placeholder="Email">
   <input type="password" name="password" placeholder="Password">

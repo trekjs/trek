@@ -108,7 +108,7 @@ class Config {
       }
       let secrets = allSecrets[Trek.env] || {};
       if (!secrets.secretKeyBase) {
-        secrets.secretKeyBase = [ Trek.keys ];
+        secrets.secretKeyBase = Trek.keys;
       }
       return secrets;
     })());

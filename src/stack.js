@@ -14,6 +14,7 @@ export default (app) => {
   let isProduction = app.env === 'production';
   let [config, ms, stack] = [app.config, klm(), []];
   let stackPath = config.paths.get('config/middleware').first;
+
   try {
     stack = require(stackPath)(app);
   } catch (e) {
@@ -23,7 +24,55 @@ export default (app) => {
   // default before stack
   let beforeStack = [
     {
-      handler: isProduction ? null : ms.logger
+      handler: isProduction ? null : ms.logger,
+      //disable: config.get('middleware.morgan.disable')
+    },
+
+    {
+      handler: ms.morgan.middleware,
+      options: [
+        config.get('middleware.morgan.mode') || 'dev',
+        config.get('middleware.morgan.stream')
+          ? {
+              stream: fs.createWriteStream(config.paths.get('log').first, {
+                flags: 'a'
+              })
+            } : null
+      ],
+    },
+
+    {
+      handler: ms.responseTime,
+    },
+
+    {
+      handler: ms.xRequestId,
+      options: [undefined, true, true],
+    },
+
+    {
+      handler: ms.staticCache,
+      options: [ config.publicPath, config.get('static') ],
+    },
+
+    {
+      handler: ms.methodoverride,
+      options: config.get('methodoverride'),
+    },
+
+    {
+      handler: ms.qs,
+      options: app,
+      isWrapped: true,
+    },
+
+    {
+      handler: ms.bodyparser
+    },
+
+    {
+      handler: ms.compress,
+      options: config.get('compress')
     },
 
     {
@@ -35,26 +84,8 @@ export default (app) => {
     },
 
     {
-      handler: ms.xRequestId,
-      options: [undefined, true, true]
-    },
-
-    {
-      handler: ms.responseTime
-    },
-
-    {
-      handler: ms.methodoverride
-    },
-
-    {
-      handler: ms.qs,
-      options: app,
-      isWrapped: true
-    },
-
-    {
-      handler: ms.bodyparser
+      handler: ms.genericSession,
+      options: config.session
     },
 
   ];
@@ -70,8 +101,8 @@ export default (app) => {
   stack = [].concat(beforeStack).concat(stack).concat(afterStack);
 
   stack.forEach((m) => {
-    let { handler, options, isWrapped } = m;
-    if (isFunction(handler)) {
+    let { handler, options, isWrapped, disable } = m;
+    if (!disable && isFunction(handler)) {
       options = Array.isArray(options) ? options : [options];
       if (isWrapped) {
         handler.apply(undefined, options);
