@@ -21,6 +21,7 @@ describe('app', () => {
   it('should have logger property', (done) => {
 
     app.logger.should.not.be.null;
+    app.logger.should.not.equal(Trek.logger);
 
     app.get('/', function*() {
       let result = yield this.sendMail({

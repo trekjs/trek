@@ -26,9 +26,8 @@
     "chalk": "^1.0.0",
     "co": "^4.4.0",
     "debug": "^2.x.x",
-    "dotenv": "^0.5.1",
+    "dotenv": "^1.x.x",
     "glob": "^5.x.x",
-    "grant": "^2.0.1",
     "joi": "^6.x.x",
     "jsonwebtoken": "^4.1.0",
     "koa": "^0.18.1",
@@ -59,12 +58,13 @@
     "nodemailer-stub-transport": "^0.1.5",
     "passport-local": "^1.0.0",
     "pbkdf2-utils": "^1.0.0",
-    "thenify": "^3.1.0",
-    "validator": "^3.33.0",
-    "winston": "^0.9.0"
+    "thenify": "^3.x.x",
+    "validator": "^3.x.x",
+    "winston": "^0.9.x"
   },
   "devDependencies": {
     "bookshelf": "^0.7.x",
+    "grant-koa": "^3.0.0",
     "istanbul": "^0.3.x",
     "knex": "^0.7.x",
     "mocha": "^2.x.x",
