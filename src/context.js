@@ -1,12 +1,10 @@
-"use strict";
-
 /*!
  * trek/context
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
 
-module.exports = function (context) {
+export default (context) => {
 
   Object.defineProperties(context, {
 
@@ -18,7 +16,7 @@ module.exports = function (context) {
      * @api public
      */
     env: {
-      get: function get() {
+      get() {
         return Trek.env;
       }
     },
@@ -31,7 +29,7 @@ module.exports = function (context) {
      * @api public
      */
     config: {
-      get: function get() {
+      get() {
         return this.app.config;
       }
     },
@@ -44,7 +42,7 @@ module.exports = function (context) {
      * @api public
      */
     jwt: {
-      get: function get() {
+      get() {
         return this.app.jwt;
       }
     },
@@ -57,7 +55,7 @@ module.exports = function (context) {
      * @api public
      */
     logger: {
-      get: function get() {
+      get() {
         return this.app.logger;
       }
     },
@@ -74,10 +72,10 @@ module.exports = function (context) {
      * @api public
      */
     sendMail: {
-      value: function (data) {
-        return function (done) {
+      value: (data) => {
+        return function(done) {
           this.app.sendMail(data, done);
-        };
+        }
       }
     },
 
@@ -93,17 +91,18 @@ module.exports = function (context) {
        * @getter
        * @return {Object}
        */
-      get: function get() {
+      get() {
         return this.req.user;
       },
 
       /**
        * @setter
        */
-      set: function set(user) {
+      set(user) {
         this.req.user = user;
       }
     }
 
   });
+
 };

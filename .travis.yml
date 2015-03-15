@@ -3,7 +3,7 @@ branches:
   only:
     - dev
 node_js:
-  - "0.12"
+  #- "0.12", no `--harmony_templates` flag
   - "iojs"
 script:
   - "npm test"

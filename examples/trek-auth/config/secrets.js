@@ -10,20 +10,39 @@ import redisStore from 'koa-redis';
 // $ telnet $(boot2docker ip) 6379
 // http://redis.io/commands/monitor
 
+export default {
+
+  development: {
+    secretKeyBase: ''
+  },
+
+  test: {
+    secretKeyBase: ''
+  },
+
+  production: {
+    secretKeyBase: ''
+  }
+
+};
+
+/*
 const secrets = {
   secretKeyBase: 'star trek',
   session: {
     key: 'trek.sid',
     prefix: 'trek:sess:',
     cookie: {
-      //signed: false,
-      //httpOnly: false
+      signed: false,
+      httpOnly: false
     },
+    // defaults to MemoryStore
+    store: null
     store: redisStore({
       port: 6379,
       host: '192.168.59.103'
     })
   }
 };
-
 export default secrets;
+*/

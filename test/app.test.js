@@ -56,4 +56,8 @@ describe('app', () => {
       .expect(200, done);
   });
 
+  it('should have secrets', () => {
+    console.log(app.config.secrets);
+  });
+
 });

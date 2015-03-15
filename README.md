@@ -37,10 +37,10 @@ $ npm i && npm start
 
 ## Features
 
-  * Use [Babel][] for writing next generation JavaScript, **ES6+**
-  * Work with [io.js][] and [Node.js v0.12][]
+  * Using [Babel][] for writing next generation JavaScript, **ES6+**
+  * Working with [io.js][]
+  * Loads configurations & environment variables(.env) automagically
   * MVC
-  * Load configurations & environment variables(.env) automagically
 
 ## Quick Start
 
@@ -53,7 +53,6 @@ $ npm i && npm start
 [Koa]: http://koajs.com/
 [Babel]: https://babeljs.io/
 [io.js]: https://iojs.org/
-[Node.js v0.12]: https://nodejs.org/
 
 [npm-img]: https://img.shields.io/npm/v/trek.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trek

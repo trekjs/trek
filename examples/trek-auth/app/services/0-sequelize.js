@@ -25,7 +25,7 @@ export default (app, config) => {
           try {
             let model = sequelize.import(file);
             db[model.name] = model;
-            app.logger.info(`* Trek modes:${chalk.blue(model.name)}`)
+            app.logger.info(`modes:${chalk.blue(model.name)}`)
           } catch(e) {
             app.logger.error(chalk.bold.red(e.stack));
           }

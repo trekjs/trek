@@ -17,10 +17,10 @@
     "koa"
   ],
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "prepublish": "make clean && make build"
   },
   "dependencies": {
-    "babel": "^4.7.12",
     "bcrypt": "^0.8.1",
     "bluebird": "^2.x.x",
     "chalk": "^1.0.0",
@@ -63,6 +63,7 @@
     "winston": "^0.9.x"
   },
   "devDependencies": {
+    "babel": "^4.7.12",
     "bookshelf": "^0.7.x",
     "grant-koa": "^3.0.0",
     "istanbul": "^0.3.x",
