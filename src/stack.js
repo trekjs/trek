@@ -27,6 +27,14 @@ export default (app) => {
     },
 
     {
+      handler: ms.conditionalGet
+    },
+
+    {
+      handler: ms.etag
+    },
+
+    {
       handler: ms.xRequestId,
       options: [undefined, true, true]
     },
