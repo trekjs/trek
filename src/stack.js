@@ -110,17 +110,20 @@ export default (app) => {
     let {
       name, handler, options, isWrapped, disabled
     } = m;
-    if (!disabled && _.isFunction(handler)) {
-      if (!options) {
-        options = config.get(name);
-      }
-      options = Array.isArray(options) ? options : [options];
-      if (isWrapped) {
-        handler.apply(undefined, options);
+    if (!disabled) {
+      if (_.isFunction(handler)) {
+        if (!options) {
+          options = config.get(name);
+        }
+        options = Array.isArray(options) ? options : [options];
+        if (isWrapped) {
+          handler.apply(undefined, options);
+        } else {
+          app.use(handler.apply(undefined, options));
+        }
       } else {
-        app.use(handler.apply(undefined, options));
+        app.logger.warn(`middleware:${name} is enabled.`)
       }
-      app.logger.debug(`middleware:${name} is enabled.`)
     }
   });
 };
