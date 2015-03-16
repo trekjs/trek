@@ -2,7 +2,7 @@
 
 Next generation full-stack JavaScript open source solution, based on [Koa][].
 
-  [![Gitter][gitter-img][gitter-url]
+  [![Gitter][gitter-img]][gitter-url]
   [![NPM version][npm-img]][npm-url]
   [![Build status][travis-img]][travis-url]
   [![Test coverage][coveralls-img]][coveralls-url]
