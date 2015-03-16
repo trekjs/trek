@@ -2,6 +2,7 @@
 
 Next generation full-stack JavaScript open source solution, based on [Koa][].
 
+  [![Gitter][gitter-img][gitter-url]
   [![NPM version][npm-img]][npm-url]
   [![Build status][travis-img]][travis-url]
   [![Test coverage][coveralls-img]][coveralls-url]
@@ -54,6 +55,8 @@ $ npm i && npm start
 [Babel]: https://babeljs.io/
 [io.js]: https://iojs.org/
 
+[gitter-img]: https://badges.gitter.im/Join%20Chat.svg
+[gitter-url]:https://gitter.im/trekjs/trek?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 [npm-img]: https://img.shields.io/npm/v/trek.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trek
 [travis-img]: https://img.shields.io/travis/trekjs/trek.svg?style=flat-square
