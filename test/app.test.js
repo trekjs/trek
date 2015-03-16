@@ -60,4 +60,45 @@ describe('app', () => {
     console.log(app.config.secrets);
   });
 
+  it('should mount other trek app', (done) => {
+    var a = new Trek(path.resolve(__dirname, './fixtures'));
+    var b = new Trek(path.resolve(__dirname, './fixtures'));
+
+    a.get('/hello', function* () {
+      this.logger.info(`A's x-request-id: ${this.id}.`);
+      this.body = 'Hello';
+    });
+
+    b.get('/world', function* () {
+      this.logger.info(`B's x-request-id: ${this.id}.`);
+      this.body = 'World';
+    });
+
+    var app = new Trek(path.resolve(__dirname, './fixtures'));
+    app.use(function* (next) {
+      this.logger.info(`App's x-request-id: ${this.id}.`);
+      yield next;
+    });
+    app.mount(a);
+    app.mount(b);
+
+    request(app.listen())
+      .get('/')
+      .expect(404)
+      .end((err) => {
+        if (err) done(err);
+
+        request(app.listen())
+          .get('/hello')
+          .expect('Hello')
+          .end((err) => {
+            if (err) done(err);
+
+            request(app.listen())
+              .get('/world')
+              .expect('World', done);
+          });
+      });
+  });
+
 });

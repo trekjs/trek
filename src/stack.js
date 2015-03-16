@@ -47,7 +47,7 @@ export default (app) => {
 
     xRequestId: {
       handler: ms.xRequestId,
-      options: [undefined, true, true],
+      options: [app, { key: undefined, noHyphen: true, inject: true }],
     },
 
     staticCache: {

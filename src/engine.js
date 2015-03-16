@@ -15,6 +15,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import Koa from 'koa';
+import mount from 'koa-mount';
 //import RouteMapper from 'route-mapper';
 import Config from './config';
 import extraContext from './context';
@@ -188,6 +189,19 @@ class Engine extends Koa {
     return this._jwt || (() => {
       return this._jwt = jsonwebtoken;
     })();
+  }
+
+  /**
+   * Mount `app` with `prefix`, `app`
+   * may be a Trek application or
+   * middleware function.
+   *
+   * @param {String|Application|Function} prefix, app, or function
+   * @param {Application|Function} [app or function]
+   * @api public
+   */
+  mount() {
+    return this.use(mount(...arguments));
   }
 
   /**
