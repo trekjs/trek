@@ -13,6 +13,12 @@ describe('Trek', () => {
     Trek.env.should.be.equal(process.env.TREK_ENV);
   });
 
+  it('should be test env', () => {
+    Trek.isTest.should.be.equal(true);
+    Trek.isProduction.should.be.equal(false);
+    Trek.isDevelopment.should.be.equal(false);
+  });
+
   it('should returns package information', () => {
     Trek.package.should.not.be.null;
     Trek.package.name.should.equal('trek');

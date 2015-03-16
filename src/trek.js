@@ -24,6 +24,7 @@ class Trek extends Engine {
    * @static
    * @property env
    * @default 'development'
+   * @return {String}
    * @api public
    */
   static get env() {
@@ -34,14 +35,38 @@ class Trek extends Engine {
       'development');
   }
 
+  /**
+   * Returns true if current environment is `production`.
+   *
+   * @static
+   * @property isProduction
+   * @return {Boolean}
+   * @api public
+   */
   static get isProduction() {
     return this.env === 'production';
   }
 
+  /**
+   * Returns true if current environment is `development`.
+   *
+   * @static
+   * @property isDevelopment
+   * @return {Boolean}
+   * @api public
+   */
   static get isDevelopment() {
     return this.env === 'development';
   }
 
+  /**
+   * Returns true if current environment is `test`.
+   *
+   * @static
+   * @property isTest
+   * @return {Boolean}
+   * @api public
+   */
   static get isTest() {
     return this.env === 'test';
   }
