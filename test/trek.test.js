@@ -24,4 +24,8 @@ describe('Trek', () => {
     Trek.package.name.should.equal('trek');
     Trek.version.should.equal(Trek.package.version);
   });
+
+  it('should returns keys array', () => {
+    Trek.keys.should.be.eql(['Star Trek', 'EnterPrise', 'Spock']);
+  });
 });

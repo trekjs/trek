@@ -1,4 +1,5 @@
 export default {
+
   "development": {
     "username": "trek",
     "password": "star trek",
@@ -21,6 +22,7 @@ export default {
     },
     "logging": true
   },
+
   "test": {
     "username": "root",
     "password": null,
@@ -28,11 +30,14 @@ export default {
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
+
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
+    "username": `${process.env.DATABASE_USERNAME}`,
+    "password": `${process.env.DATABASE_PASSWORD}`,
+    "database": `${process.env.DATABASE_DATABASE}`,
+    "host":     `${process.env.DATABASE_HOST}`,
+    "port":     `${process.env.DATABASE_PORT}`,
     "dialect": "postgres"
   }
+
 };

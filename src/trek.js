@@ -9,6 +9,8 @@ import chalk from 'chalk';
 import winston from 'winston';
 import Engine from './engine';
 
+const TREK_KEYS = ['Star Trek', 'EnterPrise', 'Spock'];
+
 /**
  * @class Trek
  */
@@ -117,8 +119,16 @@ class Trek extends Engine {
     }));
   }
 
+  /**
+   * Trek app `keys`.
+   *
+   * @getter
+   * @property
+   * @return {Array}
+   * @api public
+   */
   static get keys() {
-    return ['Star Trek', 'EnterPrise', 'Spock']
+    return TREK_KEYS;
   }
 
 }
