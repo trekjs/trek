@@ -32,10 +32,11 @@ class Config {
    * Initialize an app's config.
    *
    * @constructor
-   * @param {String} root
+   * @param {Trek} app
    */
-  constructor(root) {
-    this.root = root;
+  constructor(app) {
+    this.app = app;
+    this.root = app.root;
     this.emitter = new EventEmitter;
     this.defaultSettings = Object.create(null);
     this.settings = Object.create(null);

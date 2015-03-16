@@ -69,7 +69,7 @@
     "babel": "^4.7.12",
     "bookshelf": "^0.7.x",
     "grant-koa": "^3.0.0",
-    "istanbul": "^0.3.7",
+    "istanbul": "^0.3.x",
     "knex": "^0.7.x",
     "mocha": "^2.x.x",
     "mongoose": "^3.9.x",

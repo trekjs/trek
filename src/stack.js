@@ -25,96 +25,95 @@ export default (app) => {
   let stackTemp = {
 
     logger: {
-      name: 'logger',
       handler: isProduction ? null : ms.logger,
-      //disable: config.get('middleware.morgan.disable')
+      //disabled: true
     },
 
     morgan: {
-      name: 'morgan',
       handler: ms.morgan.middleware,
       options: [
-        config.get('middleware.morgan.mode') || 'dev',
-        config.get('middleware.morgan.stream') ? {
+        config.get('morgan.mode') || 'tiny',
+        config.get('morgan.stream') ? {
           stream: fs.createWriteStream(config.paths.get('log').first, {
             flags: 'a'
           })
         } : null
-      ],
+      ]
     },
 
     responseTime: {
-      name: 'responseTime',
       handler: ms.responseTime,
     },
 
     xRequestId: {
-      name: 'xRequestId',
       handler: ms.xRequestId,
       options: [undefined, true, true],
     },
 
     staticCache: {
-      name: 'staticCache',
       handler: ms.staticCache,
       options: [config.publicPath, config.get('static')],
     },
 
     methodoverride: {
-      name: 'methodoverride',
       handler: ms.methodoverride,
       options: config.get('methodoverride'),
     },
 
     qs: {
-      name: 'qs',
       handler: ms.qs,
       options: app,
       isWrapped: true,
     },
 
     bodyparser: {
-      name: 'bodyparser',
       handler: ms.bodyparser,
     },
 
     compress: {
-      name: 'compress',
       handler: ms.compress,
       options: config.get('compress'),
     },
 
     conditionalGet: {
-      name: 'conditionalGet',
       handler: ms.conditionalGet,
     },
 
     etag: {
-      name: 'etag',
       handler: ms.etag,
     },
 
     genericSession: {
-      name: 'genericSession',
       handler: ms.genericSession,
       options: config.session,
     },
 
     router: {
-      name: 'router',
       handler: ms.router,
       options: app,
     }
 
   };
 
-  stack = _.sortBy(_.merge(stackTemp, defaultStack, stack), 'priority');
+  stack = _.sortBy(
+    _.map(_.merge(
+      stackTemp, defaultStack, stack), (m, k) => {
+      if (!m.name) {
+        m.name = k;
+      }
+      return m;
+    }),
+    'priority'
+  );
 
   stack.forEach((m) => {
     let {
       name, handler, options, isWrapped, disabled
     } = m;
     if (!disabled && _.isFunction(handler)) {
+      if (!options) {
+        options = config.get(name);
+      }
       options = Array.isArray(options) ? options : [options];
       if (isWrapped) {
         handler.apply(undefined, options);

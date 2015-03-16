@@ -7,14 +7,12 @@ export default (app) => {
   return {
 
     favicon: {
-      name: 'favicon',
       handler: ms.favicon,
       options: path.join(config.publicPath, 'favicon.ico'),
       priority: 235
     },
 
     locale: {
-      name: 'locale',
       handler: ms.locale,
       options: app,
       isWrapped: true,
@@ -22,14 +20,12 @@ export default (app) => {
     },
 
     i18n: {
-      name: 'i18n',
       handler: ms.i18n,
       options: [app, config.get('i18n')],
       priority: 245
     },
 
     lusca: {
-      name: 'lusca',
       handler: ms.lusca,
       options: config.get('lusca'),
       priority: 250
@@ -48,13 +44,11 @@ export default (app) => {
     },
 
     connectFlash: {
-      name: 'connectFlash',
       handler: ms.connectFlash,
       priority: 260
     },
 
     swig: {
-      name: 'swig',
       handler: ms.swig,
       options: [app, config.get('views')],
       isWrapped: true,

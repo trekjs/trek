@@ -99,7 +99,7 @@ class Engine extends Koa {
    */
   get config() {
     return this._config
-      || (this._config = new Config(this.root));
+      || (this._config = new Config(this));
   }
 
   /**
