@@ -26,6 +26,6 @@ describe('Trek', () => {
   });
 
   it('should returns keys array', () => {
-    Trek.keys.should.be.eql(['Star Trek', 'EnterPrise', 'Spock']);
+    Trek.keys.should.be.eql(['Star Trek', 'Spock', 'Trek']);
   });
 });

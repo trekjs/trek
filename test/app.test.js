@@ -65,12 +65,12 @@ describe('app', () => {
     var b = new Trek(path.resolve(__dirname, './fixtures'));
 
     a.get('/hello', function* () {
-      this.logger.info(`A's x-request-id: ${this.id}.`);
+      this.logger.info(`AAA's x-request-id: ${this.id}.`);
       this.body = 'Hello';
     });
 
     b.get('/world', function* () {
-      this.logger.info(`B's x-request-id: ${this.id}.`);
+      this.logger.info(`BBB's x-request-id: ${this.id}.`);
       this.body = 'World';
     });
 

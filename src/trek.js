@@ -9,7 +9,7 @@ import chalk from 'chalk';
 import winston from 'winston';
 import Engine from './engine';
 
-const TREK_KEYS = ['Star Trek', 'EnterPrise', 'Spock'];
+const TREK_KEYS = ['Star Trek', 'Spock', 'Trek'];
 
 /**
  * @class Trek
