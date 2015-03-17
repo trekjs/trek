@@ -136,10 +136,10 @@ class Trek extends Engine {
 
       return this._jwt = jsonwebtoken;
 
-      function verify(token, signature) {
+      function verify(token, signature, options) {
         // Asynchronous
         return function(done) {
-          jwt.verifySync(token, signature, done)
+          jwt.verifySync(token, signature, options, done)
         }
       }
     })();
