@@ -6,6 +6,7 @@
 
 import has from 'lodash-node/modern/object/has';
 import chalk from 'chalk';
+import jsonwebtoken from 'jsonwebtoken';
 import winston from 'winston';
 import Engine from './engine';
 
@@ -113,10 +114,35 @@ class Trek extends Engine {
           prettyPrint: true,
           colorize: true,
           level: Trek.env === 'production' ? 'info' : 'debug'
-          //timestamp: true
+            //timestamp: true
         })
       ]
     }));
+  }
+
+  /**
+   * Trek app `jwt`.
+   *
+   * @getter
+   * @property
+   * @param {Object}
+   * @api public
+   */
+  static get jwt() {
+    return this._jwt || (() => {
+      let jwt = jsonwebtoken;
+      jwt.verifySync = jwt.verify;
+      jwt.verify = verify;
+
+      return this._jwt = jsonwebtoken;
+
+      function verify(token, signature) {
+        // Asynchronous
+        return function(done) {
+          jwt.verifySync(token, signature, done)
+        }
+      }
+    })();
   }
 
   /**

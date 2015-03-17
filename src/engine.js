@@ -9,9 +9,7 @@
  */
 import path from 'path';
 import chalk from 'chalk';
-import assign from 'lodash-node/modern/object/assign';
 import co from 'co';
-import jsonwebtoken from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import Koa from 'koa';
@@ -59,9 +57,13 @@ class Engine extends Koa {
    * @api public
    */
   dotenv() {
-    let loaded = dotenv.config({ path: `${this.root}/.env` });
+    let loaded = dotenv.config({
+      path: `${this.root}/.env`
+    });
     if (!loaded) Trek.logger.debug('Missing %s.', chalk.red('.env'));
-    loaded = dotenv.config({ path: `${this.root}/.env.${Trek.env}` });
+    loaded = dotenv.config({
+      path: `${this.root}/.env.${Trek.env}`
+    });
     if (!loaded) Trek.logger.debug('Missing %s.', chalk.red(`.env.${Trek.env}`));
   }
 
@@ -74,8 +76,7 @@ class Engine extends Koa {
    * @api public
    */
   get root() {
-    return this._root
-      || (this._root = path.dirname(require.main.filename));
+    return this._root || (this._root = path.dirname(require.main.filename));
   }
 
   /**
@@ -99,8 +100,7 @@ class Engine extends Koa {
    * @api public
    */
   get config() {
-    return this._config
-      || (this._config = new Config(this));
+    return this._config || (this._config = new Config(this));
   }
 
   /**
@@ -178,20 +178,6 @@ class Engine extends Koa {
   }
 
   /**
-   * Trek app `jwt`.
-   *
-   * @getter
-   * @property
-   * @param {Object}
-   * @api public
-   */
-  get jwt() {
-    return this._jwt || (() => {
-      return this._jwt = jsonwebtoken;
-    })();
-  }
-
-  /**
    * Mount `app` with `prefix`, `app`
    * may be a Trek application or
    * middleware function.
@@ -217,20 +203,20 @@ class Engine extends Koa {
     let config = self.config;
     let servicesPath = self.paths.get('app/services').path
     this.keys = config.secrets.secretKeyBase;
-    return co(function* () {
-      let seq = [];
-      let files = self.paths.get('app/services').existent;
-      for (let file of files) {
-        let name = path.basename(file, '.js').replace(/^[0-9]+-/, '');
-        let service = require(file)(self, config);
-        if (service) {
-          self.setService(name, service);
-          self.logger.info(chalk.green(`service:${name} init ...`));
-          if (service.promise) yield service.promise;
-          self.logger.info(chalk.green(`service:${name} booted`));
+    return co(function*() {
+        let seq = [];
+        let files = self.paths.get('app/services').existent;
+        for (let file of files) {
+          let name = path.basename(file, '.js').replace(/^[0-9]+-/, '');
+          let service = require(file)(self, config);
+          if (service) {
+            self.setService(name, service);
+            self.logger.info(chalk.green(`service:${name} init ...`));
+            if (service.promise) yield service.promise;
+            self.logger.info(chalk.green(`service:${name} booted`));
+          }
         }
-      }
-    })
+      })
       .then(() => {
         // TODO: https
         let args = [...arguments];

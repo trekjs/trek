@@ -1,6 +1,7 @@
 import path from 'path';
 import assert from 'assert';
 import request from 'supertest';
+import co from 'co';
 import Trek from '..';
 
 describe('Trek', () => {
@@ -27,5 +28,19 @@ describe('Trek', () => {
 
   it('should returns keys array', () => {
     Trek.keys.should.be.eql(['Star Trek', 'Spock', 'Trek']);
+  });
+
+  it('should has jwt object', (done) => {
+    let token = Trek.jwt.sign({
+      foo: 'bar'
+    }, 'shhhhh');
+    let data = Trek.jwt.decode(token);
+    co(function*() {
+        let result = yield Trek.jwt.verify(token, 'shhhhh');
+        data.foo.should.be.equal(data.foo);
+        let result2 = Trek.jwt.verifySync(token, 'shhhhh');
+        result.foo.should.be.equal(result2.foo);
+      })
+      .then(done);
   });
 });

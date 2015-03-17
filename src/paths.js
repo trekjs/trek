@@ -18,7 +18,10 @@ class Root {
 
   set(path, value) {
     var glob = this.get(path) ? this.get(path).glob : null;
-    this.add(path, { 'with': value, glob: glob });
+    this.add(path, {
+      'with': value,
+      glob: glob
+    });
   }
 
   get(path) {
@@ -101,7 +104,9 @@ class Path {
 
       if (this.glob && fs.existsSync(p) && fs.lstatSync(p).isDirectory()) {
         result = result.concat(
-          glob.sync(this.glob, { cwd: p }).map(_p => path.join(p, _p))
+          glob.sync(this.glob, {
+            cwd: p
+          }).map(_p => path.join(p, _p))
         );
       } else {
         result.push(p);
@@ -121,6 +126,6 @@ class Path {
 }
 
 export {
-  Root,
   Path
 };
+export default Root;

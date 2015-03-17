@@ -25,7 +25,8 @@ var defaultStack = {
   },
 
   qs: {
-    priority: 70
+    priority: 70,
+    isWrapped: true
   },
 
   bodyparser: {
@@ -41,7 +42,7 @@ var defaultStack = {
   },
 
   etag: {
-    name: 'etag',
+    name: "etag",
     priority: 110
   },
 
@@ -50,7 +51,40 @@ var defaultStack = {
   },
 
   router: {
-    priority: '1024'
+    priority: 1024
+  },
+
+  //--------//
+
+  favicon: {
+    priority: 200
+  },
+
+  locale: {
+    isWrapped: true,
+    priority: 210
+  },
+
+  i18n: {
+    priority: 220
+  },
+
+  lusca: {
+    priority: 230
+  },
+
+  passport: {
+    isWrapped: true,
+    priority: 240
+  },
+
+  connectFlash: {
+    priority: 250
+  },
+
+  swig: {
+    isWrapped: true,
+    priority: 260
   }
 
 };

@@ -47,7 +47,11 @@ export default (app) => {
 
     xRequestId: {
       handler: ms.xRequestId,
-      options: [app, { key: undefined, noHyphen: true, inject: true }],
+      options: [app, {
+        key: undefined,
+        noHyphen: true,
+        inject: true
+      }],
     },
 
     staticCache: {
@@ -63,7 +67,6 @@ export default (app) => {
     qs: {
       handler: ms.qs,
       options: app,
-      isWrapped: true,
     },
 
     bodyparser: {
@@ -91,7 +94,48 @@ export default (app) => {
     router: {
       handler: ms.router,
       options: app,
-    }
+    },
+
+    //------//
+
+    favicon: {
+      handler: ms.favicon,
+      options: path.join(config.publicPath, 'favicon.ico')
+    },
+
+    locale: {
+      handler: ms.locale,
+      options: app
+    },
+
+    i18n: {
+      handler: ms.i18n,
+      options: [app, config.get('i18n')]
+    },
+
+    lusca: {
+      handler: ms.lusca,
+      options: config.get('lusca')
+    },
+
+    passport: {
+      name: 'passport',
+      handler: () => {
+        let passport = ms.passport;
+        app.use(passport.initialize());
+        app.use(passport.session());
+        app.cache.set('passport', passport);
+      },
+    },
+
+    connectFlash: {
+      handler: ms.connectFlash,
+    },
+
+    swig: {
+      handler: ms.swig,
+      options: [app, config.get('views')]
+    },
 
   };
 
