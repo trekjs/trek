@@ -26,6 +26,7 @@
     "chalk": "^1.0.0",
     "co": "^4.4.0",
     "debug": "^2.x.x",
+    "delegates": "^0.1.0",
     "dotenv": "^1.x.x",
     "glob": "^5.x.x",
     "joi": "^6.x.x",
@@ -63,6 +64,7 @@
     "passport-local": "^1.0.0",
     "pbkdf2-utils": "^1.0.0",
     "thenify": "^3.x.x",
+    "thenify-all": "^1.6.0",
     "validator": "^3.x.x",
     "winston": "^0.9.x"
   },

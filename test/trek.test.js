@@ -43,4 +43,11 @@ describe('Trek', () => {
       })
       .then(done);
   });
+
+  it('should has bcrypt object', () => {
+    return co(function* () {
+      let salt = yield Trek.bcrypt.genSalt(10)
+      console.log(salt);
+    });
+  })
 });

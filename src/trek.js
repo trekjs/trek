@@ -5,9 +5,7 @@
  */
 
 import has from 'lodash-node/modern/object/has';
-import chalk from 'chalk';
-import jsonwebtoken from 'jsonwebtoken';
-import winston from 'winston';
+import delegate from 'delegates';
 import Engine from './engine';
 
 const TREK_KEYS = ['Star Trek', 'Spock', 'Trek'];
@@ -99,53 +97,6 @@ class Trek extends Engine {
   }
 
   /**
-   * Trek app `logger`.
-   *
-   * @getter
-   * @property
-   * @return {Object}
-   * @api public
-   */
-  static get logger() {
-    return this._logger || (this._logger = new(winston.Logger)({
-      transports: [
-        new(winston.transports.Console)({
-          label: chalk.green('Trek'),
-          prettyPrint: true,
-          colorize: true,
-          level: Trek.env === 'production' ? 'info' : 'debug'
-            //timestamp: true
-        })
-      ]
-    }));
-  }
-
-  /**
-   * Trek app `jwt`.
-   *
-   * @getter
-   * @property
-   * @param {Object}
-   * @api public
-   */
-  static get jwt() {
-    return this._jwt || (() => {
-      let jwt = jsonwebtoken;
-      jwt.verifySync = jwt.verify;
-      jwt.verify = verify;
-
-      return this._jwt = jsonwebtoken;
-
-      function verify(token, signature, options) {
-        // Asynchronous
-        return function(done) {
-          jwt.verifySync(token, signature, options, done)
-        }
-      }
-    })();
-  }
-
-  /**
    * Trek app `keys`.
    *
    * @getter
@@ -155,6 +106,18 @@ class Trek extends Engine {
    */
   static get keys() {
     return TREK_KEYS;
+  }
+
+  /**
+   * Trekking utility tools.
+   *
+   * @getter
+   * @property
+   * @return {Object}
+   * @api public
+   */
+  static get King() {
+    return require('./king');
   }
 
 }
@@ -167,6 +130,18 @@ class Trek extends Engine {
  * @return {Mixed}
  * @api public
  */
-if (!has(global, 'Trek')) global.Trek = Trek;
+if (!has(global, 'Trek')) {
+  global.Trek = Trek;
+
+  /**
+   * Delegate getter to `Trek.King`.
+   */
+  delegate(Trek, 'King')
+    .getter('joi')
+    .getter('jwt')
+    .getter('uuid')
+    .getter('bcrypt')
+    .getter('logger');
+}
 
 export default global.Trek;
