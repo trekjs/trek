@@ -141,6 +141,7 @@ if (!has(global, 'Trek')) {
     .getter('jwt')
     .getter('uuid')
     .getter('bcrypt')
+    .getter('pbkdf2')
     .getter('logger');
 }
 
