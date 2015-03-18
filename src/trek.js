@@ -8,10 +8,15 @@ import has from 'lodash-node/modern/object/has';
 import delegate from 'delegates';
 import Engine from './engine';
 
+/**
+ * Trek Secret Keys.
+ * @api private
+ */
 const TREK_KEYS = ['Star Trek', 'Spock', 'Trek'];
 
 /**
  * @class Trek
+ * @api public
  */
 class Trek extends Engine {
 
@@ -29,10 +34,10 @@ class Trek extends Engine {
    * @api public
    */
   static get env() {
-    return this._env || (
+    return this._env || (this._env =
       process.env.TREK_ENV ||
-      process.env.NODE_ENV ||
       process.env.IOJS_ENV ||
+      process.env.NODE_ENV ||
       'development');
   }
 
@@ -73,7 +78,7 @@ class Trek extends Engine {
   }
 
   /**
-   * Returns Trek package informations.
+   * Returns Trek package information.
    *
    * @static
    * @property package
@@ -127,7 +132,7 @@ class Trek extends Engine {
  *
  * @static
  * @property Trek
- * @return {Mixed}
+ * @return {Trek}
  * @api public
  */
 if (!has(global, 'Trek')) {
@@ -145,7 +150,8 @@ if (!has(global, 'Trek')) {
     .getter('pbkdf2')
     .getter('logger')
     .getter('validator')
-    .getter('Mailer');
+    .getter('Mailer')
+    .getter('dotenv');
 }
 
 export default global.Trek;

@@ -1,4 +1,5 @@
 import _ from 'lodash-node';
+import dotenv from 'dotenv';
 import joi from 'joi';
 import validator from 'validator';
 import uuid from 'node-uuid';
@@ -17,5 +18,6 @@ export {
   bcrypt,
   pbkdf2,
   validator,
-  Mailer
+  Mailer,
+  dotenv
 };

@@ -10,7 +10,6 @@
 import path from 'path';
 import chalk from 'chalk';
 import co from 'co';
-import dotenv from 'dotenv';
 import Koa from 'koa';
 import mount from 'koa-mount';
 //import RouteMapper from 'route-mapper';
@@ -20,6 +19,7 @@ import defaultStack from './stack';
 
 /**
  * @class Engine
+ * @api public
  */
 class Engine extends Koa {
 
@@ -56,14 +56,14 @@ class Engine extends Koa {
    * @api public
    */
   dotenv() {
-    let loaded = dotenv.config({
+    let loaded = Trek.dotenv.config({
       path: `${this.root}/.env`
     });
-    if (!loaded) Trek.logger.debug('Missing %s.', chalk.red('.env'));
-    loaded = dotenv.config({
+    if (!loaded) this.logger.debug('Missing %s.', chalk.red('.env'));
+    loaded = Trek.dotenv.config({
       path: `${this.root}/.env.${Trek.env}`
     });
-    if (!loaded) Trek.logger.debug('Missing %s.', chalk.red(`.env.${Trek.env}`));
+    if (!loaded) this.logger.debug('Missing %s.', chalk.red(`.env.${Trek.env}`));
   }
 
   /**
@@ -88,6 +88,31 @@ class Engine extends Koa {
    */
   set root(root) {
     this._root = root;
+  }
+
+  /**
+   * Gets current app name.
+   * Defaults to `Trek`.
+   *
+   * @getter
+   * @property
+   * @return {String}
+   * @api public
+   */
+  get name() {
+    return this._name || (this._name = this.config.get('name') || 'Trek');
+  }
+
+  /**
+   * Sets current app name.
+   *
+   * @setter
+   * @property
+   * @param {String}
+   * @api public
+   */
+  set name(name) {
+    this._name = name;
   }
 
   /**

@@ -18,6 +18,12 @@ describe('app', () => {
 
   });
 
+  it('should set app name', () => {
+    app.name.should.be.equal('Trek');
+    app.name = 'myApp'
+    app.name.should.be.equal('myApp');
+  });
+
   it('should have logger property', (done) => {
 
     app.logger.should.not.be.null;
