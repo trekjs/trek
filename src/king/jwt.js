@@ -18,8 +18,8 @@ jwt.verify = verify;
  */
 function verify(token, sign, options) {
   return (done) => {
-    jwt.verifySync(token, sign, options, done)
-  }
+    jwt.verifySync(token, sign, options, done);
+  };
 }
 
 export default jwt;

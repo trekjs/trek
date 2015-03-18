@@ -25,7 +25,7 @@ export default (app) => {
   let stackTemp = {
 
     logger: {
-      handler: isProduction ? null : ms.logger,
+      handler: isProduction ? null : ms.logger
       //disabled: true
     },
 
@@ -42,7 +42,7 @@ export default (app) => {
     },
 
     responseTime: {
-      handler: ms.responseTime,
+      handler: ms.responseTime
     },
 
     xRequestId: {
@@ -51,49 +51,49 @@ export default (app) => {
         key: undefined,
         noHyphen: true,
         inject: true
-      }],
+      }]
     },
 
     staticCache: {
       handler: ms.staticCache,
-      options: [config.publicPath, config.get('static')],
+      options: [config.publicPath, config.get('static')]
     },
 
     methodoverride: {
       handler: ms.methodoverride,
-      options: config.get('methodoverride'),
+      options: config.get('methodoverride')
     },
 
     qs: {
       handler: ms.qs,
-      options: app,
+      options: app
     },
 
     bodyparser: {
-      handler: ms.bodyparser,
+      handler: ms.bodyparser
     },
 
     compress: {
       handler: ms.compress,
-      options: config.get('compress'),
+      options: config.get('compress')
     },
 
     conditionalGet: {
-      handler: ms.conditionalGet,
+      handler: ms.conditionalGet
     },
 
     etag: {
-      handler: ms.etag,
+      handler: ms.etag
     },
 
     genericSession: {
       handler: ms.genericSession,
-      options: config.session,
+      options: config.session
     },
 
     router: {
       handler: ms.router,
-      options: app,
+      options: app
     },
 
     //------//
@@ -125,17 +125,17 @@ export default (app) => {
         app.use(passport.initialize());
         app.use(passport.session());
         app.cache.set('passport', passport);
-      },
+      }
     },
 
     connectFlash: {
-      handler: ms.connectFlash,
+      handler: ms.connectFlash
     },
 
     swig: {
       handler: ms.swig,
       options: [app, config.get('views')]
-    },
+    }
 
   };
 
@@ -166,7 +166,7 @@ export default (app) => {
           app.use(handler.apply(undefined, options));
         }
       } else {
-        app.logger.warn(`middleware:${name} is enabled.`)
+        app.logger.warn(`middleware:${name} is enabled.`);
       }
     }
   });

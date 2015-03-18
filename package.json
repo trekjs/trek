@@ -69,9 +69,12 @@
   },
   "devDependencies": {
     "babel": "^4.7.12",
+    "babel-eslint": "^2.0.2",
     "bookshelf": "^0.7.x",
+    "eslint": "^0.17.1",
     "grant-koa": "^3.0.0",
     "istanbul": "^0.3.x",
+    "jsdoc": "^3.3.0-beta2",
     "knex": "^0.7.x",
     "mocha": "^2.x.x",
     "mongoose": "^3.9.x",

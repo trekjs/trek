@@ -29,7 +29,7 @@ class Root {
   }
 
   add(path, options = {}) {
-    var _with = [].concat(options['with'] || path);
+    var _with = [].concat(options.with || path);
     this.root[path] = new Path(this, path, _with, options);
   }
 

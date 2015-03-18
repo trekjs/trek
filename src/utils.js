@@ -15,7 +15,7 @@ var splitKeyPath = (keyPath) => {
   let keyPathArray = [];
   let len = keyPath.length;
   let i = 0;
-  if (!len) return keyPathArray
+  if (!len) return keyPathArray;
   while (i < len) {
     let char = keyPath[i];
     if (char === '.' && (i === 0 || keyPath[i - 1] !== '\\')) {

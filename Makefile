@@ -5,6 +5,7 @@ BABEL = ./node_modules/.bin/babel
 BABEL_NODE = ./node_modules/.bin/babel-node
 ISTANBUL = ./node_modules/.bin/istanbul
 NODEMON = ./node_modules/.bin/nodemon
+ESLINT = ./node_modules/.bin/eslint
 
 TESTS = test/*.test.js
 TREK_ENV ?= test
@@ -52,5 +53,8 @@ bench:
 
 trek-auth:
 	@DEBUG=* $(NODEMON) --exec $(BABEL_NODE) examples/trek-auth/server.js
+
+lint:
+	@$(ESLINT) src
 
 .PHONY: test bench

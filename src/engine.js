@@ -34,7 +34,7 @@ class Engine extends Koa {
 
     this.logger.debug('Application starts from %s.', chalk.green(this.root));
 
-    super()
+    super();
 
     this.initialize();
   }
@@ -199,7 +199,7 @@ class Engine extends Koa {
     let self = this;
     self.logger.info(chalk.green('booting ...'));
     let config = self.config;
-    let servicesPath = self.paths.get('app/services').path
+    let servicesPath = self.paths.get('app/services').path;
     this.keys = config.secrets.secretKeyBase;
     return co(function*() {
         let seq = [];
@@ -232,7 +232,7 @@ class Engine extends Koa {
       .catch((e) => {
         this.logger.error(chalk.bold.red(`${e}`));
         this.logger.error(chalk.red('boots failed.'));
-      })
+      });
   }
 
   /*

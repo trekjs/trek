@@ -1,9 +1,10 @@
 import chalk from 'chalk';
 import winston from 'winston';
 
-var logger = new(winston.Logger)({
+let [Logger, Console] = [winston.Logger, winston.transports.Console];
+let logger = new Logger({
   transports: [
-    new(winston.transports.Console)({
+    new Console({
       label: chalk.green('Trek'),
       prettyPrint: true,
       colorize: true,

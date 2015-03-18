@@ -7,7 +7,7 @@ import uuid from 'node-uuid';
 import jwt from './jwt';
 import bcrypt from './bcrypt';
 import logger from './logger';
-import * as pbkdf2 from './pbkdf2'
+import * as pbkdf2 from './pbkdf2';
 import Mailer from './mailer';
 
 export {
