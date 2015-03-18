@@ -60,7 +60,7 @@ class Mailer {
    */
   send(message = {}) {
 
-    if (!(message && message.subject && message.html && message.to)) {
+    if (!(message && message.subject && (message.html || message.text) && message.to)) {
       return Promise.reject(new Error('Email Error: Incomplete message data.'));
     }
 
