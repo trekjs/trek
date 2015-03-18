@@ -1,3 +1,11 @@
+/*!
+ * trek/king/pbkdf2
+ * Copyright(c) 2015 Fangdun Cai
+ * MIT Licensed
+ */
+
+'use strict';
+
 import { pbkdf2, randomBytes } from 'mz/crypto';
 
 /**

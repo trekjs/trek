@@ -1,3 +1,11 @@
+/*!
+ * trek/king
+ * Copyright(c) 2015 Fangdun Cai
+ * MIT Licensed
+ */
+
+'use strict';
+
 import _ from 'lodash-node';
 import dotenv from 'dotenv';
 import debug from 'debug';

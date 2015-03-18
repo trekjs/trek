@@ -1,3 +1,11 @@
+/*!
+ * trek/defaultStack
+ * Copyright(c) 2015 Fangdun Cai
+ * MIT Licensed
+ */
+
+'use strict';
+
 var defaultStack = {
 
   logger: {

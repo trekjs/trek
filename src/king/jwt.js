@@ -1,3 +1,11 @@
+/*!
+ * trek/king/jwt
+ * Copyright(c) 2015 Fangdun Cai
+ * MIT Licensed
+ */
+
+'use strict';
+
 import jwt from 'jsonwebtoken';
 
 jwt.verifySync = jwt.verify;

@@ -1,3 +1,11 @@
+/*!
+ * trek/king/logger
+ * Copyright(c) 2015 Fangdun Cai
+ * MIT Licensed
+ */
+
+'use strict';
+
 import chalk from 'chalk';
 import winston from 'winston';
 

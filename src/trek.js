@@ -4,13 +4,15 @@
  * MIT Licensed
  */
 
+'use strict';
+
 import has from 'lodash-node/modern/object/has';
 import delegate from 'delegates';
 import Engine from './engine';
 
 /**
  * Trek Secret Keys.
- * constant
+ * @constant
  * @default
  * @private
  */

@@ -4,6 +4,8 @@
  * MIT Licensed
  */
 
+'use strict';
+
 import path from 'path';
 import { EventEmitter } from 'events';
 import { cloneDeep, isPlainObject } from 'lodash-node/modern/lang';

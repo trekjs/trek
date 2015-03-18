@@ -4,6 +4,8 @@
  * MIT Licensed
  */
 
+'use strict';
+
 import has from 'lodash-node/modern/object/has';
 
 /**
