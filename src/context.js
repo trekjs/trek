@@ -9,41 +9,15 @@ export default (context) => {
   Object.defineProperties(context, {
 
     /**
-     * Delegates `Trek.env`.
-     *
-     * @property env
-     * @return {String}
-     * @api public
-     */
-    env: {
-      get() {
-        return Trek.env;
-      }
-    },
-
-    /**
      * Delegates `app.config`.
      *
      * @property config
-     * @return {Mixed|Config}
+     * @return {Config}
      * @api public
      */
     config: {
       get() {
         return this.app.config;
-      }
-    },
-
-    /**
-     * Delegates `app.jwt`.
-     *
-     * @property jwt
-     * @return {Object}
-     * @api public
-     */
-    jwt: {
-      get() {
-        return this.app.jwt;
       }
     },
 

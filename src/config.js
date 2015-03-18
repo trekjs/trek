@@ -22,8 +22,10 @@ import {
   hasKeyPath
 } from './utils';
 import Root from './paths';
+
 /**
  * @class Config
+ * @api public
  */
 class Config {
 
@@ -88,7 +90,7 @@ class Config {
       paths.add('config/session',       { with: 'config/session.js' });
       paths.add('config/routes',        { with: 'config/routes.js' });
       paths.add('config/middleware',    { with: 'config/middleware.js' });
-      paths.add('config/global.js',      { with: 'config/global.js' });
+      paths.add('config/global.js',     { with: 'config/global.js' });
 
       paths.add('log',                  { with: `log/${Trek.env}.log` });
       paths.add('public');
