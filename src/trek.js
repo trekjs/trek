@@ -137,12 +137,14 @@ if (!has(global, 'Trek')) {
    * Delegate getter to `Trek.King`.
    */
   delegate(Trek, 'King')
+    .getter('_')
     .getter('joi')
     .getter('jwt')
     .getter('uuid')
     .getter('bcrypt')
     .getter('pbkdf2')
-    .getter('logger');
+    .getter('logger')
+    .getter('validator');
 }
 
 export default global.Trek;

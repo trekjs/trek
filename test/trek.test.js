@@ -30,6 +30,11 @@ describe('Trek', () => {
     Trek.keys.should.be.eql(['Star Trek', 'Spock', 'Trek']);
   });
 
+  it('should has _(lodash) object', () => {
+    let _ = Trek._;
+    Trek._.chunk(['a', 'b', 'c', 'd'], 2).should.be.eql([['a', 'b'], ['c', 'd']]);
+  });
+
   it('should has jwt object', (done) => {
     let token = Trek.jwt.sign({
       foo: 'bar'
