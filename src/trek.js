@@ -151,7 +151,8 @@ if (!has(global, 'Trek')) {
     .getter('logger')
     .getter('validator')
     .getter('Mailer')
-    .getter('dotenv');
+    .getter('dotenv')
+    .getter('debug');
 }
 
 export default global.Trek;

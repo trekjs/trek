@@ -1,5 +1,6 @@
 import _ from 'lodash-node';
 import dotenv from 'dotenv';
+import debug from 'debug';
 import joi from 'joi';
 import validator from 'validator';
 import uuid from 'node-uuid';
@@ -19,5 +20,6 @@ export {
   pbkdf2,
   validator,
   Mailer,
-  dotenv
+  dotenv,
+  debug
 };
