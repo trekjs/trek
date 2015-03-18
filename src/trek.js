@@ -10,28 +10,29 @@ import Engine from './engine';
 
 /**
  * Trek Secret Keys.
- * @api private
+ * constant
+ * @default
+ * @private
  */
 const TREK_KEYS = ['Star Trek', 'Spock', 'Trek'];
 
 /**
  * @class Trek
- * @api public
+ * @public
  */
 class Trek extends Engine {
 
   /**
    * Returns the current Trek environment.
    *
-   *  ```
-   *  Trek.env // => development | production | test
-   *  ```
+   * @example
+   *  Trek.env
+   *  // => development | production | test
    *
    * @static
-   * @property env
+   * @public
    * @default 'development'
    * @return {String}
-   * @api public
    */
   static get env() {
     return this._env || (this._env =
@@ -45,9 +46,8 @@ class Trek extends Engine {
    * Returns true if current environment is `production`.
    *
    * @static
-   * @property isProduction
+   * @public
    * @return {Boolean}
-   * @api public
    */
   static get isProduction() {
     return this.env === 'production';
@@ -57,9 +57,8 @@ class Trek extends Engine {
    * Returns true if current environment is `development`.
    *
    * @static
-   * @property isDevelopment
+   * @public
    * @return {Boolean}
-   * @api public
    */
   static get isDevelopment() {
     return this.env === 'development';
@@ -69,9 +68,8 @@ class Trek extends Engine {
    * Returns true if current environment is `test`.
    *
    * @static
-   * @property isTest
    * @return {Boolean}
-   * @api public
+   * @public
    */
   static get isTest() {
     return this.env === 'test';
@@ -81,9 +79,8 @@ class Trek extends Engine {
    * Returns Trek package information.
    *
    * @static
-   * @property package
+   * @public
    * @return {Object}
-   * @api public
    */
   static get package() {
     return require('../package.json');
@@ -93,9 +90,8 @@ class Trek extends Engine {
    * Returns Trek current version.
    *
    * @static
-   * @property version
+   * @public
    * @return {String}
-   * @api public
    */
   static get version() {
     return this.package.version;
@@ -104,10 +100,9 @@ class Trek extends Engine {
   /**
    * Trek app `keys`.
    *
-   * @getter
-   * @property
+   * @static
+   * @public
    * @return {Array}
-   * @api public
    */
   static get keys() {
     return TREK_KEYS;
@@ -116,10 +111,9 @@ class Trek extends Engine {
   /**
    * Trekking utility tools.
    *
-   * @getter
-   * @property
+   * @static
+   * @public
    * @return {Object}
-   * @api public
    */
   static get King() {
     return require('./king');
@@ -130,10 +124,9 @@ class Trek extends Engine {
 /**
  * Puts `Trek` to the global.
  *
- * @static
- * @property Trek
+ * @global
+ * @public
  * @return {Trek}
- * @api public
  */
 if (!has(global, 'Trek')) {
   global.Trek = Trek;

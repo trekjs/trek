@@ -3,7 +3,10 @@ import { pbkdf2, randomBytes } from 'mz/crypto';
 /**
  * Generate a salt.
  *
- * @return {String} Detults string'length is 32.
+ * @method
+ * @param {Number} len
+ * @param {String} encoding
+ * @return {String} by default 32 of slat length.
  */
 function genSalt(len = 16, encoding = 'hex') {
   return randomBytes(len).then((buf) => {
@@ -14,6 +17,14 @@ function genSalt(len = 16, encoding = 'hex') {
 /**
  * Compare hash and  password + salt.
  *
+ * @method
+ * @param {String} hashstr
+ * @param {String} password
+ * @param {string} salt
+ * @param {Number} [iterations] 1024
+ * @param {Number} [keylen] 32
+ * @param {String} [digest] sha256
+ * @param {String} [encoding] hex
  * @return {Boolean}
  */
 function compare(hashstr, password, salt, iterations = 1024, keylen = 32, digest = 'sha256', encoding = 'hex') {
@@ -25,7 +36,14 @@ function compare(hashstr, password, salt, iterations = 1024, keylen = 32, digest
 /**
  * Hash a password with salt.
  *
- * @return {String} Detults string'length is 64.
+ * @method
+ * @param {String} password
+ * @param {string} salt
+ * @param {Number} [iterations] 1024
+ * @param {Number} [keylen] 32
+ * @param {String} [digest] sha256
+ * @param {String} [encoding] hex
+ * @return {String} by default 64 of password_hash length.
  */
 function hash(password, salt, iterations = 1024, keylen = 32, digest = 'sha256', encoding = 'hex') {
   return pbkdf2(password, salt, iterations, keylen, digest).then((buf) => {

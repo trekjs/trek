@@ -19,14 +19,14 @@ import defaultStack from './stack';
 
 /**
  * @class Engine
- * @api public
+ * @public
  */
 class Engine extends Koa {
 
   /**
    * Initialize a new app with a working `root` directory.
    *
-   * @constructor
+   * @constructor Engine
    * @param {String} root
    */
   constructor(root) {
@@ -40,7 +40,8 @@ class Engine extends Koa {
   }
 
   /**
-   * @api private
+   * @constructs
+   * @private
    */
   initialize() {
     this.dotenv();
@@ -52,8 +53,9 @@ class Engine extends Koa {
   /**
    * Loads environment variables from .env for app.
    *
+   * @memberof Engine
    * @method
-   * @api public
+   * @public
    */
   dotenv() {
     let loaded = Trek.dotenv.config({
@@ -69,10 +71,8 @@ class Engine extends Koa {
   /**
    * Returns app working `root` directory.
    *
-   * @getter
-   * @property
+   * @public
    * @return {String}
-   * @api public
    */
   get root() {
     return this._root || (this._root = path.dirname(require.main.filename));
@@ -81,10 +81,8 @@ class Engine extends Koa {
   /**
    * Sets a working `root` directory for app.
    *
-   * @setter
-   * @property
    * @param {Root}
-   * @api public
+   * @public
    */
   set root(root) {
     this._root = root;
@@ -94,10 +92,8 @@ class Engine extends Koa {
    * Gets current app name.
    * Defaults to `Trek`.
    *
-   * @getter
-   * @property
+   * @public
    * @return {String}
-   * @api public
    */
   get name() {
     return this._name || (this._name = this.config.get('name') || 'Trek');
@@ -106,10 +102,8 @@ class Engine extends Koa {
   /**
    * Sets current app name.
    *
-   * @setter
-   * @property
+   * @public
    * @param {String}
-   * @api public
    */
   set name(name) {
     this._name = name;
@@ -118,10 +112,8 @@ class Engine extends Koa {
   /**
    * Returns app `config`.
    *
-   * @getter
-   * @property
+   * @public
    * @return {Mixed}
-   * @api public
    */
   get config() {
     return this._config || (this._config = new Config(this));
@@ -130,9 +122,7 @@ class Engine extends Koa {
   /**
    * Sets `config` for  app.
    *
-   * @setter
-   * @property
-   * @api public
+   * @public
    */
   set config(config) {
     this._config = config;
@@ -141,10 +131,8 @@ class Engine extends Koa {
   /**
    * Gets paths.
    *
-   * @getter
-   * @property
-   * @return {Mixed}
-   * @api public
+   * @public
+   * @return {Root}
    */
   get paths() {
     return this.config.paths;
@@ -153,10 +141,8 @@ class Engine extends Koa {
   /**
    * Trek app `logger`.
    *
-   * @getter
-   * @property
-   * @return {Object}
-   * @api public
+   * @public
+   * @return {winston.Logger}
    */
   get logger() {
     return this._logger || (this._logger = Object.create(Trek.logger));
@@ -165,10 +151,8 @@ class Engine extends Koa {
   /**
    * Trek app `mailer`.
    *
-   * @getter
-   * @property
-   * @return {Object}
-   * @api public
+   * @public
+   * @return {Mailer}
    */
   get mailer() {
     return this._mailer || (this._mailer = new Trek.Mailer(this.config.get('mail')));
@@ -182,9 +166,9 @@ class Engine extends Koa {
    *  ```
    *
    * @method
+   * @public
    * @param {Object}
    * @param {Promise}
-   * @api public
    */
   sendMail(data) {
     return this.mailer.send(data);
@@ -195,9 +179,10 @@ class Engine extends Koa {
    * may be a Trek application or
    * middleware function.
    *
+   * @method
+   * @public
    * @param {String|Application|Function} prefix, app, or function
    * @param {Application|Function} [app or function]
-   * @api public
    */
   mount() {
     return this.use(mount(...arguments));
@@ -207,8 +192,8 @@ class Engine extends Koa {
    * Runs app.
    *
    * @method
+   * @public
    * @return {Promise}
-   * @api public
    */
   run() {
     let self = this;

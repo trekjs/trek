@@ -6,14 +6,17 @@
 
 export default (context) => {
 
+  /**
+   * @namespace context
+   */
   Object.defineProperties(context, {
 
     /**
      * Delegates `app.config`.
      *
-     * @property config
+     * @memberof context
+     * @public
      * @return {Config}
-     * @api public
      */
     config: {
       get() {
@@ -24,9 +27,9 @@ export default (context) => {
     /**
      * Delegates `app.logger`.
      *
-     * @property logger
+     * @memberof context
+     * @public
      * @return {Object}
-     * @api public
      */
     logger: {
       get() {
@@ -37,13 +40,13 @@ export default (context) => {
     /**
      * Delegates `app.sendMail`.
      *
-     *  ```
+     * @example
      *  let result = yield ctx.sendMail({from: ..., to: ...})
-     *  ```
      *
-     * @method sendMail
+     * @memberof context
+     * @method
+     * @public
      * @return {Promise}
-     * @api public
      */
     sendMail: {
       value: function(data) {
@@ -54,22 +57,18 @@ export default (context) => {
     /**
      * Delegates `req.user`, the logined user.
      *
-     * @propertya user
-     * @api public
+     * @memberof context
+     * @public
      */
     user: {
 
       /**
-       * @getter
        * @return {Object}
        */
       get() {
           return this.req.user;
         },
 
-      /**
-       * @setter
-       */
       set(user) {
         this.req.user = user;
       }

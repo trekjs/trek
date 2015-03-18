@@ -5,13 +5,19 @@ jwt.verifySync = jwt.verify;
 jwt.verify = verify;
 
 /**
- *    ```js
- *    let result = yield jwt.verify(token, sign, options);
- *    ```
+ * Asynchronous verify the token.
+ *
+ * @example
+ *  let result = yield jwt.verify(token, sign, options);
+ *
+ * @method
+ * @param {String} token
+ * @param {String} sign
+ * @param {Object} [options]
+ * @return {Function}
  */
 function verify(token, sign, options) {
-  // Asynchronous
-  return function(done) {
+  return (done) => {
     jwt.verifySync(token, sign, options, done)
   }
 }

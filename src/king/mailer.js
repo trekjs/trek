@@ -10,6 +10,7 @@ import nodemailer from 'nodemailer';
 class Mailer {
 
   /**
+   * @constructor
    * @param {Object} config
    */
   constructor(config = {}) {
@@ -58,13 +59,19 @@ class Mailer {
   }
 
   /**
-   * Async send mail.
+   * Asynchronous send mail.
    *
-   *  ```
+   * @example
    *  mailer.send({}).then(done)
-   *  ```
    *
+   * @method
+   * @public
    * @param {Object} message
+   * @property {String} message.from
+   * @property {String} message.to
+   * @property {String} message.subject
+   * @property {String} message.html
+   * @property {String} message.text
    * @return {Promise}
    */
   send(message = {}) {

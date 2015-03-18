@@ -15,7 +15,7 @@ import Root from './paths';
 
 /**
  * @class Config
- * @api public
+ * @public
  */
 class Config {
 
@@ -34,7 +34,7 @@ class Config {
   }
 
   /**
-   * @api private
+   * @private
    */
   initialize() {
     this.load(this.paths.get('config/application').first);
@@ -44,10 +44,8 @@ class Config {
   /**
    * Delegates `process.env`.
    *
-   * @getter
-   * @property env
+   * @public
    * @return {Object}
-   * @api public
    */
   get env() {
     return process.env;
@@ -56,10 +54,8 @@ class Config {
   /**
    * Gets app's `paths`.
    *
-   * @getter
-   * @property paths
+   * @public
    * @return {Root}
-   * @api public
    */
   get paths() {
     return this._paths || (this._paths = ((root) => {
@@ -96,10 +92,8 @@ class Config {
   /**
    * Gets the secrets settings.
    *
-   * @getter
-   * @property secrets
+   * @public
    * @return {Object}
-   * @api public
    */
   get secrets() {
     return this._secrets || (this._secrets = (() => {
@@ -121,10 +115,8 @@ class Config {
   /**
    * Gets the session settings.
    *
-   * @getter
-   * @property session
+   * @public
    * @return {Object}
-   * @api public
    */
   get session() {
     let allSession = {};
@@ -141,10 +133,8 @@ class Config {
   /**
    * Gets the app public path.
    *
-   * @getter
-   * @property publicPath
+   * @public
    * @return {String}
-   * @api public
    */
   get publicPath() {
     return this.paths.get('public').first;
@@ -153,15 +143,20 @@ class Config {
   /**
    * Gets the app views path.
    *
-   * @getter
-   * @property viewsPath
+   * @public
    * @return {String}
-   * @api public
    */
   get viewsPath() {
     return this.paths.get('app/views').first;
   }
 
+  /**
+   * Loads a config file.
+   *
+   * @method
+   * @public
+   * @param {String} filepath
+   */
   load(filepath) {
     Trek.logger.debug('Loading %s.', path.relative(this.root, filepath));
     try {
@@ -174,16 +169,17 @@ class Config {
   /**
    * Gets value with `keyPath`.
    *
-   *  ```
+   * @example
    *  let site = config.get('site')
    *  let sietUrl = config.get('site.url')
    *  let name = config.get('name', true)
    *  ```
    *
+   * @method
+   * @public
    * @param {String} keyPath
    * @param {Boolean} isDefault [optional]
    * @return {Mixed}
-   * @api public
    */
   get(keyPath, isDefault = false) {
     let value, defaultValue;
@@ -205,18 +201,18 @@ class Config {
   /**
    * Sets value with a keyPath.
    *
-   *  ```
+   * @example
    *  config.set('site', {
    *    url: 'http://trekjs.com',
    *    title: 'TREK.JS'
    *  }, true)
-   *  ```
    *
+   * @method
+   * @public
    * @param {String} keyPath
    * @param {Mixed} value
    * @param {Boolean} isDefault [optional]
    * @return {Mixed}
-   * @api public
    */
   set(keyPath, value, isDefault) {
     setValueForKeyPath(
