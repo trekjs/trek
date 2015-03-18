@@ -230,7 +230,7 @@ class Engine extends Koa {
         this._httpServer = app;
       })
       .catch((e) => {
-        this.logger.error(chalk.bold.red(`${e}`));
+        this.logger.error(chalk.bold.red(`${e.stack}`));
         this.logger.error(chalk.red('boots failed.'));
       });
   }
