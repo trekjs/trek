@@ -27,7 +27,14 @@ app.listen(3000);
 $ npm i trek
 ```
 
-OR use **[trek-cli][]** to generate a trek app.
+Or
+
+```bash
+$ npm i trekjs/trek
+```
+
+
+O~ use **[trek-cli][]** to generate a trek app.
 
 ```bash
 $ npm i trek-cli -g
