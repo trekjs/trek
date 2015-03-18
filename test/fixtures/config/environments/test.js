@@ -1,6 +1,6 @@
 export default (config) => {
-  // mailer
-  config.set('mailer', {
+  // mail
+  config.set('mail', {
     transport: 'stub'
   });
 };

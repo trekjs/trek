@@ -26,8 +26,8 @@ export default (config) => {
     cache: false
   });
 
-  // mailer
-  config.set('mailer', {
+  // mail
+  config.set('mail', {
     transport: 'mailgun',
     options: {
       auth: {

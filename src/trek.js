@@ -144,7 +144,8 @@ if (!has(global, 'Trek')) {
     .getter('bcrypt')
     .getter('pbkdf2')
     .getter('logger')
-    .getter('validator');
+    .getter('validator')
+    .getter('Mailer');
 }
 
 export default global.Trek;

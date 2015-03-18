@@ -10,7 +10,6 @@
 import path from 'path';
 import chalk from 'chalk';
 import co from 'co';
-import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import Koa from 'koa';
 import mount from 'koa-mount';
@@ -147,34 +146,23 @@ class Engine extends Koa {
    * @api public
    */
   get mailer() {
-    return this._mailer || (() => {
-      let transport = this.config.get('mailer.transport');
-      let options = this.config.get('mailer.options');
-      let moduleName = `nodemailer-${transport}-transport`;
-      let transporter;
-      if (transport) {
-        try {
-          transporter = require(moduleName);
-        } catch (e) {
-          this.app.logger.error(chalk.bold.red(`Missing ${moduleName}`));
-        }
-      }
-      return this._mailer = nodemailer.createTransport(
-        transport ? transporter(options) : options
-      );
-    })();
+    return this._mailer || (this._mailer = new Trek.Mailer(this.config.get('mail')));
   }
 
   /**
    * Trek app `sendMail`.
    *
+   *  ```
+   *  let result = yield app.sendMail(message);
+   *  ```
+   *
    * @method
    * @param {Object}
-   * @param {Callback}
+   * @param {Promise}
    * @api public
    */
-  sendMail(data, done) {
-    this.mailer.sendMail(data, done);
+  sendMail(data) {
+    return this.mailer.send(data);
   }
 
   /**

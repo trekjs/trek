@@ -68,14 +68,12 @@ export default (context) => {
      *  ```
      *
      * @method sendMail
-     * @return {Object}
+     * @return {Promise}
      * @api public
      */
     sendMail: {
-      value: (data) => {
-        return function(done) {
-          this.app.sendMail(data, done);
-        }
+      value: function(data) {
+        return this.app.sendMail(data);
       }
     },
 
@@ -92,8 +90,8 @@ export default (context) => {
        * @return {Object}
        */
       get() {
-        return this.req.user;
-      },
+          return this.req.user;
+        },
 
       /**
        * @setter

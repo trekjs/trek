@@ -24,10 +24,14 @@ describe('app', () => {
     app.logger.should.not.equal(Trek.logger);
 
     app.get('/', function*() {
-      let result = yield this.sendMail({
-        from: 'test@valid.sender',
-        to: 'test@valid.recipient'
-      });
+      try {
+        let result = yield this.sendMail({
+          from: 'test@valid.sender',
+          to: 'test@valid.recipient'
+        });
+      } catch(e) {
+        console.log(e);
+      }
       this.body = yield thenify(this.logger.info)('trek.js');
     });
 
@@ -37,15 +41,26 @@ describe('app', () => {
       .expect(200, done);
   });
 
+  it('should be a Promise, sendMail', (done) => {
+    app.sendMail({
+      from: 'test@valid.sender',
+      to: 'test@valid.recipient',
+      subject: 'Hello Trek.js',
+      html: '<body>TREK.JS</body>'
+    }).finally(done);
+  });
+
   it('should have mailer property', (done) => {
 
     app.mailer.should.not.be.null;
-    app.mailer.constructor.name.should.be.equal('Nodemailer')
+    app.mailer.constructor.name.should.be.equal('Mailer')
 
     app.get('/', function*() {
       let result = yield this.sendMail({
         from: 'test@valid.sender',
-        to: 'test@valid.recipient'
+        to: 'test@valid.recipient',
+        subject: 'Hello Trek.js',
+        html: '<body>TREK.JS</body>'
       });
       this.body = yield thenify(this.logger.info)(result.response.toString());
     });

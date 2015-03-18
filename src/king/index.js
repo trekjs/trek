@@ -6,6 +6,7 @@ import jwt from './jwt';
 import bcrypt from './bcrypt';
 import logger from './logger';
 import * as pbkdf2 from './pbkdf2'
+import Mailer from './mailer';
 
 export {
   _,
@@ -15,5 +16,6 @@ export {
   logger,
   bcrypt,
   pbkdf2,
-  validator
+  validator,
+  Mailer
 };
