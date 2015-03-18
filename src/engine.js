@@ -163,9 +163,8 @@ class Engine extends Koa {
   /**
    * Trek app `sendMail`.
    *
-   *  ```
+   * @example
    *  let result = yield app.sendMail(message);
-   *  ```
    *
    * @method
    * @public
