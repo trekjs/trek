@@ -7,20 +7,10 @@
 import fs from 'fs';
 import path from 'path';
 import { EventEmitter } from 'events';
-import {
-  cloneDeep,
-  isPlainObject
-} from 'lodash-node/modern/lang';
-import {
-  defaults,
-  has
-} from 'lodash-node/modern/object';
+import { cloneDeep, isPlainObject } from 'lodash-node/modern/lang';
+import { defaults, has } from 'lodash-node/modern/object';
 import chalk from 'chalk';
-import {
-  valueForKeyPath,
-  setValueForKeyPath,
-  hasKeyPath
-} from './utils';
+import { valueForKeyPath, setValueForKeyPath, hasKeyPath } from './utils';
 import Root from './paths';
 
 /**
@@ -54,7 +44,8 @@ class Config {
   /**
    * Delegates `process.env`.
    *
-   * @property
+   * @getter
+   * @property env
    * @return {Object}
    * @api public
    */
@@ -63,9 +54,11 @@ class Config {
   }
 
   /**
-   * Gets app's paths.
+   * Gets app's `paths`.
    *
-   * @property
+   * @getter
+   * @property paths
+   * @return {Root}
    * @api public
    */
   get paths() {
@@ -100,6 +93,14 @@ class Config {
     })(this.root));
   }
 
+  /**
+   * Gets the secrets settings.
+   *
+   * @getter
+   * @property secrets
+   * @return {Object}
+   * @api public
+   */
   get secrets() {
     return this._secrets || (this._secrets = (() => {
       let allSecrets = {};
@@ -117,6 +118,14 @@ class Config {
     })());
   }
 
+  /**
+   * Gets the session settings.
+   *
+   * @getter
+   * @property session
+   * @return {Object}
+   * @api public
+   */
   get session() {
     let allSession = {};
     let filepath = this.paths.get('config/session').first;
@@ -129,10 +138,26 @@ class Config {
     return session;
   }
 
+  /**
+   * Gets the app public path.
+   *
+   * @getter
+   * @property publicPath
+   * @return {String}
+   * @api public
+   */
   get publicPath() {
     return this.paths.get('public').first;
   }
 
+  /**
+   * Gets the app views path.
+   *
+   * @getter
+   * @property viewsPath
+   * @return {String}
+   * @api public
+   */
   get viewsPath() {
     return this.paths.get('app/views').first;
   }
@@ -146,7 +171,21 @@ class Config {
     }
   }
 
-  get(keyPath, isDefault) {
+  /**
+   * Gets value with `keyPath`.
+   *
+   *  ```
+   *  let site = config.get('site')
+   *  let sietUrl = config.get('site.url')
+   *  let name = config.get('name', true)
+   *  ```
+   *
+   * @param {String} keyPath
+   * @param {Boolean} isDefault [optional]
+   * @return {Mixed}
+   * @api public
+   */
+  get(keyPath, isDefault = false) {
     let value, defaultValue;
     defaultValue = valueForKeyPath(this.defaultSettings, keyPath);
     if (!isDefault) value = valueForKeyPath(this.settings, keyPath);
@@ -163,6 +202,22 @@ class Config {
     return value;
   }
 
+  /**
+   * Sets value with a keyPath.
+   *
+   *  ```
+   *  config.set('site', {
+   *    url: 'http://trekjs.com',
+   *    title: 'TREK.JS'
+   *  }, true)
+   *  ```
+   *
+   * @param {String} keyPath
+   * @param {Mixed} value
+   * @param {Boolean} isDefault [optional]
+   * @return {Mixed}
+   * @api public
+   */
   set(keyPath, value, isDefault) {
     setValueForKeyPath(
       isDefault ? this.defaultSettings : this.settings,

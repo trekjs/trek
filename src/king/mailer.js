@@ -2,13 +2,16 @@ import assign from 'lodash-node/modern/object/assign';
 import chalk from 'chalk';
 import Promise from 'bluebird';
 import thenify from 'thenify';
-import { createTransport } from 'nodemailer';
+import nodemailer from 'nodemailer';
 
 /**
  * @class mailer
  */
 class Mailer {
 
+  /**
+   * @param {Object} config
+   */
   constructor(config = {}) {
     this._config = config;
   }
@@ -30,7 +33,7 @@ class Mailer {
     return this.config.options || {};
   }
 
-  // transport provider: mailgun, sengird
+  // transport provider: mailgun, sengird, ses
   get provider() {
     return this.config.transport;
   }
@@ -47,7 +50,9 @@ class Mailer {
             Trek.logger.error(chalk.bold.red(`Missing ${moduleName} module.`));
           }
         }
-        return createTransport(transporter ? transporter(this.options) : this.options);
+        return nodemailer.createTransport(
+          transporter ? transporter(this.options) : this.options
+        );
       })()
     );
   }
@@ -55,12 +60,18 @@ class Mailer {
   /**
    * Async send mail.
    *
-   * @param {Object}
+   *  ```
+   *  mailer.send({}).then(done)
+   *  ```
+   *
+   * @param {Object} message
    * @return {Promise}
    */
   send(message = {}) {
 
-    if (!(message && message.subject && (message.html || message.text) && message.to)) {
+    let verified = message.subject && (message.html || message.text) && message.to;
+
+    if (!verified) {
       return Promise.reject(new Error('Email Error: Incomplete message data.'));
     }
 
