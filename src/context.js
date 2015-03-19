@@ -1,5 +1,5 @@
 /*!
- * trek/context
+ * trek - lib/context
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */

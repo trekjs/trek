@@ -1,5 +1,5 @@
 /*!
- * trek/king
+ * trek - lib/king
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */

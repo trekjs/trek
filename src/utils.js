@@ -1,5 +1,5 @@
 /*!
- * trek/utils
+ * trek - lib/utils
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */

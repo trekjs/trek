@@ -1,5 +1,5 @@
 /*!
- * trek/king/pbkdf2
+ * trek - lib/king/pbkdf2
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */

@@ -1,5 +1,5 @@
 /*!
- * trek/king/jwt
+ * trek - lib/king/jwt
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */

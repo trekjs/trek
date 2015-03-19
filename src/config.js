@@ -1,5 +1,5 @@
 /*!
- * trek/config
+ * trek - lib/config
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */

@@ -1,5 +1,5 @@
 /*!
- * trek/paths
+ * trek - lib/paths
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
