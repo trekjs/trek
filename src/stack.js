@@ -167,9 +167,12 @@ export default (app) => {
         } else {
           app.use(handler.apply(undefined, options));
         }
+        app.logger.debug(`middleware:${name} is enabled.`);
       } else {
-        app.logger.warn(`middleware:${name} is enabled.`);
+        app.logger.warn(`middleware:${name} missing handler.`);
       }
+    } else {
+      app.logger.debug(`middleware:${name} is disabled.`);
     }
   });
 };
