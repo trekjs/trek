@@ -49,6 +49,12 @@ $ npm i && npm start
   * Working with [io.js][]
   * Loads configurations & environment variables(.env) automagically
   * MVC
+  * RESTful Routing, Rails Style, powered by [RouteMapper][]
+
+    - HTTP Verbs
+    - Resources
+    - Namespace
+    - Nesting
 
 ## Quick Start
 
@@ -61,6 +67,7 @@ $ npm i && npm start
 [Koa]: http://koajs.com/
 [Babel]: https://babeljs.io/
 [io.js]: https://iojs.org/
+[Routemapper]: https://github.com/trekjs/route-mapper
 
 [gitter-img]: https://badges.gitter.im/Join%20Chat.svg
 [gitter-url]:https://gitter.im/trekjs/trek?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
