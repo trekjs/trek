@@ -14,7 +14,7 @@ import chalk from 'chalk';
 import co from 'co';
 import Koa from 'koa';
 import mount from 'koa-mount';
-//import RouteMapper from 'route-mapper';
+import RouteMapper from 'route-mapper';
 import Config from './config';
 import extraContext from './context';
 import defaultStack from './stack';
@@ -202,6 +202,7 @@ class Engine extends Koa {
     let config = self.config;
     let servicesPath = self.paths.get('app/services').path;
     this.keys = config.secrets.secretKeyBase;
+    this.loadRoutes();
     return co(function*() {
         let seq = [];
         let files = self.paths.get('app/services').existent;
@@ -236,11 +237,39 @@ class Engine extends Koa {
       });
   }
 
-  /*
   get routeMapper() {
     return this._routeMapper || (this._routeMapper = new RouteMapper);
   }
-  */
+
+  loadRoutes() {
+    this.logger.debug(`Load the routes.`);
+    var routesPath = this.paths.get('config/routes').path;
+    var controllersPath = this.paths.get('app/controllers').path;
+    try {
+      require(routesPath)(this.routeMapper);
+      this.routeMapper.routes.forEach(r => {
+        r.verb.forEach((m) => {
+          let controller = r.controller;
+          let action = r.action;
+          try {
+            let c = require(controllersPath + '/' + controller + '.js');
+            let a;
+            if (c && (a = c[action])) {
+              if (!Array.isArray(a)) {
+                a = [a];
+              }
+              this.logger.log(r.path, controller, action)
+              this[m](r.path, ...a);
+            };
+          } catch (e) {
+            console.log(e);
+          }
+        });
+      });
+    } catch (e) {
+      this.logger.error(`Load the routes failed, ${e}`);
+    }
+  }
 
   get cache() {
     return this._cache || (this._cache = new Map);
