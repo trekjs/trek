@@ -126,7 +126,7 @@ export default (app) => {
         let passport = ms.passport;
         app.use(passport.initialize());
         app.use(passport.session());
-        app.cache.set('passport', passport);
+        app.setService('passport', passport);
       }
     },
 

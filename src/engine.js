@@ -176,6 +176,38 @@ class Engine extends Koa {
   }
 
   /**
+   * Gets all servides.
+   *
+   * @public
+   * @return {Map}
+   */
+  get services() {
+    return this._services || (this._services = new Map);
+  }
+
+  /**
+   * Gets a service.
+   *
+   * @param {String} service
+   * @return {Mixed}
+   */
+  getService(key) {
+    return this.services.get(key);
+  }
+
+  /**
+   * Stores a service.
+   *
+   * @param {String} key - the service name
+   * @param {Mixed} service - the service instance
+   * @return {Mixed} service
+   */
+  setService(key, value) {
+    this.logger.log('info', chalk.yellow('service:%s'), key);
+    this.services.set(key, value);
+  }
+
+  /**
    * Mount `app` with `prefix`, `app`
    * may be a Trek application or
    * middleware function.
@@ -271,23 +303,6 @@ class Engine extends Koa {
     } catch (e) {
       this.logger.error(`Load the routes failed, ${e}`);
     }
-  }
-
-  get cache() {
-    return this._cache || (this._cache = new Map);
-  }
-
-  get services() {
-    return this._services || (this._services = new Map);
-  }
-
-  getService(key) {
-    return this.services.get(key);
-  }
-
-  setService(key, value) {
-    this.logger.log('info', chalk.yellow('service:%s'), key);
-    this.services.set(key, value);
   }
 
 }
