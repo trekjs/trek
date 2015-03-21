@@ -255,7 +255,7 @@ class Engine extends Koa {
             let c = require(controllersPath + '/' + controller + '.js');
             let a;
             if (c && (a = c[action])) {
-              if (!_.isArray(a)) a = [a];
+              if (!Array.isArray(a)) a = [a];
               this.logger.log(r.as, r.path, controller, action)
               if (r.as) {
                 this[m](r.as, r.path, ...a);
