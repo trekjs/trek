@@ -75,7 +75,7 @@
     "eslint": "^0.17.1",
     "grant-koa": "^3.0.0",
     "istanbul": "^0.3.x",
-    "jsdoc": "^3.3.0-beta2",
+    "jsdoc": "^3.x",
     "knex": "^0.7.x",
     "mocha": "^2.x.x",
     "mongoose": "^3.9.x",
