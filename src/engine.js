@@ -256,7 +256,7 @@ class Engine extends Koa {
             let a;
             if (c && (a = c[action])) {
               if (!Array.isArray(a)) a = [a];
-              this.logger.log(r.as, r.path, controller, action)
+              this.logger.info(r.as, r.path, controller, action)
               if (r.as) {
                 this[m](r.as, r.path, ...a);
               } else {
