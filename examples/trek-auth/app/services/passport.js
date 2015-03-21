@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import _ from 'lodash-node';
 
 export default (app, config) => {
-  let passport = app.cache.get('passport');
+  let passport = app.getService('passport');
   let models = app.getService('sequelize');
   let PassportModel = models.Passport;
   let UserModel = models.User;
