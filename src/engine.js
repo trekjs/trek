@@ -203,6 +203,10 @@ class Engine extends Koa {
    * @return {Mixed} service
    */
   setService(key, value) {
+    if (this.services.has(key)) {
+      this.logger.info(chalk.green(`service:${key} was registed`));
+      return;
+    }
     this.logger.log('info', chalk.yellow('service:%s'), key);
     this.services.set(key, value);
   }
@@ -239,10 +243,6 @@ class Engine extends Koa {
         let files = this.paths.get('app/services').existent;
         for (let file of files) {
           let name = path.basename(file, '.js').replace(/^[0-9]+-/, '');
-          if (this.services.has(name)) {
-            this.logger.info(chalk.green(`service:${name} has booted`));
-            continue;
-          }
           let service = require(file)(this, config);
           if (service) {
             this.setService(name, service);
