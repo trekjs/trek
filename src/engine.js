@@ -229,26 +229,29 @@ class Engine extends Koa {
    * @return {Promise}
    */
   run() {
-    let self = this;
-    self.logger.info(chalk.green('booting ...'));
+    this.logger.info(chalk.green('booting ...'));
     this.loadRouteMapper();
-    let config = self.config;
-    let servicesPath = self.paths.get('app/services').path;
+    let config = this.config;
+    let servicesPath = this.paths.get('app/services').path;
     this.keys = config.secrets.secretKeyBase;
     return co(function*() {
         let seq = [];
-        let files = self.paths.get('app/services').existent;
+        let files = this.paths.get('app/services').existent;
         for (let file of files) {
           let name = path.basename(file, '.js').replace(/^[0-9]+-/, '');
-          let service = require(file)(self, config);
+          if (this.services.has(name)) {
+            this.logger.info(chalk.green(`service:${name} has booted`));
+            continue;
+          }
+          let service = require(file)(this, config);
           if (service) {
-            self.setService(name, service);
-            self.logger.info(chalk.green(`service:${name} init ...`));
+            this.setService(name, service);
+            this.logger.info(chalk.green(`service:${name} init ...`));
             if (service.promise) yield service.promise;
-            self.logger.info(chalk.green(`service:${name} booted`));
+            this.logger.info(chalk.green(`service:${name} booted`));
           }
         }
-      })
+      }.bind(this))
       .then(() => {
         // TODO: https
         let args = [...arguments];
