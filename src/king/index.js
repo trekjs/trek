@@ -17,6 +17,7 @@ import bcrypt from './bcrypt';
 import logger from './logger';
 import * as pbkdf2 from './pbkdf2';
 import Mailer from './mailer';
+import RouteMapper from 'route-mapper';
 
 export {
   _,
@@ -27,7 +28,8 @@ export {
   bcrypt,
   pbkdf2,
   validator,
-  Mailer,
   dotenv,
-  debug
+  debug,
+  Mailer,
+  RouteMapper
 };

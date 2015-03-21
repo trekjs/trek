@@ -145,9 +145,10 @@ if (!has(global, 'Trek')) {
     .getter('pbkdf2')
     .getter('logger')
     .getter('validator')
-    .getter('Mailer')
     .getter('dotenv')
-    .getter('debug');
+    .getter('debug')
+    .getter('Mailer')
+    .getter('RouteMapper');
 }
 
 export default global.Trek;

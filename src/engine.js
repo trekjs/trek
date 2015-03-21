@@ -199,10 +199,10 @@ class Engine extends Koa {
   run() {
     let self = this;
     self.logger.info(chalk.green('booting ...'));
+    this.loadRouteMapper();
     let config = self.config;
     let servicesPath = self.paths.get('app/services').path;
     this.keys = config.secrets.secretKeyBase;
-    this.loadRoutes();
     return co(function*() {
         let seq = [];
         let files = self.paths.get('app/services').existent;
@@ -241,7 +241,7 @@ class Engine extends Koa {
     return this._routeMapper || (this._routeMapper = new RouteMapper);
   }
 
-  loadRoutes() {
+  loadRouteMapper() {
     this.logger.debug(`Load the routes.`);
     var routesPath = this.paths.get('config/routes').path;
     var controllersPath = this.paths.get('app/controllers').path;
@@ -255,14 +255,16 @@ class Engine extends Koa {
             let c = require(controllersPath + '/' + controller + '.js');
             let a;
             if (c && (a = c[action])) {
-              if (!Array.isArray(a)) {
-                a = [a];
+              if (!_.isArray(a)) a = [a];
+              this.logger.log(r.as, r.path, controller, action)
+              if (r.as) {
+                this[m](r.as, r.path, ...a);
+              } else {
+                this[m](r.path, ...a);
               }
-              this.logger.log(r.path, controller, action)
-              this[m](r.path, ...a);
             };
           } catch (e) {
-            console.log(e);
+            this.logger.error(`Missing the ${controller}#${action}.`);
           }
         });
       });
