@@ -57,6 +57,23 @@ export default (context) => {
     },
 
     /**
+     * Delegates `app.getService`.
+     *
+     * @example
+     *  let db = ctx.getService('sequelize')
+     *
+     * @memberof context
+     * @method
+     * @public
+     * @return {Mixed} service
+     */
+    getService: {
+      value: function (key) {
+        return this.app.getService(key);
+      }
+    },
+
+    /**
      * Delegates `req.user`, the logined user.
      *
      * @memberof context
