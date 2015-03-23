@@ -1,10 +1,13 @@
+sudo: false
 language: node_js
+node_js:
+  #- "0.12", no `--harmony_templates` flag
+  - "iojs"
+
 branches:
   only:
     - master
     - dev
-node_js:
-  #- "0.12", no `--harmony_templates` flag
-  - "iojs"
+
 script:
   - "npm test"
