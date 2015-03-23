@@ -1,6 +1,7 @@
 language: node_js
 branches:
   only:
+    - master
     - dev
 node_js:
   #- "0.12", no `--harmony_templates` flag
