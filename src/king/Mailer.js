@@ -9,8 +9,8 @@
 import assign from 'lodash-node/modern/object/assign';
 import chalk from 'chalk';
 import Promise from 'bluebird';
-import thenify from 'thenify';
 import nodemailer from 'nodemailer';
+import { thenify } from 'thenify-all';
 
 /**
  * @class mailer
