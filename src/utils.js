@@ -12,7 +12,7 @@ import has from 'lodash-node/modern/object/has';
  * helpers
  */
 
-var splitKeyPath = (keyPath) => {
+function splitKeyPath(keyPath) {
   let startIndex = 0;
   let keyPathArray = [];
   let len = keyPath.length;
@@ -28,18 +28,18 @@ var splitKeyPath = (keyPath) => {
   }
   keyPathArray.push(keyPath.substr(startIndex, len));
   return keyPathArray;
-};
+}
 
-var valueForKeyPath = (object, keyPath) => {
+function valueForKeyPath(object, keyPath) {
   let keys = splitKeyPath(keyPath);
   for (let key of keys) {
     object = object[key];
     if (!object) return;
   }
   return object;
-};
+}
 
-var setValueForKeyPath = (object, keyPath, value) => {
+function setValueForKeyPath(object, keyPath, value) {
   let keys = splitKeyPath(keyPath);
   while (keys.length > 1) {
     let key = keys.shift();
@@ -50,16 +50,16 @@ var setValueForKeyPath = (object, keyPath, value) => {
     object[keys.shift()] = value;
   else
     delete object[keys.shift()];
-};
+}
 
-var hasKeyPath = (object, keyPath) => {
+function hasKeyPath(object, keyPath) {
   let keys = splitKeyPath(keyPath);
   for (let key of keys) {
     if (!has(object, key)) return false;
     object = object[key];
   }
   return true;
-};
+}
 
 export {
   splitKeyPath,

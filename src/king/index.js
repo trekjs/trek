@@ -16,7 +16,7 @@ import jwt from './jwt';
 import bcrypt from './bcrypt';
 import logger from './logger';
 import * as pbkdf2 from './pbkdf2';
-import Mailer from './mailer';
+import Mailer from './Mailer';
 import RouteMapper from 'route-mapper';
 
 export {

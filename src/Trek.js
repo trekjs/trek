@@ -1,14 +1,13 @@
 /*!
- * trek - lib/trek
+ * trek - lib/Trek
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
 
 'use strict';
 
-import has from 'lodash-node/modern/object/has';
 import delegate from 'delegates';
-import Engine from './engine';
+import Engine from './Engine';
 
 /**
  * Trek Secret Keys.
@@ -130,7 +129,7 @@ class Trek extends Engine {
  * @public
  * @return {Trek}
  */
-if (!has(global, 'Trek')) {
+if (!global.Trek) {
   global.Trek = Trek;
 
   /**

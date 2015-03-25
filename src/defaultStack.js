@@ -50,7 +50,7 @@ var defaultStack = {
   },
 
   etag: {
-    name: "etag",
+    name: 'etag',
     priority: 110
   },
 

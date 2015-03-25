@@ -1,5 +1,5 @@
 /*!
- * trek - lib/engine
+ * trek - lib/Engine
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
@@ -15,8 +15,9 @@ import co from 'co';
 import Koa from 'koa';
 import mount from 'koa-mount';
 import RouteMapper from 'route-mapper';
-import Config from './config';
-import extraContext from './context';
+import Config from './Config';
+//import extraContext from './Context';
+import Context from './Context';
 import defaultStack from './stack';
 
 /**
@@ -48,8 +49,18 @@ class Engine extends Koa {
   initialize() {
     this.dotenv();
     this.config.initialize();
-    extraContext(this.context);
+    this.overrideContext();
     defaultStack(this);
+  }
+
+  /**
+   * Override the original `koa-context` object.
+   *
+   * @method overrideContext
+   * @private
+   */
+  overrideContext() {
+    this.context = new Context();
   }
 
   /**
@@ -182,7 +193,7 @@ class Engine extends Koa {
    * @return {Map}
    */
   get services() {
-    return this._services || (this._services = new Map);
+    return this._services || (this._services = new Map());
   }
 
   /**
@@ -277,7 +288,7 @@ class Engine extends Koa {
   }
 
   get routeMapper() {
-    return this._routeMapper || (this._routeMapper = new RouteMapper);
+    return this._routeMapper || (this._routeMapper = new RouteMapper());
   }
 
   loadRouteMapper() {
@@ -295,13 +306,13 @@ class Engine extends Koa {
             let a;
             if (c && (a = c[action])) {
               if (!Array.isArray(a)) a = [a];
-              this.logger.info(r.as, r.path, controller, action)
+              this.logger.info(r.as, r.path, controller, action);
               if (r.as) {
                 this[m](r.as, r.path, ...a);
               } else {
                 this[m](r.path, ...a);
               }
-            };
+            }
           } catch (e) {
             this.logger.error(`Missing the ${controller}#${action}.`);
           }

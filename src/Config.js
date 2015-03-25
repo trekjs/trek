@@ -1,5 +1,5 @@
 /*!
- * trek - lib/config
+ * trek - lib/Config
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
@@ -29,7 +29,7 @@ class Config {
   constructor(app) {
     this.app = app;
     this.root = app.root;
-    this.emitter = new EventEmitter;
+    this.emitter = new EventEmitter();
     this.defaultSettings = Object.create(null);
     this.settings = Object.create(null);
   }

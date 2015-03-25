@@ -1,26 +1,35 @@
 {
   "parser": "babel-eslint",
   "rules": {
+    "valid-jsdoc": 0,
     "strict": 0,
-    "quotes": "single",
-    "no-underscore-dangle": 0,
-    "no-unused-vars": 0,
-    "curly": 0,
-    "no-multi-spaces": 0,
+    "quotes": [2, "single"],
+    "one-var": 0,
     "key-spacing": 0,
+    "comma-spacing": 0,
+    "curly": [0 "multi"],
+    "brace-style": [0, "stroustrup"],
+    "no-shadow": 0,
+    "no-multi-spaces": 0,
+    "no-constant-condition": 0,
+    "no-underscore-dangle": 0,
+    "no-use-before-define": 0,
+    "no-unused-vars": 0,
     "no-return-assign": 0,
     "consistent-return": 0,
-    "no-shadow": 0,
-    "no-comma-dangle": 0,
-    "no-use-before-define": 0,
-    "no-empty": 0,
-    "new-parens": 0,
     "no-cond-assign": 0,
-    "no-undef": [
-      "Trek"
-    ]
+    "func-names": 0,
+    "func-style": [2, "declaration"],
+    "new-cap": 1,
+    "new-parens": 2,
+    "no-ternary": 0,
+    "space-infix-ops": 0,
+    "consistent-this": 2
   },
   "env": {
     "node": true
+  },
+  "globals": {
+    "Trek": true
   }
 }
