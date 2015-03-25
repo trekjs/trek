@@ -56,7 +56,7 @@ class Engine extends Koa {
    * Loads environment variables from .env for app.
    *
    * @memberof Engine
-   * @method
+   * @method dotenv
    * @public
    */
   dotenv() {
@@ -166,7 +166,7 @@ class Engine extends Koa {
    * @example
    *  let result = yield app.sendMail(message);
    *
-   * @method
+   * @method sendMail
    * @public
    * @param {Object}
    * @param {Promise}
@@ -188,6 +188,8 @@ class Engine extends Koa {
   /**
    * Gets a service.
    *
+   * @method getService
+   * @public
    * @param {String} service
    * @return {Mixed}
    */
@@ -198,6 +200,8 @@ class Engine extends Koa {
   /**
    * Stores a service.
    *
+   * @method setService
+   * @public
    * @param {String} key - the service name
    * @param {Mixed} service - the service instance
    * @return {Mixed} service
@@ -216,7 +220,7 @@ class Engine extends Koa {
    * may be a Trek application or
    * middleware function.
    *
-   * @method
+   * @method mount
    * @public
    * @param {String|Application|Function} prefix, app, or function
    * @param {Application|Function} [app or function]
@@ -228,7 +232,7 @@ class Engine extends Koa {
   /**
    * Runs app.
    *
-   * @method
+   * @method run
    * @public
    * @return {Promise}
    */
