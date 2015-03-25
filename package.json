@@ -1,6 +1,6 @@
 {
   "name": "trek",
-  "version": "0.0.9-dev",
+  "version": "0.0.10-dev",
   "description": "Next generation full-stack JavaScript open source solution.",
   "author": "Fangdun Cai <cfddream@gmail.com> (https://github.com/fundon)",
   "homepage": "https://trekjs.com/",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "bcrypt": "^0.8.1",
-    "bluebird": "^2.x.x",
+    "bluebird": "^2.9.14",
     "chalk": "^1.0.0",
     "co": "^4.5.1",
     "debug": "^2.x.x",
