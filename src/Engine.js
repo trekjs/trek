@@ -16,7 +16,6 @@ import Koa from 'koa';
 import mount from 'koa-mount';
 import RouteMapper from 'route-mapper';
 import Config from './Config';
-//import extraContext from './Context';
 import Context from './Context';
 import defaultStack from './stack';
 
