@@ -59,6 +59,8 @@ $ npm i && npm start
 
 ## Quick Start
 
+[Example Trek apps][]
+
 ## License
 
   [MIT](LICENSE)
@@ -69,6 +71,7 @@ $ npm i && npm start
 [Babel]: https://babeljs.io/
 [io.js]: https://iojs.org/
 [Routemapper]: https://github.com/trekjs/route-mapper
+[Example Trek apps]: https://github.com/trekjs/examples
 
 [gitter-img]: https://badges.gitter.im/Join%20Chat.svg
 [gitter-url]:https://gitter.im/trekjs/trek?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
