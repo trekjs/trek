@@ -1,7 +1,7 @@
 import path from 'path';
 import assert from 'assert';
-import thenify from 'thenify';
 import request from 'supertest';
+import { thenify } from 'thenify-all';
 import Trek from '..';
 
 describe('app', () => {
@@ -47,13 +47,13 @@ describe('app', () => {
       .expect(200, done);
   });
 
-  it('should be a Promise, sendMail', (done) => {
-    app.sendMail({
+  it('should be a Promise, sendMail', () => {
+    return app.sendMail({
       from: 'test@valid.sender',
       to: 'test@valid.recipient',
       subject: 'Hello Trek.js',
       html: '<body>TREK.JS</body>'
-    }).finally(done);
+    });
   });
 
   it('should have mailer property', (done) => {

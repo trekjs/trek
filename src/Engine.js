@@ -49,6 +49,12 @@ class Engine extends Koa {
     this.dotenv();
     this.config.initialize();
     this.overrideContext();
+    let secretKeyBase = this.config.secrets.secretKeyBase;
+    if (secretKeyBase) {
+      this.keys = Array.isArray(secretKeyBase) ? secretKeyBase : [secretKeyBase];
+    } else {
+      this.keys = Trek.keys;
+    }
     defaultStack(this);
   }
 
@@ -251,7 +257,6 @@ class Engine extends Koa {
     this.loadRouteMapper();
     let config = this.config;
     let servicesPath = this.paths.get('app/services').path;
-    this.keys = config.secrets.secretKeyBase;
     return co(function*() {
         let seq = [];
         let files = this.paths.get('app/services').existent;
