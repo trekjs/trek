@@ -4,3 +4,4 @@ examples/*/log/*.log
 coverage/
 .env*
 !.env.example
+out/
