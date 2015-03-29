@@ -46,7 +46,6 @@ class Engine extends Koa {
    * @private
    */
   initialize() {
-    this.dotenv();
     this.config.initialize();
     this.overrideContext();
     let secretKeyBase = this.config.secrets.secretKeyBase;
@@ -66,24 +65,6 @@ class Engine extends Koa {
    */
   overrideContext() {
     this.context = new Context();
-  }
-
-  /**
-   * Loads environment variables from .env for app.
-   *
-   * @memberof Engine
-   * @method dotenv
-   * @public
-   */
-  dotenv() {
-    let loaded = Trek.dotenv.config({
-      path: `${this.root}/.env`
-    });
-    if (!loaded) this.logger.debug('Missing %s.', chalk.red('.env'));
-    loaded = Trek.dotenv.config({
-      path: `${this.root}/.env.${Trek.env}`
-    });
-    if (!loaded) this.logger.debug('Missing %s.', chalk.red(`.env.${Trek.env}`));
   }
 
   /**

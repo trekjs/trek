@@ -38,6 +38,7 @@ class Config {
    * @private
    */
   initialize() {
+    this.dotenv();
     this.load(this.paths.get('config/application').first);
     this.load(this.paths.get('config/environments').first);
   }
@@ -159,12 +160,31 @@ class Config {
    * @param {String} filepath
    */
   load(filepath) {
-    Trek.logger.debug('Loading %s.', path.relative(this.root, filepath));
     try {
       require(filepath)(this);
     } catch (e) {
       Trek.logger.warn(`${e}`);
     }
+    Trek.logger.debug('Loaded %s.', chalk.green(path.relative(this.root, filepath)));
+  }
+
+  /**
+   * Loads environment variables from .env for app.
+   *
+   * @method dotenv
+   * @public
+   */
+  dotenv() {
+    [
+      '.env',
+      `.env.${Trek.env}`
+    ].forEach((env) => {
+      let loaded = Trek.dotenv.config({
+        path: `${this.root}/config/${env}`
+      });
+      if (!loaded) Trek.logger.debug('Missing %s.', chalk.red(env));
+      else Trek.logger.debug('Loaded %s.', chalk.green(env));
+    });
   }
 
   /**
