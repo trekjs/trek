@@ -176,11 +176,11 @@ class Config {
    */
   dotenv() {
     [
-      '.env',
-      `.env.${Trek.env}`
+      'config/.env',
+      `config/.env.${Trek.env}`
     ].forEach((env) => {
       let loaded = Trek.dotenv.config({
-        path: `${this.root}/config/${env}`
+        path: `${this.root}/${env}`
       });
       if (!loaded) Trek.logger.debug('Missing %s.', chalk.red(env));
       else Trek.logger.debug('Loaded %s.', chalk.green(env));
