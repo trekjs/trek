@@ -6,6 +6,7 @@
 
 'use strict';
 
+import co from 'co';
 import originalContext from 'koa/lib/context';
 
 /**
@@ -17,7 +18,6 @@ class Context {
   /**
    * Delegates `app.config`.
    *
-   * @memberof context
    * @public
    * @return {Config}
    */
@@ -28,7 +28,6 @@ class Context {
   /**
    * Delegates `app.logger`.
    *
-   * @memberof context
    * @public
    * @return {Object}
    */
@@ -42,7 +41,6 @@ class Context {
    * @example
    *  let result = yield ctx.sendMail({from: ..., to: ...})
    *
-   * @memberof context
    * @method
    * @public
    * @return {Promise}
@@ -57,7 +55,6 @@ class Context {
    * @example
    *  let db = ctx.getService('sequelize')
    *
-   * @memberof context
    * @method
    * @public
    * @return {Mixed} service
@@ -69,7 +66,6 @@ class Context {
   /**
    * Delegates getter `req.user`, the logined user.
    *
-   * @memberof context
    * @public
    */
   get user() {
@@ -79,7 +75,6 @@ class Context {
   /**
    * Delegates setter `req.user`, the logined user.
    *
-   * @memberof context
    * @public
    */
   set user(user) {
@@ -88,6 +83,7 @@ class Context {
 
 }
 
+// Sets Context's prototype to originalContext `koa/context`.
 Object.setPrototypeOf(Context.prototype, originalContext);
 
 export default Context;
