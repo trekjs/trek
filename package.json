@@ -60,7 +60,6 @@
     "lodash-node": "^3.6.0",
     "mz": "^1.3.0",
     "nconf": "^0.7.1",
-    "node-uuid": "^1.4.3",
     "nodemailer": "^1.3.2",
     "nodemailer-stub-transport": "^0.1.5",
     "route-mapper": "^0.2.5",
