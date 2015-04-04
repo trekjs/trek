@@ -62,7 +62,7 @@
     "route-mapper": "^0.2.5",
     "thenify-all": "^1.6.0",
     "toml": "^2.2.2",
-    "trek-router": "0.0.8",
+    "trek-router": "0.0.9",
     "winston": "^0.9.x"
   },
   "devDependencies": {
