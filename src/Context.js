@@ -1,48 +1,47 @@
 /*!
- * trek - lib/Context
+ * trek - Context
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
 
-'use strict';
-
-import co from 'co';
 import originalContext from 'koa/lib/context';
 
 /**
+ * The app's context.
+ *
  * @class Context
  * @extends koa/lib/context
  */
 class Context {
 
   /**
-   * Delegates `app.config`.
+   * The `app.config` delegation.
    *
-   * @public
-   * @return {Config}
+   * @memberof Context.prototype
+   * @type {Config} config
    */
   get config() {
     return this.app.config;
   }
 
   /**
-   * Delegates `app.logger`.
+   * The `app.logger` delegation.
    *
-   * @public
-   * @return {Object}
+   * @memberof Context.prototype
+   * @type {winston.Logger} logger
    */
   get logger() {
     return this.app.logger;
   }
 
   /**
-   * Delegates `app.sendMail`.
+   * The `app.sendMail` delegation.
    *
    * @example
    *  let result = yield ctx.sendMail({from: ..., to: ...})
    *
-   * @method
-   * @public
+   * @method sendMail
+   * @memberof Context.prototype
    * @return {Promise}
    */
   sendMail(data) {
@@ -50,13 +49,13 @@ class Context {
   }
 
   /**
-   * Delegates `app.getService`.
+   * The `app.getService` delegation.
    *
    * @example
    *  let db = ctx.getService('sequelize')
    *
-   * @method
-   * @public
+   * @method getService
+   * @memberof Context.prototype
    * @return {Mixed} service
    */
   getService(key) {
@@ -64,18 +63,18 @@ class Context {
   }
 
   /**
-   * Delegates getter `req.user`, the logined user.
+   * The `req.user` getter delegation.
    *
-   * @public
+   * @return {Mixed} user
    */
   get user() {
     return this.req.user;
   }
 
   /**
-   * Delegates setter `req.user`, the logined user.
+   * The `req.user` setter delegation.
    *
-   * @public
+   * @param {Mixed} user
    */
   set user(user) {
     this.req.user = user;

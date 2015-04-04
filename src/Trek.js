@@ -1,44 +1,34 @@
 /*!
- * trek - lib/Trek
+ * trek - Trek
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
-
-'use strict';
 
 import delegate from 'delegates';
 import Engine from './Engine';
 
 /**
- * Trek Secret Keys.
- * @constant
- * @default
- * @private
- */
-const TREK_KEYS = ['Star Trek', 'Spock', 'Trek'];
-
-/**
  * @class Trek
- * @public
+ * @namespace Trek
+ * @extends Engine
+ * @param {String} rootPath The app root path.
  */
 class Trek extends Engine {
 
   /**
    * Returns the current Trek environment.
    *
+   * @static
+   * @memberof Trek
+   * @default 'development'
+   *
    * @example
    *  Trek.env
    *  // => development | production | test
-   *
-   * @static
-   * @public
-   * @default 'development'
-   * @return {String}
    */
   static get env() {
     return this._env || (this._env =
       process.env.TREK_ENV ||
-      process.env.IOJS_ENV ||
       process.env.NODE_ENV ||
       'development');
   }
@@ -47,8 +37,7 @@ class Trek extends Engine {
    * Returns true if current environment is `production`.
    *
    * @static
-   * @public
-   * @return {Boolean}
+   * @memberof Trek
    */
   static get isProduction() {
     return this.env === 'production';
@@ -58,8 +47,7 @@ class Trek extends Engine {
    * Returns true if current environment is `development`.
    *
    * @static
-   * @public
-   * @return {Boolean}
+   * @memberof Trek
    */
   static get isDevelopment() {
     return this.env === 'development';
@@ -69,8 +57,7 @@ class Trek extends Engine {
    * Returns true if current environment is `test`.
    *
    * @static
-   * @return {Boolean}
-   * @public
+   * @memberof Trek
    */
   static get isTest() {
     return this.env === 'test';
@@ -80,8 +67,7 @@ class Trek extends Engine {
    * Returns Trek package information.
    *
    * @static
-   * @public
-   * @return {Object}
+   * @memberof Trek
    */
   static get package() {
     return require('../package.json');
@@ -91,63 +77,38 @@ class Trek extends Engine {
    * Returns Trek current version.
    *
    * @static
-   * @public
-   * @return {String}
+   * @memberof Trek
    */
   static get version() {
     return this.package.version;
   }
 
   /**
-   * Trek app `keys`.
+   * Trek libs.
    *
    * @static
-   * @public
-   * @return {Array}
+   * @memberof Trek
    */
-  static get keys() {
-    return TREK_KEYS;
-  }
-
-  /**
-   * Trekking utility tools.
-   *
-   * @static
-   * @public
-   * @return {Object}
-   */
-  static get King() {
-    return require('./king');
+  static get lib() {
+    return require('./lib');
   }
 
 }
 
-/**
- * Puts `Trek` to the global.
- *
- * @global
- * @public
- * @return {Trek}
- */
 if (!global.Trek) {
+  /**
+   * Puts `Trek` to the global.
+   *
+   * @global
+   */
   global.Trek = Trek;
 
   /**
-   * Delegate getter to `Trek.King`.
+   * lib delegation.
    */
-  delegate(Trek, 'King')
-    .getter('_')
-    .getter('joi')
-    .getter('jwt')
-    .getter('uuid')
-    .getter('bcrypt')
-    .getter('pbkdf2')
+  delegate(Trek, 'lib')
     .getter('logger')
-    .getter('validator')
-    .getter('dotenv')
-    .getter('debug')
-    .getter('Mailer')
-    .getter('RouteMapper');
+    .getter('Mailer');
 }
 
-export default global.Trek;
+export default Trek;

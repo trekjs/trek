@@ -4,4 +4,5 @@ examples/*/log/*.log
 coverage/
 .env*
 !.env.example
+!test/fixtures/config/.env*
 out/

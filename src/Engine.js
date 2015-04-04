@@ -1,146 +1,76 @@
 /*!
- * trek - lib/Engine
+ * trek - Engine
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
 
-'use strict';
-
-/**
- * Module dependencies.
- */
-import path from 'path';
-import chalk from 'chalk';
+import { dirname, join } from 'path';
+import { thenify } from 'thenify-all';
+import staticCache from 'koa-static-cache';
+import serveStatic from 'koa-serve-static';
 import co from 'co';
 import Koa from 'koa';
-import mount from 'koa-mount';
+import chalk from 'chalk';
+import Router from 'trek-router';
 import RouteMapper from 'route-mapper';
+import composition from 'composition';
 import Config from './Config';
 import Context from './Context';
-import defaultStack from './stack';
 
 /**
  * @class Engine
- * @public
+ * @extends Koa
+ * @param {String} rootPath The app root path.
  */
 class Engine extends Koa {
-
-  /**
-   * Initialize a new app with a working `root` directory.
-   *
-   * @constructor Engine
-   * @param {String} root
-   */
-  constructor(root) {
-    if (root) this.root = root;
-
-    this.logger.debug('Application starts from %s.', chalk.green(this.root));
-
+  constructor(rootPath) {
     super();
 
+    if (rootPath) this.rootPath = rootPath;
+    Trek.logger.debug('Application starts from %s.', chalk.green(this.rootPath));
     this.initialize();
   }
 
   /**
    * @constructs
-   * @private
    */
   initialize() {
-    this.config.initialize();
-    this.overrideContext();
-    let secretKeyBase = this.config.secrets.secretKeyBase;
-    if (secretKeyBase) {
-      this.keys = Array.isArray(secretKeyBase) ? secretKeyBase : [secretKeyBase];
-    } else {
-      this.keys = Trek.keys;
-    }
-    defaultStack(this);
-  }
-
-  /**
-   * Override the original `koa-context` object.
-   *
-   * @method overrideContext
-   * @private
-   */
-  overrideContext() {
+    this.config = new Config(this.rootPath);
+    this.router = new Router();
+    // override context
     this.context = new Context();
   }
 
   /**
-   * Returns app working `root` directory.
+   * The app working `rootPath` directory.
    *
-   * @public
-   * @return {String}
+   * @type {String} rootPath
    */
-  get root() {
-    return this._root || (this._root = path.dirname(require.main.filename));
+  get rootPath() {
+    return this._rootPath || (this._rootPath = dirname(require.main.filename));
   }
 
   /**
-   * Sets a working `root` directory for app.
+   * Set a working `rootPath` directory for app.
    *
    * @param {Root}
-   * @public
    */
-  set root(root) {
-    this._root = root;
+  set rootPath(rootPath) {
+    this._rootPath = rootPath;
   }
 
   /**
-   * Gets current app name.
-   * Defaults to `Trek`.
+   * The `config.paths` delegation.
    *
-   * @public
-   * @return {String}
-   */
-  get name() {
-    return this._name || (this._name = this.config.get('name') || 'Trek');
-  }
-
-  /**
-   * Sets current app name.
-   *
-   * @public
-   * @param {String}
-   */
-  set name(name) {
-    this._name = name;
-  }
-
-  /**
-   * Returns app `config`.
-   *
-   * @public
-   * @return {Mixed}
-   */
-  get config() {
-    return this._config || (this._config = new Config(this));
-  }
-
-  /**
-   * Sets `config` for  app.
-   *
-   * @public
-   */
-  set config(config) {
-    this._config = config;
-  }
-
-  /**
-   * Gets paths.
-   *
-   * @public
-   * @return {Root}
+   * @type {Root} paths
    */
   get paths() {
     return this.config.paths;
   }
 
   /**
-   * Trek app `logger`.
+   * The app `logger`.
    *
-   * @public
    * @return {winston.Logger}
    */
   get logger() {
@@ -148,47 +78,77 @@ class Engine extends Koa {
   }
 
   /**
-   * Trek app `mailer`.
+   * The app `mailer`.
    *
-   * @public
-   * @return {Mailer}
+   * @return {Mailer} mailer
    */
   get mailer() {
     return this._mailer || (this._mailer = new Trek.Mailer(this.config.get('mail')));
   }
 
   /**
-   * Trek app `sendMail`.
+   * Send a mail.
+   *
+   * @method sendMail
+   * @param {Object} data
+   * @return {Promise}
    *
    * @example
    *  let result = yield app.sendMail(message);
    *
-   * @method sendMail
-   * @public
-   * @param {Object}
-   * @param {Promise}
    */
   sendMail(data) {
     return this.mailer.send(data);
   }
 
   /**
-   * Gets all servides.
+   * Get route mapper.
    *
-   * @public
-   * @return {Map}
+   * @return {RouteMapper} routeMapper
+   */
+  get routeMapper() {
+    return this._routeMapper || (this._routeMapper = new RouteMapper());
+  }
+
+  loadRoutes() {
+    Trek.logger.debug(`Start load the routes.`);
+    let routesPath = this.paths.get('config/routes', true);
+    let controllersPath = this.paths.get('app/controllers', true);
+    try {
+      require(routesPath)(this.routeMapper);
+      this.routeMapper.routes.forEach(r => {
+        let { controller, action } = r;
+        let path = join(controllersPath, controller) + '.js';
+        let c = require(path);
+        r.verb.forEach((m) => {
+          let a;
+          if (c && (a = c[action])) {
+            if (!Array.isArray(a)) a = [a];
+            Trek.logger.debug(m, r.as, r.path, controller, action);
+            this[m](r.path, ...a);
+          }
+        });
+      });
+    } catch (e) {
+      Trek.logger.error(`Load the routes failed, %s.`, chalk.red(e));
+    }
+  }
+
+  /**
+   * Get all servides.
+   *
+   * @return {Map} services
    */
   get services() {
     return this._services || (this._services = new Map());
   }
 
   /**
-   * Gets a service.
+   * Get a service by key.
    *
    * @method getService
-   * @public
-   * @param {String} service
-   * @return {Mixed}
+   * @param {String} key
+   * @return {Mixed} service
    */
   getService(key) {
     return this.services.get(key);
@@ -198,10 +158,8 @@ class Engine extends Koa {
    * Stores a service.
    *
    * @method setService
-   * @public
-   * @param {String} key - the service name
-   * @param {Mixed} service - the service instance
-   * @return {Mixed} service
+   * @param {String} key the service name
+   * @param {Mixed} service the service instance
    */
   setService(key, value) {
     if (this.services.has(key)) {
@@ -212,102 +170,59 @@ class Engine extends Koa {
     this.services.set(key, value);
   }
 
-  /**
-   * Mount `app` with `prefix`, `app`
-   * may be a Trek application or
-   * middleware function.
-   *
-   * @method mount
-   * @public
-   * @param {String|Application|Function} prefix, app, or function
-   * @param {Application|Function} [app or function]
-   */
-  mount() {
-    return this.use(mount(...arguments));
+  ['static'](root, options, files) {
+    return this.use(staticCache(root, options, files));
   }
 
-  /**
-   * Runs app.
-   *
-   * @method run
-   * @public
-   * @return {Promise}
-   */
+  serveFile(path, file, options) {
+    file = dirname(file);
+    this.get(path, serveStatic(file, options));
+    return this;
+  }
+
+  index(file, options) {
+    return this.serveFile('/', file, options);
+  }
+
   run() {
     this.logger.info(chalk.green('booting ...'));
-    this.loadRouteMapper();
-    let config = this.config;
-    let servicesPath = this.paths.get('app/services').path;
-    return co(function*() {
-        let seq = [];
-        let files = this.paths.get('app/services').existent;
-        for (let file of files) {
-          let name = path.basename(file, '.js').replace(/^[0-9]+-/, '');
-          let service = require(file)(this, config);
-          if (service) {
-            this.setService(name, service);
-            this.logger.info(chalk.green(`service:${name} init ...`));
-            if (service.promise) yield service.promise;
-            this.logger.info(chalk.green(`service:${name} booted`));
-          }
-        }
-      }.bind(this))
-      .then(() => {
-        // TODO: https
-        let args = [...arguments];
-        if (!args[0]) args[0] = this.config.get('site.port');
-        let app = this.listen(...args);
-        this.logger.info(
-          chalk.green('%s application starting in %s on http://%s:%s'),
-          Trek.version,
-          Trek.env,
-          app.address().address === '::' ? '127.0.0.1' : app.address().address,
-          app.address().port
-        );
-        this._httpServer = app;
-      })
-      .catch((e) => {
-        this.logger.error(chalk.bold.red(`${e.stack}`));
-        this.logger.error(chalk.red('boots failed.'));
-      });
-  }
-
-  get routeMapper() {
-    return this._routeMapper || (this._routeMapper = new RouteMapper());
-  }
-
-  loadRouteMapper() {
-    this.logger.debug(`Load the routes.`);
-    var routesPath = this.paths.get('config/routes').path;
-    var controllersPath = this.paths.get('app/controllers').path;
-    try {
-      require(routesPath)(this.routeMapper);
-      this.routeMapper.routes.forEach(r => {
-        r.verb.forEach((m) => {
-          let controller = r.controller;
-          let action = r.action;
-          try {
-            let c = require(controllersPath + '/' + controller + '.js');
-            let a;
-            if (c && (a = c[action])) {
-              if (!Array.isArray(a)) a = [a];
-              this.logger.info(r.as, r.path, controller, action);
-              if (r.as) {
-                this[m](r.as, r.path, ...a);
-              } else {
-                this[m](r.path, ...a);
-              }
-            }
-          } catch (e) {
-            this.logger.error(`Missing the ${controller}#${action}.`);
-          }
+    this.loadRoutes();
+    this.use(function* dispatcher(next) {
+      this.params = Object.create(null);
+      let result = this.app.router.find(this.method, this.path);
+      if (result && result[0]) {
+        result[1].forEach((i) => {
+          this.params[i.name] = i.value;
         });
-      });
-    } catch (e) {
-      this.logger.error(`Load the routes failed, ${e}`);
-    }
+        yield result[0].call(this, next);
+      }
+      yield next;
+    });
+    this.listen(3000);
   }
 
 }
+
+[
+  'CONNECT',
+  'DELETE',
+  'GET',
+  'HEAD',
+  'OPTIONS',
+  'PATCH',
+  'POST',
+  'PUT',
+  'TRACE'
+].forEach((m) => {
+  let verb = m;
+  m = m.toLowerCase();
+  Engine.prototype[m] = function(path, ...handlers) {
+    handlers = composition(handlers);
+    this.router.add(verb, path, handlers);
+    return this;
+  };
+});
+
+Engine.prototype.del = Engine.prototype.delete;
 
 export default Engine;

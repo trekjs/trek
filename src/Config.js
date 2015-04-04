@@ -1,246 +1,129 @@
 /*!
- * trek - lib/Config
+ * trek - Config
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
 
-'use strict';
-
-import path from 'path';
-import { EventEmitter } from 'events';
-import { cloneDeep, isPlainObject } from 'lodash-node/modern/lang';
-import { defaults, has } from 'lodash-node/modern/object';
+import toml from 'toml';
 import chalk from 'chalk';
-import { valueForKeyPath, setValueForKeyPath, hasKeyPath } from './utils';
-import Root from './paths';
+import nconf from 'nconf';
+import dotenv from 'dotenv';
+import Paths from './Paths';
 
 /**
+ * The app's configuration.
+ *
  * @class Config
- * @public
+ * @param {String} root The app's root path
+ * @param {String} separator The keypath separator
  */
 class Config {
-
-  /**
-   * Initialize an app's config.
-   *
-   * @constructor
-   * @param {Trek} app
-   */
-  constructor(app) {
-    this.app = app;
-    this.root = app.root;
-    this.emitter = new EventEmitter();
-    this.defaultSettings = Object.create(null);
-    this.settings = Object.create(null);
+  constructor(root, separator = '.') {
+    this.root = root;
+    this.separator = separator;
+    this.initialize();
   }
 
-  /**
-   * @private
-   */
   initialize() {
-    this.dotenv();
-    this.load(this.paths.get('config/application').first);
-    this.load(this.paths.get('config/environments').first);
+    this.paths = new Paths(this.root);
+    // first load dotenv
+    this.loadDotenv();
+    // second, init nconf & load
+    this.initStores();
   }
 
-  /**
-   * Delegates `process.env`.
-   *
-   * @public
-   * @return {Object}
-   */
-  get env() {
-    return process.env;
-  }
-
-  /**
-   * Gets app's `paths`.
-   *
-   * @public
-   * @return {Root}
-   */
-  get paths() {
-    return this._paths || (this._paths = ((root) => {
-      let paths = new Root(root);
-
-      paths.add('app');
-      paths.add('app/controllers');
-      paths.add('app/models',           { glob: '*.js' });
-      paths.add('app/services',         { glob: '*.js' });
-      paths.add('app/views');
-
-      paths.add('lib');
-
-      paths.add('config');
-      paths.add('config/application',   { with: 'config/application.js' });
-      paths.add('config/environments',  { glob: `${Trek.env}.js` });
-      paths.add('config/locales',       { glob: '*.{js,json}' });
-
-      paths.add('config/database',      { with: 'config/database.js' });
-      paths.add('config/secrets',       { with: 'config/secrets.js' });
-      paths.add('config/session',       { with: 'config/session.js' });
-      paths.add('config/routes',        { with: 'config/routes.js' });
-      paths.add('config/middleware',    { with: 'config/middleware.js' });
-      paths.add('config/global.js',     { with: 'config/global.js' });
-
-      paths.add('log',                  { with: `log/${Trek.env}.log` });
-      paths.add('public');
-      paths.add('tmp');
-
-      return paths;
-    })(this.root));
-  }
-
-  /**
-   * Gets the secrets settings.
-   *
-   * @public
-   * @return {Object}
-   */
-  get secrets() {
-    return this._secrets || (this._secrets = (() => {
-      let allSecrets = {};
-      let filepath = this.paths.get('config/secrets').first;
-      try {
-        allSecrets = require(filepath);
-      } catch (e) {
-        Trek.logger.warn(`Missing %s.`, chalk.red(filepath));
-      }
-      let secrets = allSecrets[Trek.env] || {};
-      if (!secrets.secretKeyBase) {
-        secrets.secretKeyBase = Trek.keys;
-      }
-      return secrets;
-    })());
-  }
-
-  /**
-   * Gets the session settings.
-   *
-   * @public
-   * @return {Object}
-   */
-  get session() {
-    let allSession = {};
-    let filepath = this.paths.get('config/session').first;
-    try {
-      allSession = require(filepath);
-    } catch (e) {
-      Trek.logger.warn(`Missing %s.`, chalk.red(filepath));
+  initStores() {
+    //this.nconf = nconf.argv().env().use('memory');
+    this.stores = new Map();
+    this.stores.set('env', new nconf.Env());
+    this.loadConfig();
+    for (let s of this.stores.values()) {
+      s.loadSync();
     }
-    let session = allSession[Trek.env] || {};
-    return session;
   }
 
   /**
-   * Gets the app public path.
+   * Load .env .env.{development|test|production}
    *
-   * @public
-   * @return {String}
+   * @method loadDotenv
    */
-  get publicPath() {
-    return this.paths.get('public').first;
-  }
-
-  /**
-   * Gets the app views path.
-   *
-   * @public
-   * @return {String}
-   */
-  get viewsPath() {
-    return this.paths.get('app/views').first;
-  }
-
-  /**
-   * Loads a config file.
-   *
-   * @method
-   * @public
-   * @param {String} filepath
-   */
-  load(filepath) {
-    try {
-      require(filepath)(this);
-    } catch (e) {
-      Trek.logger.warn(`${e}`);
-    }
-    Trek.logger.debug('Loaded %s.', chalk.green(path.relative(this.root, filepath)));
-  }
-
-  /**
-   * Loads environment variables from .env for app.
-   *
-   * @method dotenv
-   * @public
-   */
-  dotenv() {
+  loadDotenv() {
     [
-      'config/.env',
-      `config/.env.${Trek.env}`
+      this.paths.get('config/.env.env'), // .env.${Trek.env}
+      this.paths.get('config/.env')
     ].forEach((env) => {
-      let loaded = Trek.dotenv.config({
-        path: `${this.root}/${env}`
-      });
-      if (!loaded) Trek.logger.debug('Missing %s.', chalk.red(env));
-      else Trek.logger.debug('Loaded %s.', chalk.green(env));
+      let [loaded, err] = [true, ''];
+      try {
+        loaded = dotenv.config({
+          path: `${this.root}/${env}`
+        });
+      } catch (e) {
+        err = e;
+        loaded = false;
+      }
+      if (loaded) Trek.logger.debug('Loaded %s.', chalk.green(env));
+      else Trek.logger.debug('Missing %s or parse failed %s.', chalk.red(env), chalk.red(err));
     });
   }
 
   /**
-   * Gets value with `keyPath`.
+   * Load app.toml app.{development|test|production}.toml
    *
-   * @example
-   *  let site = config.get('site')
-   *  let sietUrl = config.get('site.url')
-   *  let name = config.get('name', true)
-   *  ```
-   *
-   * @method
-   * @public
-   * @param {String} keyPath
-   * @param {Boolean} isDefault [optional]
-   * @return {Mixed}
+   * @method loadConfig
    */
-  get(keyPath, isDefault = false) {
-    let value, defaultValue;
-    defaultValue = valueForKeyPath(this.defaultSettings, keyPath);
-    if (!isDefault) value = valueForKeyPath(this.settings, keyPath);
-
-    if (value) {
-      value = cloneDeep(value);
-      if (isPlainObject(value) && isPlainObject(defaultValue)) {
-        defaults(value, defaultValue);
+  loadConfig() {
+    [
+      [this.paths.get('config/app.env'), 'global'], // app.${Trek.env}
+      [this.paths.get('config/app'), 'user']
+    ].forEach((item) => {
+      let [c, t] = item;
+      let [loaded, err] = [true, ''];
+      try {
+        this.stores.set(t, new nconf.File({
+          file: `${this.root}/${c}`,
+          format: toml,
+          logicalSeparator: this.separator
+        }));
+      } catch (e) {
+        err = e;
+        loaded = false;
       }
-    } else {
-      value = cloneDeep(defaultValue);
-    }
-
-    return value;
+      if (loaded) Trek.logger.debug('Loaded %s.', chalk.green(c));
+      else Trek.logger.debug('Missing %s or parse failed %s.', chalk.red(c), chalk.red(err));
+    });
   }
 
   /**
-   * Sets value with a keyPath.
+   * Get value by key from Config.
    *
-   * @example
-   *  config.set('site', {
-   *    url: 'http://trekjs.com',
-   *    title: 'TREK.JS'
-   *  }, true)
+   *  search: env -> global -> user
    *
-   * @method
-   * @public
-   * @param {String} keyPath
-   * @param {Mixed} value
-   * @param {Boolean} isDefault [optional]
+   * @method get
+   * @param {String} key
+   * @param {Mixed} [defaultValue]
    * @return {Mixed}
    */
-  set(keyPath, value, isDefault) {
-    setValueForKeyPath(
-      isDefault ? this.defaultSettings : this.settings,
-      keyPath,
-      value
-    );
+  get(key, defaultValue) {
+    let value;
+    for (let s of this.stores.values()) {
+      value = s.get(key);
+      if (value) return value;
+    }
+    return defaultValue;
+  }
+
+  /**
+   * Set value by key onto Config.
+   *
+   * @method set
+   * @param {String} key
+   * @param {Mixed} value
+   * @param {String} [type='user']
+   */
+  set(key, value, type = 'user') {
+    if (this.stores.has(type)) {
+      this.stores.get(type).set(key, value);
+    }
   }
 
 }
