@@ -21,7 +21,6 @@
     "prepublish": "make clean && make build"
   },
   "dependencies": {
-    "bcrypt": "^0.8.2",
     "bluebird": "^2.9.24",
     "chalk": "^1.0.0",
     "co": "^4.5.1",
