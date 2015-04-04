@@ -29,7 +29,6 @@
     "delegates": "^0.1.0",
     "dotenv": "^1.1.0",
     "glob": "^5.x.x",
-    "joi": "^6.x.x",
     "jsonwebtoken": "^4.2.2",
     "koa": "^0.18.1",
     "koa-bodyparser": "^1.4.1",
