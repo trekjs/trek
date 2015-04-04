@@ -18,7 +18,7 @@ app.get('/', function* (next) {
   this.body = 'Hello World';
 });
 
-app.listen(3000);
+app.run(3000);
 ```
 
 ## Installation

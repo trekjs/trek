@@ -185,7 +185,7 @@ class Engine extends Koa {
   }
 
   run() {
-    this.logger.info(chalk.green('booting ...'));
+    this.logger.debug(chalk.green('booting ...'));
     this.loadRoutes();
     this.use(function* dispatcher(next) {
       this.params = Object.create(null);
@@ -198,7 +198,7 @@ class Engine extends Koa {
       }
       yield next;
     });
-    this.listen(3000);
+    return this.listen(...arguments);
   }
 
 }
