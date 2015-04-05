@@ -19,6 +19,7 @@ import Context from './Context';
 
 /**
  * @class Engine
+ * @constructor
  * @extends Koa
  * @param {String} rootPath The app root path.
  */
@@ -31,9 +32,6 @@ class Engine extends Koa {
     this.initialize();
   }
 
-  /**
-   * @constructs
-   */
   initialize() {
     this.config = new Config(this.rootPath);
     this.router = new Router();
@@ -44,7 +42,8 @@ class Engine extends Koa {
   /**
    * The app working `rootPath` directory.
    *
-   * @type {String} rootPath
+   * @memberof Engine.prototype
+   *
    */
   get rootPath() {
     return this._rootPath || (this._rootPath = dirname(require.main.filename));
@@ -53,6 +52,7 @@ class Engine extends Koa {
   /**
    * Set a working `rootPath` directory for app.
    *
+   * @memberof Engine.prototype
    * @param {Root}
    */
   set rootPath(rootPath) {
@@ -62,7 +62,7 @@ class Engine extends Koa {
   /**
    * The `config.paths` delegation.
    *
-   * @type {Root} paths
+   * @memberof Engine.prototype
    */
   get paths() {
     return this.config.paths;
@@ -71,6 +71,7 @@ class Engine extends Koa {
   /**
    * The app `logger`.
    *
+   * @memberof Engine.prototype
    * @return {winston.Logger}
    */
   get logger() {
@@ -80,6 +81,7 @@ class Engine extends Koa {
   /**
    * The app `mailer`.
    *
+   * @memberof Engine.prototype
    * @return {Mailer} mailer
    */
   get mailer() {
@@ -89,6 +91,7 @@ class Engine extends Koa {
   /**
    * Send a mail.
    *
+   * @memberof Engine.prototype
    * @method sendMail
    * @param {Object} data
    * @return {Promise}
@@ -102,14 +105,57 @@ class Engine extends Koa {
   }
 
   /**
+   * Get all servides.
+   *
+   * @memberof Engine.prototype
+   * @return {Map} services
+   */
+  get services() {
+    return this._services || (this._services = new Map());
+  }
+
+  /**
+   * Get a service by key.
+   *
+   * @memberof Engine.prototype
+   * @method getService
+   * @param {String} key
+   * @return {Mixed} service
+   */
+  getService(key) {
+    return this.services.get(key);
+  }
+
+  /**
+   * Stores a service.
+   *
+   * @memberof Engine.prototype
+   * @method setService
+   * @param {String} key the service name
+   * @param {Mixed} service the service instance
+   */
+  setService(key, value) {
+    if (this.services.has(key)) {
+      this.logger.debug(chalk.green(`service:${key} was registed`));
+      return;
+    }
+    this.logger.debug(chalk.yellow('service:%s'), key);
+    this.services.set(key, value);
+  }
+
+  /**
    * Get route mapper.
    *
+   * @memberof Engine.prototype
    * @return {RouteMapper} routeMapper
    */
   get routeMapper() {
     return this._routeMapper || (this._routeMapper = new RouteMapper());
   }
 
+  /**
+   * @private
+   */
   loadRoutes() {
     Trek.logger.debug(`Start load the routes.`);
     let routesPath = this.paths.get('config/routes', true);
@@ -135,39 +181,19 @@ class Engine extends Koa {
   }
 
   /**
-   * Get all servides.
+   * Load middleware stack
    *
-   * @return {Map} services
+   * @private
    */
-  get services() {
-    return this._services || (this._services = new Map());
-  }
-
-  /**
-   * Get a service by key.
-   *
-   * @method getService
-   * @param {String} key
-   * @return {Mixed} service
-   */
-  getService(key) {
-    return this.services.get(key);
-  }
-
-  /**
-   * Stores a service.
-   *
-   * @method setService
-   * @param {String} key the service name
-   * @param {Mixed} service the service instance
-   */
-  setService(key, value) {
-    if (this.services.has(key)) {
-      this.logger.info(chalk.green(`service:${key} was registed`));
-      return;
+  loadStack() {
+    let loaded = true;
+    let stackPath = this.paths.get('config/middleware', true);
+    try {
+      require(stackPath)(this);
+    } catch (e) {
+      loaded = false;
+      this.logger.debug(`Load failed ${chalk.red(stackPath)}, failed ${e}`);
     }
-    this.logger.log('info', chalk.yellow('service:%s'), key);
-    this.services.set(key, value);
   }
 
   ['static'](root, options, files) {
@@ -186,15 +212,16 @@ class Engine extends Koa {
 
   run() {
     this.logger.debug(chalk.green('booting ...'));
+    this.loadStack();
     this.loadRoutes();
     this.use(function* dispatcher(next) {
       this.params = Object.create(null);
-      let result = this.app.router.find(this.method, this.path);
-      if (result && result[0]) {
-        result[1].forEach((i) => {
+      let [handler, params] = this.app.router.find(this.method, this.path);
+      if (handler) {
+        params.forEach((i) => {
           this.params[i.name] = i.value;
         });
-        yield result[0].call(this, next);
+        yield* handler.call(this, next);
       }
       yield next;
     });
