@@ -73,8 +73,8 @@ class Config {
    */
   loadConfig() {
     [
-      [this.paths.get('config/app.env'), 'global'], // app.${Trek.env}
-      [this.paths.get('config/app'), 'user']
+      [this.paths.get('config/app.env'), 'user'], // app.${Trek.env}
+      [this.paths.get('config/app'), 'global']
     ].forEach((item) => {
       let [c, t] = item;
       let [loaded, err] = [true, ''];
