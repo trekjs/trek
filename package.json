@@ -55,7 +55,7 @@
     "iojs": "1.x.x"
   },
   "files": [
-    "lib",
-    "index.js"
+    "LICENSE"
+    "lib"
   ]
 }
