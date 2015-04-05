@@ -5,6 +5,7 @@
  */
 
 import path from 'path';
+import glob from 'glob';
 
 /**
  *
@@ -26,7 +27,7 @@ class Paths {
       .set('app/controllers')
       .set('app/models')
       .set('app/views')
-      .set('app/sevices')
+      .set('app/services',       { glob: '*.js' })
 
       .set('lib')
 
@@ -58,6 +59,10 @@ class Paths {
   get(key, absolute = false) {
     if (!this.blueprint.has(key)) return null;
     let value = this.blueprint.get(key);
+    if (value.glob) {
+      // TODO glob async
+      return glob(value.glob, { sync: true, realpath: true, cwd: `${this.root}/${key}` });
+    }
     return path.join(absolute ? this.root : '', value.with || value);
   }
 

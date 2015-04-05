@@ -12,7 +12,7 @@ describe('Trek', () => {
       this.body = 'Hello World';
     });
 
-    request(app.run())
+    request(app.listen())
       .get('/')
       .expect(200, 'Hello World', done);
   });

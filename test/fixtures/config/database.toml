@@ -2,6 +2,6 @@
 [test]
 
 [development]
-url="{{}}"
+url="{{env.DATABASE_URL}}"
 
 [production]

@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { dirname, join } from 'path';
+import { basename, dirname, join } from 'path';
 import { thenify } from 'thenify-all';
 import staticCache from 'koa-static-cache';
 import serveStatic from 'koa-serve-static';
@@ -176,7 +176,7 @@ class Engine extends Koa {
         });
       });
     } catch (e) {
-      Trek.logger.error(`Load the routes failed, %s.`, chalk.red(e));
+      Trek.logger.debug(`Load the routes failed, ${chalk.red(e)}.`);
     }
   }
 
@@ -187,13 +187,35 @@ class Engine extends Koa {
    */
   loadStack() {
     let loaded = true;
-    let stackPath = this.paths.get('config/middleware', true);
+    let stackPath = this.paths.get('config/middleware');
     try {
-      require(stackPath)(this);
+      require(`${this.rootPath}/${stackPath}`)(this);
     } catch (e) {
       loaded = false;
       this.logger.debug(`Load failed ${chalk.red(stackPath)}, failed ${e}`);
     }
+  }
+
+  /**
+   * Load services
+   *
+   * @private
+   */
+  loadServices() {
+    let files = this.paths.get('app/services');
+    return co(function*() {
+        let seq = [];
+        for (let file of files) {
+          let name = basename(file, '.js').replace(/^[0-9]+-/, '');
+          let service = require(file)(this, this.config);
+          if (service) {
+            this.setService(name, service);
+            this.logger.info(chalk.green(`service:${name} init ...`));
+            if (service.promise) yield service.promise;
+            this.logger.info(chalk.green(`service:${name} booted`));
+          }
+        }
+      }.bind(this));
   }
 
   ['static'](root, options, files) {
@@ -210,8 +232,7 @@ class Engine extends Koa {
     return this.serveFile('/', file, options);
   }
 
-  run() {
-    this.logger.debug(chalk.green('booting ...'));
+  listen(...args) {
     this.loadStack();
     this.loadRoutes();
     this.use(function* dispatcher(next) {
@@ -225,7 +246,29 @@ class Engine extends Koa {
       }
       yield next;
     });
-    return this.listen(...arguments);
+    return super.listen(...args);
+  }
+
+  run(...args) {
+    this.logger.debug(chalk.green('booting ...'));
+    return this.loadServices()
+      .then(() => {
+        // TODO: https
+        if (!args[0]) args[0] = this.config.get('site.port');
+        let app = this.listen(...args);
+        this.logger.info(
+          chalk.green('%s application starting in %s on http://%s:%s'),
+          Trek.version,
+          Trek.env,
+          app.address().address === '::' ? '127.0.0.1' : app.address().address,
+          app.address().port
+        );
+        this._httpServer = app;
+      })
+      .catch((e) => {
+        this.logger.error(chalk.bold.red(`${e.stack}`));
+        this.logger.error(chalk.red('boots failed.'));
+      });
   }
 
 }
