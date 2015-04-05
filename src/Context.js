@@ -18,7 +18,7 @@ class Context {
    * The `app.config` delegation.
    *
    * @memberof Context.prototype
-   * @type {Config} config
+   * @return {Config}
    */
   get config() {
     return this.app.config;
@@ -28,7 +28,7 @@ class Context {
    * The `app.logger` delegation.
    *
    * @memberof Context.prototype
-   * @type {winston.Logger} logger
+   * @return {winston.Logger}
    */
   get logger() {
     return this.app.logger;
@@ -37,12 +37,12 @@ class Context {
   /**
    * The `app.sendMail` delegation.
    *
-   * @example
-   *  let result = yield ctx.sendMail({from: ..., to: ...})
-   *
    * @method sendMail
    * @memberof Context.prototype
    * @return {Promise}
+   *
+   * @example
+   *  let result = yield ctx.sendMail({from: ..., to: ...})
    */
   sendMail(data) {
     return this.app.sendMail(data);
@@ -63,7 +63,7 @@ class Context {
   }
 
   /**
-   * The `req.user` getter delegation.
+   * Get request user.
    *
    * @return {Mixed} user
    */
@@ -72,7 +72,7 @@ class Context {
   }
 
   /**
-   * The `req.user` setter delegation.
+   * Set request user.
    *
    * @param {Mixed} user
    */
