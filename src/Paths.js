@@ -6,6 +6,12 @@
 
 import path from 'path';
 
+/**
+ *
+ * @class Paths
+ * @constructor
+ * @param {String} root The app root path
+ */
 class Paths {
 
   constructor(root) {
@@ -40,12 +46,30 @@ class Paths {
       .set('tmp');
   }
 
+  /**
+   * Get the path with the key path from paths
+   *
+   * @method get
+   * @memberof Paths.prototype
+   * @param {String} key The key path
+   * @param {Boolean} [absolute=false] Relative or absolute path
+   * @return {String} path
+   */
   get(key, absolute = false) {
     if (!this.blueprint.has(key)) return null;
     let value = this.blueprint.get(key);
     return path.join(absolute ? this.root : '', value.with || value);
   }
 
+  /**
+   * Set the value with the key path onto paths
+   *
+   * @method set
+   * @memberof Paths.prototype
+   * @param {String} key The key path
+   * @param {Object|String} [value=key]
+   * @return this
+   */
   set(key, value) {
     value = value || key;
     this.blueprint.set(key, value);
