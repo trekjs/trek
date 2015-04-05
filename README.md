@@ -48,14 +48,9 @@ $ npm i && npm start
   * Using [Babel][] for writing next generation JavaScript, **ES6+**
   * Working with [io.js][]
   * Loads configurations & environment variables(.env) automagically
-  * Built-in normal middleware, `disable/enable`, `priority`
-  * MVC
   * RESTful Routing, Rails Style, powered by [RouteMapper][]
-
-    - HTTP Verbs
-    - Resources
-    - Namespace
-    - Nesting
+  * Fast Router
+  * MVC
 
 ## Quick Start
 
