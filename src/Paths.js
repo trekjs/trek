@@ -25,7 +25,7 @@ class Paths {
     this
       .set('app')
       .set('app/controllers')
-      .set('app/models')
+      .set('app/models',         { glob: '*.js' })
       .set('app/views')
       .set('app/services',       { glob: '*.js' })
 
