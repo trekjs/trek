@@ -51,9 +51,6 @@ test-cov:
 bench:
 	@$(MAKE) -C benchmarks
 
-trek-auth:
-	@DEBUG=* $(NODEMON) --exec $(BABEL_NODE) examples/trek-auth/server.js
-
 lint:
 	@$(ESLINT) src
 
