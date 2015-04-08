@@ -5,3 +5,4 @@ PORT = 377
 name = "Fangdun Cai"
 organization = "FutureSpace.io"
 url = "{{env.PATH}}"
+publicPath = "{{config.paths.get('public', true)}}"

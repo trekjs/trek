@@ -17,7 +17,7 @@ app.serveFile('/main.js', publicPath + '/js/main.js');
 
 app.index(publicPath + '/index.html');
 
-swig(app, {
+app.render = swig({
   root: viewsPath
 });
 

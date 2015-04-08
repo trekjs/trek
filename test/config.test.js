@@ -14,3 +14,6 @@ console.log(config.get('title'));
 config.set('owner.age', 233);
 console.log(config.get('owner.age'));
 console.log(config.get('owner.url'));
+console.log(config.get('owner.publicPath'));
+
+console.log(config.get('database'));
