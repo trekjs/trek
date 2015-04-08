@@ -4,6 +4,7 @@
  * MIT Licensed
  */
 
+import swig from 'swig';
 import toml from 'toml';
 import chalk from 'chalk';
 import nconf from 'nconf';
@@ -33,10 +34,18 @@ class Config {
   }
 
   initStores() {
+    // swig settings
+    swig.setDefaults({
+      cache: false,
+      locals: {
+        env: process.env,
+        config: this
+      }
+    });
     //this.nconf = nconf.argv().env().use('memory');
     this.stores = new Map();
     this.stores.set('env', new nconf.Env());
-    this.loadConfig();
+    this.loadConfigs();
     for (let s of this.stores.values()) {
       s.loadSync();
     }
@@ -69,21 +78,19 @@ class Config {
   /**
    * Load app.toml app.{development|test|production}.toml
    *
-   * @method loadConfig
+   * @method loadConfigs
    */
-  loadConfig() {
+  loadConfigs() {
     [
+      [this.paths.get('config/secrets'), 'secrets', true, Trek.env],
+      [this.paths.get('config/database'), 'database', true, Trek.env],
       [this.paths.get('config/app.env'), 'user'], // app.${Trek.env}
       [this.paths.get('config/app'), 'global']
     ].forEach((item) => {
-      let [c, t] = item;
+      let [c, t, n, e] = item;
       let [loaded, err] = [true, ''];
       try {
-        this.stores.set(t, new nconf.File({
-          file: `${this.root}/${c}`,
-          format: toml,
-          logicalSeparator: this.separator
-        }));
+        this.stores.set(t, this.renderAndParse(`${this.root}/${c}`, n ? t : null, e));
       } catch (e) {
         err = e;
         loaded = false;
@@ -94,9 +101,37 @@ class Config {
   }
 
   /**
+   * Use swig to render, then parse toml file to Memory.
+   *
+   * @method renderAndParse
+   * @param {String} file The file path
+   * @param {String} namespace Set a namespace for current store
+   * @return {nconf.Memory}
+   */
+  renderAndParse(file, namespace, env) {
+    let context = swig.renderFile(file);
+    let data = toml.parse(context);
+    let memory = new nconf.Memory({
+      logicalSeparator: this.separator
+    });
+    // select env
+    if (env) {
+      data = data[env] || data;
+    }
+    // add namespace for data
+    if (namespace) {
+      data = {
+        [namespace]: data
+      }
+    }
+    memory.store = data || {};
+    return memory;
+  }
+
+  /**
    * Get value by key from Config.
    *
-   *  search: env -> global -> user
+   *  search: env -> user -> global
    *
    * @method get
    * @param {String} key
