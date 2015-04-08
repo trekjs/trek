@@ -25,6 +25,20 @@ class Context {
   }
 
   /**
+   * The `app.render` delegation.
+   *
+   * @memberof Context.prototype
+   * @return {GeneratorFunction}
+   */
+  get render() {
+    return this._render;
+  }
+
+  set render(render) {
+    this._render = render;
+  }
+
+  /**
    * The `app.logger` delegation.
    *
    * @memberof Context.prototype
