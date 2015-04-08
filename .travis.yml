@@ -9,5 +9,5 @@ branches:
     - master
     - dev
 
-script:
-  - "npm test"
+script: "make test-ci"
+after_script: "npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"

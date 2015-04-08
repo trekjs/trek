@@ -32,6 +32,20 @@ test:
 		$(MOCHA) \
 		--compilers js:babel/register \
 		--require should \
+		--reporter spec \
+		--check-leaks \
+		$(TESTS) \
+		--bail
+
+test-ci:
+	@TREK_ENV=$(TREK_ENV) $(BIN) $(FLAGS) \
+		$(ISTANBUL) cover \
+		$(MOCHA) \
+		--report lcovonly \
+		-- -u exports \
+		--compilers js:babel/register \
+		--reporter spec \
+		--require should \
 		--check-leaks \
 		$(TESTS) \
 		--bail
