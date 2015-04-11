@@ -28,7 +28,7 @@
     "debug": "^2.x.x",
     "delegates": "^0.1.0",
     "dotenv": "^1.1.0",
-    "glob": "^5.x.x",
+    "glob": "^5.0.5",
     "koa": "^0.19.0",
     "koa-serve-static": "0.0.1",
     "koa-static-cache": "^3.1.0",
@@ -39,7 +39,7 @@
     "swig": "^1.4.2",
     "thenify-all": "^1.6.0",
     "toml": "^2.2.2",
-    "trek-router": "0.0.13",
+    "trek-router": "^0.1.4",
     "winston": "^1.0.0"
   },
   "devDependencies": {
@@ -47,7 +47,7 @@
     "babel-eslint": "^2.0.2",
     "eslint": "^0.18.0",
     "istanbul": "^0.3.13",
-    "koa-swig": "^1.4.0",
+    "koa-swig": "^2.0.0",
     "mocha": "^2.2.4",
     "require-times": "^1.0.0",
     "should": "^5.x",

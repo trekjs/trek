@@ -122,7 +122,7 @@ class Config {
     if (namespace) {
       data = {
         [namespace]: data
-      }
+      };
     }
     memory.store = data || {};
     return memory;
