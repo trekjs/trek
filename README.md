@@ -47,7 +47,7 @@ $ npm i && npm start
 
   * Using [Babel][] for writing next generation JavaScript, **ES6+**
   * Working with [io.js][]
-  * Loads configurations & environment variables(.env) automagically
+  * Loads configurations(.js,.toml) & environment variables(.env) automagically
   * Zippy [router][]
   * RESTful Routing, Rails Style, powered by [RouteMapper][]
   * MVC
