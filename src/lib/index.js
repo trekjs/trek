@@ -1,4 +1,4 @@
 import logger from './logger';
-import Mailer from './Mailer'
+import Mailer from './Mailer';
 
-export { logger, Mailer }
+export { logger, Mailer };
