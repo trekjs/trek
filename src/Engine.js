@@ -157,7 +157,7 @@ class Engine extends Koa {
    *
    * @param {GeneratorFunction|Promise} render
    */
-  set render(render)  {
+  set render(render) {
     this.context.render = render;
   }
 
@@ -222,18 +222,18 @@ class Engine extends Koa {
   loadServices() {
     let files = this.paths.get('app/services');
     return co(function*() {
-        let seq = [];
-        for (let file of files) {
-          let name = basename(file, '.js').replace(/^[0-9]+-/, '');
-          let service = require(file)(this, this.config);
-          if (service) {
-            this.setService(name, service);
-            this.logger.info(chalk.green(`service:${name} init ...`));
-            if (service.promise) yield service.promise;
-            this.logger.info(chalk.green(`service:${name} booted`));
-          }
+      let seq = [];
+      for (let file of files) {
+        let name = basename(file, '.js').replace(/^[0-9]+-/, '');
+        let service = require(file)(this, this.config);
+        if (service) {
+          this.setService(name, service);
+          this.logger.info(chalk.green(`service:${name} init ...`));
+          if (service.promise) yield service.promise;
+          this.logger.info(chalk.green(`service:${name} booted`));
         }
-      }.bind(this));
+      }
+    }.bind(this));
   }
 
   ['static'](root, options, files) {
@@ -291,25 +291,17 @@ class Engine extends Koa {
 
 }
 
-[
-  'CONNECT',
-  'DELETE',
-  'GET',
-  'HEAD',
-  'OPTIONS',
-  'PATCH',
-  'POST',
-  'PUT',
-  'TRACE'
-].forEach((m) => {
-  let verb = m;
-  m = m.toLowerCase();
-  Engine.prototype[m] = function(path, ...handlers) {
-    handlers = composition(handlers);
-    this.router.add(verb, path, handlers);
-    return this;
-  };
-});
+Router
+  .METHODS
+  .forEach((m) => {
+    let verb = m;
+    m = m.toLowerCase();
+    Engine.prototype[m] = function(path, ...handlers) {
+      handlers = composition(handlers);
+      this.router.add(verb, path, handlers);
+      return this;
+    };
+  });
 
 Engine.prototype.del = Engine.prototype.delete;
 
