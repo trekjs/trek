@@ -39,7 +39,7 @@
     "swig": "^1.4.2",
     "thenify-all": "^1.6.0",
     "toml": "^2.2.2",
-    "trek-router": "^0.1.8",
+    "trek-router": "^0.2.0",
     "winston": "^1.0.0"
   },
   "devDependencies": {
