@@ -29,7 +29,7 @@
     "delegates": "^0.1.0",
     "dotenv": "^1.1.0",
     "glob": "^5.0.5",
-    "koa": "^0.19.1",
+    "koa": "^0.20.0",
     "koa-serve-static": "0.0.1",
     "koa-static-cache": "^3.1.1",
     "lodash-node": "^3.7.0",
