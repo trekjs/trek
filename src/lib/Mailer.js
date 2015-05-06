@@ -1,5 +1,5 @@
 /*!
- * trek - lib/king/mailer
+ * trek - lib/mailer
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */

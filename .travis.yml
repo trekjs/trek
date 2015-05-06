@@ -1,13 +1,12 @@
 sudo: false
 language: node_js
 node_js:
-  #- "0.12", no `--harmony_templates` flag
-  - "iojs"
+  - "iojs-v1"
+  - "iojs-v2"
 
 branches:
   only:
     - master
-    - dev
 
 script: "make test-ci"
 after_script: "npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
