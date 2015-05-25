@@ -34,7 +34,6 @@ class Paths {
       .set('config')
       .set('config/app',        { with: 'config/app.toml' })
       .set(`config/app.env`,    { with: `config/app.${Trek.env}.toml` })
-      .set('config/.env',       { with: 'config/.env' })
       .set('config/.env.env',   { with: `config/.env.${Trek.env}` })
       .set('config/database',   { with: 'config/database.toml' })
       .set('config/secrets',    { with: 'config/secrets.toml' })

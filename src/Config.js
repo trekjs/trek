@@ -52,27 +52,23 @@ class Config {
   }
 
   /**
-   * Load .env .env.{development|test|production}
+   * Load .env.{development|test|production}
    *
    * @method loadDotenv
    */
   loadDotenv() {
-    [
-      this.paths.get('config/.env.env'), // .env.${Trek.env}
-      this.paths.get('config/.env')
-    ].forEach((env) => {
-      let [loaded, err] = [true, ''];
-      try {
-        loaded = dotenv.config({
-          path: `${this.root}/${env}`
-        });
-      } catch (e) {
-        err = e;
-        loaded = false;
-      }
-      if (loaded) Trek.logger.debug('Loaded %s.', chalk.green(env));
-      else Trek.logger.debug('Missing %s or parse failed %s.', chalk.red(env), chalk.red(err));
-    });
+    let env = this.paths.get('config/.env.env'); // .env.${Trek.env}
+    let [loaded, err] = [true, ''];
+    try {
+      loaded = dotenv.config({
+        path: `${this.root}/${env}`
+      });
+    } catch (e) {
+      err = e;
+      loaded = false;
+    }
+    if (loaded) Trek.logger.debug('Loaded %s.', chalk.green(env));
+    else Trek.logger.debug('Missing %s or parse failed %s.', chalk.red(env), chalk.red(err));
   }
 
   /**
