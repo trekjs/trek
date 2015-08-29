@@ -83,9 +83,11 @@ class Engine extends Koa {
    * @memberof Engine.prototype
    * @return {Mailer} mailer
    */
+  /*
   get mailer() {
     return this._mailer || (this._mailer = new Trek.Mailer(this.config.get('mail')));
   }
+  */
 
   /**
    * Send a mail.
@@ -99,9 +101,11 @@ class Engine extends Koa {
    *  let result = yield app.sendMail(message);
    *
    */
+  /*
   sendMail(data) {
     return this.mailer.send(data);
   }
+  */
 
   /**
    * Get all servides.
@@ -224,7 +228,7 @@ class Engine extends Koa {
       let seq = [];
       for (let file of files) {
         let name = basename(file, '.js').replace(/^[0-9]+-/, '');
-        let service = require(file)(this, this.config);
+        let service = require(`${this.rootPath}/${file}`)(this, this.config);
         if (service) {
           this.setService(name, service);
           this.logger.info(chalk.green(`service:${name} init ...`));

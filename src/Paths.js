@@ -26,9 +26,9 @@ class Paths {
     this
       .set('app')
       .set('app/controllers')
-      .set('app/models',         { glob: '*.js' })
+      .set('app/models',         { glob: 'app/models/*.js', multi: true })
       .set('app/views')
-      .set('app/services',       { glob: '*.js' })
+      .set('app/services',       { glob: 'app/services/*.js', multi: true })
 
       .set('lib')
 
@@ -61,7 +61,8 @@ class Paths {
     let value = this.blueprint.get(key);
     if (value.glob) {
       // TODO glob async
-      return glob(value.glob, { sync: true, cwd: this.root })[0];
+      let res = glob(value.glob, { sync: true, cwd: this.root });
+      return value.multi ? res : res[0];
     }
     return path.join(absolute ? this.root : '', value.with || value);
   }

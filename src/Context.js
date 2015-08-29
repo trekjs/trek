@@ -58,9 +58,11 @@ class Context {
    * @example
    *  let result = yield ctx.sendMail({from: ..., to: ...})
    */
+  /*
   sendMail(data) {
     return this.app.sendMail(data);
   }
+  */
 
   /**
    * The `app.getService` delegation.
@@ -81,18 +83,22 @@ class Context {
    *
    * @return {Mixed} user
    */
+  /*
   get user() {
     return this.req.user;
   }
+  */
 
   /**
    * Set request user.
    *
    * @param {Mixed} user
    */
+  /*
   set user(user) {
     this.req.user = user;
   }
+  */
 
 }
 
