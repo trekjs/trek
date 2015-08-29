@@ -297,11 +297,9 @@ class Engine extends Koa {
 Router
   .METHODS
   .forEach((m) => {
-    let verb = m;
-    m = m.toLowerCase();
     Engine.prototype[m] = function(path, ...handlers) {
       handlers = composition(handlers);
-      this.router.add(verb, path, handlers);
+      this.router.add(m.toUpperCase(), path, handlers);
       return this;
     };
   });

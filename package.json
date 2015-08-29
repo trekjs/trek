@@ -41,12 +41,12 @@
     "swig": "^1.4.2",
     "thenify-all": "^1.6.0",
     "toml": "^2.3.0",
-    "trek-router": "^0.3.2",
+    "trek-router": "^0.4.0",
     "winston": "^1.0.1"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.0",
-    "eslint": "^1.3.0",
+    "eslint": "^1.3.1",
     "istanbul": "^0.3.18",
     "koa-swig": "^2.0.0",
     "mocha": "^2.2.5",
