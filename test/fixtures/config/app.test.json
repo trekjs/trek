@@ -1,0 +1,10 @@
+{
+  // This is port.
+  "PORT": 377,
+  "owner": {
+    "name": "Fangdun Cai",
+    "organization": "FutureSpace.io",
+    "url": "{{env.PATH}}",
+    "publicPath": "{{config.paths.get('public', true)}}"
+  }
+}

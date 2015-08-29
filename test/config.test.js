@@ -1,19 +1,30 @@
+import assert from 'power-assert';
 import '../src/Trek';
 import Config from '../src/Config';
 
-var config = new Config(__dirname + '/fixtures');
+describe('Config', () => {
 
-console.log(config.get('PATH'));
-console.log(config.get('PORT'));
-console.log(config.get('HOST'));
-console.log(config.get('owner.name'));
-console.log(config.get('owner.bio'));
-console.dir(config.get('owner.dob').toISOString());
-console.log(config.get('title'));
+  var config = new Config(__dirname + '/fixtures');
 
-config.set('owner.age', 233);
-console.log(config.get('owner.age'));
-console.log(config.get('owner.url'));
-console.log(config.get('owner.publicPath'));
+  describe('#get()', () => {
+    it('should return $PATH from env', () => {
+      assert(config.get('PATH').length !== 0);
+      assert(config.get('PORT') === 377);
+    });
 
-console.log(config.get('database'));
+    it('should return a secret key from secrets.js', () => {
+      assert(config.get('secrets.secret_key') === 'Oabah4p');
+    });
+
+  });
+
+  describe('#set()', () => {
+    it('should return new value when reseting', () => {
+      assert(config.get('owner.age') === 144);
+      config.set('owner.age', 233);
+      assert(config.get('owner.age') === 233);
+    });
+  });
+
+});
+

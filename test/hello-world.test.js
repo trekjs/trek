@@ -1,3 +1,4 @@
+return
 import Trek from '../src/Trek';
 import request from 'supertest';
 

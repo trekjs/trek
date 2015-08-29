@@ -1,3 +1,4 @@
+return
 import '../src/Trek';
 import Paths from '../src/Paths';
 

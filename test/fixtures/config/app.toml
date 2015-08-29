@@ -6,8 +6,9 @@ title = "TOML Example"
 [owner]
 name = "Tom Preston-Werner"
 bio = """GitHub Cofounder & CEO
-	Likes "tater tots" and beer and backslashes:"""
+  Likes "tater tots" and beer and backslashes:"""
 dob = 1979-05-27T07:32:00Z # First class dates
+age = 144
 
 [servers]
 

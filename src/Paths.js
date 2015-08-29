@@ -15,8 +15,9 @@ import glob from 'glob';
  */
 class Paths {
 
-  constructor(root) {
+  constructor(root, formats = 'toml|json|js') {
     this.root = root;
+    this.formats = formats;
     this.blueprint = new Map();
     this.initialize();
   }
@@ -32,11 +33,11 @@ class Paths {
       .set('lib')
 
       .set('config')
-      .set('config/app',        { with: 'config/app.toml' })
-      .set(`config/app.env`,    { with: `config/app.${Trek.env}.toml` })
-      .set('config/.env.env',   { with: `config/.env.${Trek.env}` })
-      .set('config/database',   { with: 'config/database.toml' })
-      .set('config/secrets',    { with: 'config/secrets.toml' })
+      .set('config/app',        { glob: `config/app.?(${this.formats})` })
+      .set(`config/app.env`,    { glob: `config/app.${Trek.env}.?(${this.formats})` })
+      .set('config/.env',       { with: `config/.env.${Trek.env}` })
+      .set('config/database',   { glob: `config/database.?(${this.formats})` })
+      .set('config/secrets',    { glob: `config/secrets.?(${this.formats})` })
       .set('config/routes',     { with: 'config/routes.js' })
       .set('config/middleware', { with: 'config/middleware.js' })
       .set('config/locales')
@@ -60,7 +61,7 @@ class Paths {
     let value = this.blueprint.get(key);
     if (value.glob) {
       // TODO glob async
-      return glob(value.glob, { sync: true, realpath: true, cwd: `${this.root}/${key}` });
+      return glob(value.glob, { sync: true, cwd: this.root })[0];
     }
     return path.join(absolute ? this.root : '', value.with || value);
   }

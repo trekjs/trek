@@ -4,8 +4,12 @@
  * MIT Licensed
  */
 
+import vm from 'vm';
+import path from 'path';
+import Module from 'module';
 import swig from 'swig';
 import toml from 'toml';
+import hjson from 'hjson';
 import chalk from 'chalk';
 import nconf from 'nconf';
 import dotenv from 'dotenv';
@@ -42,13 +46,8 @@ class Config {
         config: this
       }
     });
-    //this.nconf = nconf.argv().env().use('memory');
     this.stores = new Map();
-    this.stores.set('env', new nconf.Env());
     this.loadConfigs();
-    for (let s of this.stores.values()) {
-      s.loadSync();
-    }
   }
 
   /**
@@ -57,18 +56,13 @@ class Config {
    * @method loadDotenv
    */
   loadDotenv() {
-    let env = this.paths.get('config/.env.env'); // .env.${Trek.env}
-    let [loaded, err] = [true, ''];
-    try {
-      loaded = dotenv.config({
-        path: `${this.root}/${env}`
-      });
-    } catch (e) {
-      err = e;
-      loaded = false;
-    }
-    if (loaded) Trek.logger.debug('Loaded %s.', chalk.green(env));
-    else Trek.logger.debug('Missing %s or parse failed %s.', chalk.red(env), chalk.red(err));
+    let env = this.paths.get('config/.env'); // .env.${Trek.env}
+    let loaded = dotenv.config({
+      path: `${this.root}/${env}`,
+      silent: true
+    });
+    if (loaded) Trek.logger.debug('Loaded environment variables from %s.', chalk.green(env));
+    else Trek.logger.warn('Missing %s or parse failed.', chalk.red(env));
   }
 
   /**
@@ -77,22 +71,40 @@ class Config {
    * @method loadConfigs
    */
   loadConfigs() {
+    let tmp = [];
     [
-      [this.paths.get('config/secrets'), 'secrets', true, Trek.env],
-      [this.paths.get('config/database'), 'database', true, Trek.env],
+      [this.paths.get('config/database'), 'database', null, true, Trek.env],
+      [this.paths.get('config/secrets'), 'secrets', null, true, Trek.env],
       [this.paths.get('config/app.env'), 'user'], // app.${Trek.env}
-      [this.paths.get('config/app'), 'global']
+      [this.paths.get('config/app'), 'global'],
+      [this.paths.get('config/.env'), 'env', new nconf.Env()], // .env.${Trek.env}
     ].forEach((item) => {
-      let [c, t, n, e] = item;
-      let [loaded, err] = [true, ''];
+      let [c, t, nc, n, e] = item;
+      let [loaded, err] = [true, null];
       try {
-        this.stores.set(t, this.renderAndParse(`${this.root}/${c}`, n ? t : null, e));
+        let s = nc || (this.renderAndParse(`${this.root}/${c}`, n ? t : null, e));
+        this.stores.set(t, s);
       } catch (e) {
         err = e;
         loaded = false;
       }
-      if (loaded) Trek.logger.debug('Loaded %s.', chalk.green(c));
-      else Trek.logger.debug('Missing %s or parse failed %s.', chalk.red(c), chalk.red(err));
+      tmp.unshift({
+        filename: c,
+        loaded: loaded,
+        error: err
+      });
+    });
+
+    for (let [k, s] of this.stores.entries()) {
+      s.loadSync();
+    }
+
+    tmp.forEach((e) => {
+      let {
+        filename, loaded, error
+      } = e;
+      if (loaded) Trek.logger.debug('Loaded %s.', chalk.green(filename));
+      else Trek.logger.warn('Missing %s or parse failed, %s.', chalk.red(filename), chalk.red(error));
     });
   }
 
@@ -104,9 +116,9 @@ class Config {
    * @param {String} namespace Set a namespace for current store
    * @return {nconf.Memory}
    */
-  renderAndParse(file, namespace, env) {
-    let context = swig.renderFile(file);
-    let data = toml.parse(context);
+  renderAndParse(filename, namespace, env) {
+    let context = swig.renderFile(filename);
+    let data = this.parse(filename, context);
     let memory = new nconf.Memory({
       logicalSeparator: this.separator
     });
@@ -120,7 +132,7 @@ class Config {
         [namespace]: data
       };
     }
-    memory.store = data || {};
+    memory.store = data || Object.create(null);
     return memory;
   }
 
@@ -155,6 +167,20 @@ class Config {
     if (this.stores.has(type)) {
       this.stores.get(type).set(key, value);
     }
+  }
+
+  parse(filename, context) {
+    let ext = path.extname(filename);
+    if (ext === '.toml') {
+      return toml.parse(context);
+    } else if (ext === '.json') {
+      return hjson.parse(context);
+    } else if (ext === '.js') {
+      let m = new Module(filename, module);
+      m._compile(context, filename);
+      return m.exports;
+    }
+    return Object.create(null);
   }
 
 }

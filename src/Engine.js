@@ -26,7 +26,6 @@ import Context from './Context';
 class Engine extends Koa {
   constructor(rootPath) {
     super();
-
     if (rootPath) this.rootPath = rootPath;
     Trek.logger.debug('Application starts from %s.', chalk.green(this.rootPath));
     this.initialize();
