@@ -7,7 +7,7 @@
 import vm from 'vm';
 import path from 'path';
 import Module from 'module';
-import swig from 'swig';
+import nunjucks from 'nunjucks';
 import toml from 'toml';
 import hjson from 'hjson';
 import * as babel from 'babel';
@@ -39,14 +39,12 @@ class Config {
   }
 
   initStores() {
-    // swig settings
-    swig.setDefaults({
-      cache: false,
-      locals: {
-        env: process.env,
-        config: this
-      }
+    // nunjucks configure
+    this.nunjucks = new nunjucks.configure({
+      autoescape: true
     });
+    this.nunjucks.addGlobal('env', process.env);
+    this.nunjucks.addGlobal('config', this);
     this.stores = new Map();
     this.loadConfigs();
   }
@@ -118,7 +116,7 @@ class Config {
    * @return {nconf.Memory}
    */
   renderAndParse(filename, namespace, env) {
-    let context = swig.renderFile(filename);
+    let context = this.nunjucks.render(filename);
     let data = this.parse(filename, context);
     let memory = new nconf.Memory({
       logicalSeparator: this.separator
