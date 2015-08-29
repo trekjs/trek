@@ -10,6 +10,7 @@ import Module from 'module';
 import swig from 'swig';
 import toml from 'toml';
 import hjson from 'hjson';
+import * as babel from 'babel';
 import chalk from 'chalk';
 import nconf from 'nconf';
 import dotenv from 'dotenv';
@@ -176,8 +177,9 @@ class Config {
     } else if (ext === '.json') {
       return hjson.parse(context);
     } else if (ext === '.js') {
+      let o = babel.transform(context);
       let m = new Module(filename, module);
-      m._compile(context, filename);
+      m._compile(o.code, filename);
       return m.exports;
     }
     return Object.create(null);
