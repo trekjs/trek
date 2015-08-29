@@ -34,7 +34,7 @@ $ npm i trekjs/trek
 ```
 
 
-O~ use **[trek-cli][]** to generate a trek app.
+Or use **[trek-cli][]** to generate a trek app.
 
 ```bash
 $ npm i trek-cli -g
