@@ -40,7 +40,7 @@ class Config {
 
   initStores() {
     // nunjucks configure
-    this.nunjucks = new nunjucks.configure({
+    this.nunjucks = nunjucks.configure({
       autoescape: true
     });
     this.nunjucks.addGlobal('env', process.env);
