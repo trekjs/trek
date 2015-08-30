@@ -7,7 +7,7 @@
     "one-var": 0,
     "key-spacing": 0,
     "comma-spacing": 0,
-    "curly": [0 "multi"],
+    "curly": [0, "multi"],
     "brace-style": [0, "stroustrup"],
     "no-shadow": 0,
     "no-multi-spaces": 0,
