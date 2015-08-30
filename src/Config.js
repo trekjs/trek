@@ -32,9 +32,9 @@ class Config {
 
   initialize() {
     this.paths = new Paths(this.root);
-    // first load dotenv
+    // first, load dotenv
     this.loadDotenv();
-    // second, init nconf & load
+    // second, init stores
     this.initStores();
   }
 
@@ -47,6 +47,15 @@ class Config {
     this.nunjucks.addGlobal('config', this);
     this.stores = new Map();
     this.loadConfigs();
+  }
+
+  /**
+   * First, uses nunjucks to reander configuration file.
+   *
+   * @method render
+   */
+  render() {
+    return this.nunjucks.render(...arguments);
   }
 
   /**
@@ -81,7 +90,7 @@ class Config {
       let [c, t, nc, n, e] = item;
       let [loaded, err] = [true, null];
       try {
-        let s = nc || (this.renderAndParse(`${this.root}/${c}`, n ? t : null, e));
+        let s = nc || (this.compile(`${this.root}/${c}`, n ? t : null, e));
         this.stores.set(t, s);
       } catch (e) {
         err = e;
@@ -110,13 +119,13 @@ class Config {
   /**
    * Use swig to render, then parse toml file to Memory.
    *
-   * @method renderAndParse
+   * @method compile
    * @param {String} file The file path
    * @param {String} namespace Set a namespace for current store
    * @return {nconf.Memory}
    */
-  renderAndParse(filename, namespace, env) {
-    let context = this.nunjucks.render(filename);
+  compile(filename, namespace, env) {
+    let context = this.render(filename);
     let data = this.parse(filename, context);
     let memory = new nconf.Memory({
       logicalSeparator: this.separator
