@@ -4,7 +4,7 @@
   "owner": {
     "name": "Fangdun Cai",
     "organization": "FutureSpace.io",
-    "url": "{{env.PATH}}",
-    "publicPath": "{{config.paths.get('public', true)}}"
+    "url": "${env.PATH}",
+    "publicPath": "${config.paths.get('public', true)}"
   }
 }

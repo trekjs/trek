@@ -1,3 +1,4 @@
+return
 import rt from 'require-times';
 import swig from 'koa-swig';
 import '../src/Trek';

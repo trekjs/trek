@@ -1,3 +1,4 @@
+import co from 'co';
 import assert from 'power-assert';
 import '../src/Trek';
 import Config from '../src/Config';
@@ -5,6 +6,11 @@ import Config from '../src/Config';
 describe('Config', () => {
 
   var config = new Config(__dirname + '/fixtures');
+  before(() => {
+    return co(function *() {
+      yield config.load();
+    });
+  });
 
   describe('#get()', () => {
     it('should return $PATH from env', () => {

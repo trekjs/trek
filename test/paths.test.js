@@ -1,13 +1,35 @@
-return
+import assert from 'power-assert';
 import '../src/Trek';
 import Paths from '../src/Paths';
 
-var paths = new Paths(__dirname + '/fixtures');
+describe('Paths', () => {
+  var paths = new Paths(__dirname + '/fixtures');
 
-console.log(paths.get('app'));
-console.log(paths.get('app/services'));
-console.log(paths.get('config/app'));
-console.log(paths.get('config/app.env'));
-console.log(paths.get('config/.env'));
-console.log(paths.get('config/.env.env'));
-console.log(paths.get('config/routes'));
+  describe('#get()', () => {
+    it('should return app from `app`', () => {
+      assert(paths.get('app') === 'app');
+    });
+
+    it('should return an array from `app/services`', () => {
+      assert(Array.isArray(paths.get('app/services')) === true);
+    });
+
+    it('should return `config/app.toml` from `config/app`', () => {
+      assert(paths.get('config/app') === 'config/app.toml');
+    });
+
+    it('should return `config/app.test.json` from `config/app.env`', () => {
+      assert(paths.get('config/app.env') === 'config/app.test.json');
+    });
+
+    it('should return `config/.env.test` from `config/.env`', () => {
+      assert(paths.get('config/.env') === 'config/.env.test');
+    });
+
+    it('should return `config/routes.js` from `config/routes`', () => {
+      assert(paths.get('config/routes') === 'config/routes.js');
+    });
+
+  });
+
+});
