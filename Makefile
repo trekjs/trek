@@ -13,11 +13,14 @@ TREK_ENV ?= test
 BIN = iojs
 
 ifeq ($(findstring io.js, $(shell which node)),)
-	BIN = node
+  BIN = node
 endif
 
 ifeq (node, $(BIN))
-	FLAGS = --harmony
+  FLAGS = --harmony
+else
+  FLAGS = --harmony_rest_parameters \
+          --harmony_spreadcalls
 endif
 
 build:
@@ -30,9 +33,7 @@ clean:
 test:
 		@TREK_ENV=$(TREK_ENV) $(BIN) $(FLAGS) \
 		$(MOCHA) \
-		--compilers js:babel/register \
-		--require should \
-		--reporter spec \
+		--require ./test/babel-hook \
 		--check-leaks \
 		$(TESTS) \
 		--bail
@@ -43,9 +44,7 @@ test-ci:
 		$(MOCHA) \
 		--report lcovonly \
 		-- -u exports \
-		--compilers js:babel/register \
-		--reporter spec \
-		--require should \
+		--require ./test/babel-hook \
 		--check-leaks \
 		$(TESTS) \
 		--bail
@@ -56,8 +55,7 @@ test-cov:
 		$(ISTANBUL) cover \
 		$(MOCHA) \
 		-- -u exports \
-		--compilers js:babel/register \
-		--require should \
+		--require ./test/babel-hook \
 		--check-leaks \
 		$(TESTS) \
 		--bail
