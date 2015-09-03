@@ -4,17 +4,14 @@
  * MIT Licensed
  */
 
-import vm from 'vm';
-import path from 'path';
-import Module from 'module';
-import nunjucks from 'nunjucks';
-import toml from 'toml';
-import hjson from 'hjson';
-import * as babel from 'babel';
+import { extname} from 'path';
+import { readFile } from 'mz/fs';
+import { Env, Memory } from 'nconf';
 import chalk from 'chalk';
-import nconf from 'nconf';
 import dotenv from 'dotenv';
+import templatly from 'templatly';
 import Paths from './Paths';
+import Parsers from './Parsers';
 
 /**
  * The app's configuration.
@@ -31,39 +28,26 @@ class Config {
   }
 
   initialize() {
+    this.parsers = Parsers;
     this.paths = new Paths(this.root);
-    // first, load dotenv
-    this.loadDotenv();
-    // second, init stores
-    this.initStores();
-  }
-
-  initStores() {
-    // nunjucks configure
-    this.nunjucks = nunjucks.configure({
-      autoescape: true
-    });
-    this.nunjucks.addGlobal('env', process.env);
-    this.nunjucks.addGlobal('config', this);
+    // init stores
     this.stores = new Map();
-    this.loadConfigs();
-  }
-
-  /**
-   * First, uses nunjucks to reander configuration file.
-   *
-   * @method render
-   */
-  render() {
-    return this.nunjucks.render(...arguments);
+    // init list
+    this.list = [
+      [this.paths.get('config/database'), 'database', null, true, Trek.env],
+      [this.paths.get('config/secrets'), 'secrets', null, true, Trek.env],
+      [this.paths.get('config/app.env'), 'user'], // app.${Trek.env}
+      [this.paths.get('config/app'), 'global'],
+      [this.paths.get('config/.env'), 'env', new Env()], // .env.${Trek.env}
+    ];
   }
 
   /**
    * Load .env.{development|test|production}
    *
-   * @method loadDotenv
+   * @method dotenv
    */
-  loadDotenv() {
+  dotenv() {
     let env = this.paths.get('config/.env'); // .env.${Trek.env}
     let loaded = dotenv.config({
       path: `${this.root}/${env}`,
@@ -73,24 +57,26 @@ class Config {
     else Trek.logger.warn('Missing %s or parse failed.', chalk.red(env));
   }
 
+  *load() {
+    // first, load dotenv
+    this.dotenv();
+    // second, load list
+    yield this.loadList();
+  }
+
   /**
    * Load app.toml app.{development|test|production}.toml
    *
-   * @method loadConfigs
+   * @method loadList
    */
-  loadConfigs() {
+  *loadList() {
     let tmp = [];
-    [
-      [this.paths.get('config/database'), 'database', null, true, Trek.env],
-      [this.paths.get('config/secrets'), 'secrets', null, true, Trek.env],
-      [this.paths.get('config/app.env'), 'user'], // app.${Trek.env}
-      [this.paths.get('config/app'), 'global'],
-      [this.paths.get('config/.env'), 'env', new nconf.Env()], // .env.${Trek.env}
-    ].forEach((item) => {
+
+    for (let item of this.list) {
       let [c, t, nc, n, e] = item;
       let [loaded, err] = [true, null];
       try {
-        let s = nc || (this.compile(`${this.root}/${c}`, n ? t : null, e));
+        let s = nc || (yield this.compile(`${this.root}/${c}`, n ? t : null, e));
         this.stores.set(t, s);
       } catch (e) {
         err = e;
@@ -101,7 +87,7 @@ class Config {
         loaded: loaded,
         error: err
       });
-    });
+    }
 
     for (let [k, s] of this.stores.entries()) {
       s.loadSync();
@@ -117,17 +103,18 @@ class Config {
   }
 
   /**
-   * Use swig to render, then parse toml file to Memory.
+   * Use templatly to render thie file, then parse file to Memory.
    *
    * @method compile
-   * @param {String} file The file path
-   * @param {String} namespace Set a namespace for current store
+   * @param {String} filename The file path.
+   * @param {String} namespace Set a namespace for current store.
+   * @param {String} env
    * @return {nconf.Memory}
    */
-  compile(filename, namespace, env) {
-    let context = this.render(filename);
-    let data = this.parse(filename, context);
-    let memory = new nconf.Memory({
+  *compile(filename, namespace, env) {
+    let context = yield this.render(filename);
+    let data = this.parse(context, filename);
+    let memory = new Memory({
       logicalSeparator: this.separator
     });
     // select env
@@ -142,6 +129,36 @@ class Config {
     }
     memory.store = data || Object.create(null);
     return memory;
+  }
+
+  /**
+   * First, uses native `template-strings` for reandering configuration file.
+   *
+   * @method render
+   */
+  *render(filename, locals = Object.create(null)) {
+    let context = yield readFile(filename, 'utf-8');
+    Object.assign(locals, {
+      env: process.env,
+      config: this
+    });
+    return templatly(context, locals);
+  }
+
+  /**
+   * Parse the file from `.js`, `.json`, `.toml`.
+   *
+   * @method parse
+   * @param {String} context The file raw context.
+   * @param {String} filename The file path.
+   * @return {nconf.Memory}
+   */
+  parse(context, filename) {
+    let ext = extname(filename).substring(1);
+    // parser
+    let p = this.parsers[ext];
+    if (!p) return Object.create(null);
+    return p.parse(context, filename);
   }
 
   /**
@@ -175,21 +192,6 @@ class Config {
     if (this.stores.has(type)) {
       this.stores.get(type).set(key, value);
     }
-  }
-
-  parse(filename, context) {
-    let ext = path.extname(filename);
-    if (ext === '.toml') {
-      return toml.parse(context);
-    } else if (ext === '.json') {
-      return hjson.parse(context);
-    } else if (ext === '.js') {
-      let o = babel.transform(context);
-      let m = new Module(filename, module);
-      m._compile(o.code, filename);
-      return m.exports;
-    }
-    return Object.create(null);
   }
 
 }

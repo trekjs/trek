@@ -60,7 +60,6 @@ class Paths {
     if (!this.blueprint.has(key)) return null;
     let value = this.blueprint.get(key);
     if (value.glob) {
-      // TODO glob async
       let res = glob(value.glob, { sync: true, cwd: this.root });
       return value.multi ? res : res[0];
     }
