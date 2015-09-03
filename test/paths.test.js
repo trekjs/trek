@@ -6,6 +6,11 @@ describe('Paths', () => {
   var paths = new Paths(__dirname + '/fixtures');
 
   describe('#get()', () => {
+
+    it('should return an absolute path', () => {
+      assert(paths.get('app', true) !== paths.get('app'));
+    });
+
     it('should return app from `app`', () => {
       assert(paths.get('app') === 'app');
     });
@@ -31,5 +36,7 @@ describe('Paths', () => {
     });
 
   });
+
+  describe('#set()', () => {});
 
 });
