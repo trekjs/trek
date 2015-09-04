@@ -25,6 +25,16 @@ class Context {
   }
 
   /**
+   * The `app.logger` delegation.
+   *
+   * @memberof Context.prototype
+   * @return {winston.Logger}
+   */
+  get logger() {
+    return this.app.logger;
+  }
+
+  /**
    * The `app.render` delegation.
    *
    * @memberof Context.prototype
@@ -37,32 +47,6 @@ class Context {
   set render(render) {
     this._render = render;
   }
-
-  /**
-   * The `app.logger` delegation.
-   *
-   * @memberof Context.prototype
-   * @return {winston.Logger}
-   */
-  get logger() {
-    return this.app.logger;
-  }
-
-  /**
-   * The `app.sendMail` delegation.
-   *
-   * @method sendMail
-   * @memberof Context.prototype
-   * @return {Promise}
-   *
-   * @example
-   *  let result = yield ctx.sendMail({from: ..., to: ...})
-   */
-  /*
-  sendMail(data) {
-    return this.app.sendMail(data);
-  }
-  */
 
   /**
    * The `app.getService` delegation.
@@ -83,22 +67,18 @@ class Context {
    *
    * @return {Mixed} user
    */
-  /*
   get user() {
-    return this.req.user;
+    return this._user;
   }
-  */
 
   /**
    * Set request user.
    *
    * @param {Mixed} user
    */
-  /*
   set user(user) {
-    this.req.user = user;
+    this._user = user;
   }
-  */
 
 }
 

@@ -40,7 +40,6 @@
     "nodemailer": "^1.4.0",
     "route-mapper": "^0.3.0",
     "templatly": "^0.1.2",
-    "thenify-all": "^1.6.0",
     "toml": "^2.3.0",
     "trek-router": "^0.4.0",
     "winston": "^1.0.1"

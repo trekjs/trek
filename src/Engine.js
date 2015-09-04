@@ -5,15 +5,15 @@
  */
 
 import { basename, dirname, join } from 'path';
-import { thenify } from 'thenify-all';
+import camelCase from 'lodash/string/camelCase';
 import staticCache from 'koa-static-cache';
 import serveStatic from 'koa-serve-static';
-import co from 'co';
-import Koa from 'koa';
 import chalk from 'chalk';
+import co from 'co';
+import composition from 'composition';
+import Koa from 'koa';
 import Router from 'trek-router';
 import RouteMapper from 'route-mapper';
-import composition from 'composition';
 import Config from './Config';
 import Context from './Context';
 
@@ -24,10 +24,12 @@ import Context from './Context';
  * @param {String} rootPath The app root path.
  */
 class Engine extends Koa {
+
   constructor(rootPath) {
     super();
+    this.initialized = false;
+    this.env = Trek.env;
     if (rootPath) this.rootPath = rootPath;
-    Trek.logger.debug('Application starts from %s.', chalk.green(this.rootPath));
     this.initialize();
   }
 
@@ -39,16 +41,6 @@ class Engine extends Koa {
   }
 
   /**
-   * The app working `rootPath` directory.
-   *
-   * @memberof Engine.prototype
-   *
-   */
-  get rootPath() {
-    return this._rootPath || (this._rootPath = dirname(require.main.filename));
-  }
-
-  /**
    * Set a working `rootPath` directory for app.
    *
    * @memberof Engine.prototype
@@ -56,6 +48,16 @@ class Engine extends Koa {
    */
   set rootPath(rootPath) {
     this._rootPath = rootPath;
+  }
+
+  /**
+   * The app working `rootPath` directory.
+   *
+   * @memberof Engine.prototype
+   *
+   */
+  get rootPath() {
+    return this._rootPath || (this._rootPath = dirname(require.main.filename));
   }
 
   /**
@@ -76,36 +78,6 @@ class Engine extends Koa {
   get logger() {
     return this._logger || (this._logger = Object.create(Trek.logger));
   }
-
-  /**
-   * The app `mailer`.
-   *
-   * @memberof Engine.prototype
-   * @return {Mailer} mailer
-   */
-  /*
-  get mailer() {
-    return this._mailer || (this._mailer = new Trek.Mailer(this.config.get('mail')));
-  }
-  */
-
-  /**
-   * Send a mail.
-   *
-   * @memberof Engine.prototype
-   * @method sendMail
-   * @param {Object} data
-   * @return {Promise}
-   *
-   * @example
-   *  let result = yield app.sendMail(message);
-   *
-   */
-  /*
-  sendMail(data) {
-    return this.mailer.send(data);
-  }
-  */
 
   /**
    * Get all servides.
@@ -139,7 +111,7 @@ class Engine extends Koa {
    */
   setService(key, value) {
     if (this.services.has(key)) {
-      this.logger.debug(chalk.green(`service:${key} was registed`));
+      this.logger.warn(chalk.green(`service:${key} was registed`));
       return;
     }
     this.logger.debug(chalk.yellow('service:%s'), key);
@@ -178,11 +150,11 @@ class Engine extends Koa {
    * @private
    */
   loadRoutes() {
-    Trek.logger.debug(`Start load the routes.`);
+    this.logger.debug(`Start load the routes.`);
     let routesPath = this.paths.get('config/routes', true);
     let controllersPath = this.paths.get('app/controllers', true);
     try {
-      require(routesPath)(this.routeMapper);
+      require(routesPath).call(this.routeMapper, this.routeMapper);
       this.routeMapper.routes.forEach(r => {
         let { controller, action } = r;
         let path = join(controllersPath, controller) + '.js';
@@ -191,61 +163,79 @@ class Engine extends Koa {
           let a;
           if (c && (a = c[action])) {
             if (!Array.isArray(a)) a = [a];
-            Trek.logger.debug(m, r.as, r.path, controller, action);
+            this.logger.debug(m, r.as, r.path, controller, action);
             this[m](r.path, ...a);
           }
         });
       });
     } catch (e) {
-      Trek.logger.debug(`Load the routes failed, ${chalk.red(e)}.`);
+      this.logger.warn(`Load the routes failed, ${chalk.red(e)}.`);
     }
   }
 
   /**
-   * Load middleware stack
+   * Load default middleware stack.
    *
    * @private
    */
-  loadStack() {
-    let loaded = true;
-    let stackPath = this.paths.get('config/middleware');
+  defaultMiddlewareStack() {
+    let stackPath = this.paths.get('config/middleware', true);
     try {
-      require(`${this.rootPath}/${stackPath}`)(this);
+      require(stackPath)(this);
     } catch (e) {
-      loaded = false;
-      this.logger.debug(`Load failed ${chalk.red(stackPath)}, failed ${e}`);
+      this.logger.warn(`Load the middleware failed, ${chalk.red(e)}.`);
     }
   }
 
-  /**
-   * Load services
-   *
-   * @private
-   */
-  loadServices() {
-    let files = this.paths.get('app/services');
-    return co(function*() {
-      let seq = [];
-      for (let file of files) {
-        let name = basename(file, '.js').replace(/^[0-9]+-/, '');
-        let service = require(`${this.rootPath}/${file}`)(this, this.config);
-        if (service) {
-          this.setService(name, service);
-          this.logger.info(chalk.green(`service:${name} init ...`));
-          if (service.promise) yield service.promise;
-          this.logger.info(chalk.green(`service:${name} booted`));
+  *bootstrap() {
+    yield this.config.load();
+    this.defaultMiddlewareStack();
+    this.loadRoutes();
+    yield this.loadServices();
+    this.use(function* dispatcher(next) {
+      this.params = Object.create(null);
+      let [handler, params] = this.app.router.find(this.method, this.path);
+      if (handler) {
+        params.forEach((i) => {
+          this.params[i.name] = i.value;
+        });
+        let body = yield handler.call(this, next);
+        if (body) {
+          this.body = body;
         }
       }
-    }.bind(this));
+      yield next;
+    });
+    return this;
+  }
+
+  /**
+   * Load services.
+   *
+   * @private
+   */
+  *loadServices() {
+    let files = this.paths.get('app/services');
+    let seq = [];
+    for (let file of files) {
+      let name = basename(file, '.js').replace(/^[0-9]+-/, '');
+      let service = require(`${this.rootPath}/${file}`)(this, this.config);
+      if (service) {
+        this.setService(name, service);
+        this.logger.debug(chalk.green(`service:${name} init ...`));
+        if (service.promise) yield service.promise;
+        this.logger.debug(chalk.green(`service:${name} booted`));
+      }
+    }
   }
 
   ['static'](root, options, files) {
     return this.use(staticCache(root, options, files));
   }
 
-  serveFile(path, file, options) {
-    file = dirname(file);
-    this.get(path, serveStatic(file, options));
+  serveFile(file, path, options) {
+    path = dirname(path);
+    this.get(file, serveStatic(path, options));
     return this;
   }
 
@@ -254,42 +244,27 @@ class Engine extends Koa {
   }
 
   listen(...args) {
-    this.loadStack();
-    this.loadRoutes();
-    this.use(function* dispatcher(next) {
-      this.params = Object.create(null);
-      let [handler, params] = this.app.router.find(this.method, this.path);
-      if (handler) {
-        params.forEach((i) => {
-          this.params[i.name] = i.value;
-        });
-        yield* handler.call(this, next);
-      }
-      yield next;
-    });
     return super.listen(...args);
   }
 
   run(...args) {
     this.logger.debug(chalk.green('booting ...'));
-    return this.loadServices()
-      .then(() => {
-        // TODO: https
-        if (!args[0]) args[0] = this.config.get('site.port');
-        let app = this.listen(...args);
-        this.logger.info(
-          chalk.green('%s application starting in %s on http://%s:%s'),
-          Trek.version,
-          Trek.env,
-          app.address().address === '::' ? '127.0.0.1' : app.address().address,
-          app.address().port
-        );
-        this._httpServer = app;
-      })
-      .catch((e) => {
-        this.logger.error(chalk.bold.red(`${e.stack}`));
-        this.logger.error(chalk.red('boots failed.'));
-      });
+    return co.call(this, function* () {
+      // TODO: https
+      if (!args[0]) args[0] = this.config.get('site.port');
+      let app = this.listen(...args);
+      this.logger.info(
+        chalk.green('%s application starting in %s on http://%s:%s'),
+        Trek.version,
+        Trek.env,
+        app.address().address === '::' ? '127.0.0.1' : app.address().address,
+        app.address().port
+      );
+      this._httpServer = app;
+    }).catch((e) => {
+      this.logger.error(chalk.bold.red(`${e.stack}`));
+      this.logger.error(chalk.red('boots failed.'));
+    });
   }
 
 }
@@ -297,13 +272,12 @@ class Engine extends Koa {
 Router
   .METHODS
   .forEach((m) => {
-    Engine.prototype[m] = function(path, ...handlers) {
-      handlers = composition(handlers);
+    let name = m === 'delete' ? 'del' : m;
+    Engine.prototype[m] = eval(`(function ${camelCase(name)}(path, ...handlers) {
+      handlers = _composition(handlers);
       this.router.add(m.toUpperCase(), path, handlers);
       return this;
-    };
+    })`);
   });
-
-Engine.prototype.del = Engine.prototype.delete;
 
 export default Engine;

@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import delegate from 'delegates';
+import winston from 'winston';
 import Engine from './Engine';
 
 /**
@@ -93,6 +93,14 @@ class Trek extends Engine {
     return require('./lib');
   }
 
+  static get logger() {
+    return this._logger || (this._logger = winston);
+  }
+
+  static set logger(logger) {
+    this._logger = logger;
+  }
+
 }
 
 if (!global.Trek) {
@@ -106,9 +114,11 @@ if (!global.Trek) {
   /**
    * lib delegation.
    */
+  /*
   delegate(Trek, 'lib')
     .getter('logger')
     .getter('Mailer');
+  */
 }
 
 export default Trek;

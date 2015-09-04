@@ -60,7 +60,7 @@ class Paths {
     if (!this.blueprint.has(key)) return null;
     let value = this.blueprint.get(key);
     if (value.glob) {
-      let res = glob(value.glob, { sync: true, cwd: this.root });
+      let res = glob(value.glob, { sync: true, realpath: absolute, cwd: this.root });
       return value.multi ? res : res[0];
     }
     return path.join(absolute ? this.root : '', value.with || value);

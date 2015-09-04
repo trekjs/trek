@@ -5,6 +5,18 @@ import Paths from '../src/Paths';
 describe('Paths', () => {
   var paths = new Paths(__dirname + '/fixtures');
 
+  describe('#root', () => {
+    it('should return a path', () => {
+      assert(paths.root === `${__dirname}/fixtures`);
+    });
+  });
+
+  describe('#formats', () => {
+    it('should return `js|json|toml`', () => {
+      assert(paths.formats === 'toml|json|js');
+    });
+  });
+
   describe('#get()', () => {
 
     it('should return an absolute path', () => {

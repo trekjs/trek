@@ -6,7 +6,6 @@
     "es6.literals",
     "es6.forOf",
     "es6.tailCall",
-    "es6.spread",
     "es6.properties.computed",
     "es6.templateLiterals"
   ]

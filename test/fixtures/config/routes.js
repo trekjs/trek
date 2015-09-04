@@ -1,9 +1,8 @@
 // routes
 
-export default (routeMapper) => {
+export default (mapper) => {
 
-  routeMapper
-    .resources('photos', { format: false }, () => {
-    })
+  mapper.resources('photos');
+  mapper.resources('comments');
 
 };
