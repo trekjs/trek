@@ -202,6 +202,7 @@ class Engine extends Koa {
         let body = yield handler.call(this, next);
         if (body) {
           this.body = body;
+          return;
         }
       }
       yield next;

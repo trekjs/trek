@@ -48,7 +48,7 @@ describe('Trek', () => {
     it('POST /comments', (done) => {
       request(server)
         .post('/comments')
-        .expect(200, 'comments#create', done);
+        .expect(200, '{"name":"trek","age":233}', done);
     });
 
     it('DELETE /comments', (done) => {

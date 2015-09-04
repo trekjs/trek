@@ -2,11 +2,13 @@
 export default {
 
   * index(next) {
-    this.body = 'comments#index';
+    return 'comments#index';
   },
 
   * create(next) {
-    this.body = 'comments#create'
+    let name = 'trek';
+    let age = 233;
+    return { name, age };
   },
 
   * ['new'](next) {
