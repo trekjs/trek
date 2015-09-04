@@ -34,7 +34,7 @@
     "koa": "^1.0.0",
     "koa-serve-static": "0.0.1",
     "koa-static-cache": "^3.1.2",
-    "lodash-node": "^3.10.1",
+    "lodash": "^3.10.1",
     "mz": "^2.0.0",
     "nconf": "^0.7.2",
     "nodemailer": "^1.4.0",
