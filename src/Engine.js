@@ -274,11 +274,13 @@ Router
   .METHODS
   .forEach((m) => {
     let name = m === 'delete' ? 'del' : m;
-    Engine.prototype[m] = eval(`(function ${camelCase(name)}(path, ...handlers) {
-      handlers = _composition(handlers);
-      this.router.add(m.toUpperCase(), path, handlers);
-      return this;
-    })`);
+    Engine.prototype[m] = eval(`(function (c) {
+      return (function ${camelCase(name)}(path, ...handlers) {
+        handlers = c(handlers);
+        this.router.add(m.toUpperCase(), path, handlers);
+        return this;
+      });
+    })`)(composition);
   });
 
 export default Engine;
