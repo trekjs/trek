@@ -94,7 +94,8 @@ class Trek extends Engine {
   }
 
   static get logger() {
-    return this._logger || (this._logger = winston);
+    winston.default.transports.console.label = 'Trek';
+    return this._logger || (this._logger = winston.cli());
   }
 
   static set logger(logger) {
