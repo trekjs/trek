@@ -6,11 +6,8 @@
 
 'use strict';
 
-import assign from 'lodash-node/modern/object/assign';
 import chalk from 'chalk';
-import Promise from 'bluebird';
 import nodemailer from 'nodemailer';
-import { thenify } from 'thenify-all';
 
 /**
  * @class mailer
@@ -84,17 +81,21 @@ class Mailer {
     let verified = message.subject && (message.html || message.text) && message.to;
 
     if (!verified) {
-      return Promise.reject(new Error('Email Error: Incomplete message data.'));
+      throw new Error('Email Error: Incomplete message data.');
     }
 
-    assign(message, {
+    Object.assign(message, {
       from: message.from || this.from,
       to: message.to || false,
       generateTextFromHTML: true,
       encoding: 'base64'
     });
 
-    return thenify(this.transport.sendMail.bind(this.transport))(message);
+    return new Promise((resolve, reject) => {
+      this.transport.sendMail(message, (err, res) => {
+        err ? reject(err) : resolve(res);
+      });
+    });
   }
 
 }
