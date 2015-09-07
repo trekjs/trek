@@ -13,13 +13,13 @@ import Engine from './Engine';
  * @extends Engine
  * @param {String} rootPath The app root path.
  */
-class Trek extends Engine {
+
+export default class Trek extends Engine {
 
   /**
    * Returns the current Trek environment.
    *
    * @static
-   * @memberof Trek
    * @default 'development'
    *
    * @example
@@ -47,7 +47,6 @@ class Trek extends Engine {
    * Returns true if current environment is `development`.
    *
    * @static
-   * @memberof Trek
    */
   static get isDevelopment() {
     return this.env === 'development';
@@ -57,7 +56,6 @@ class Trek extends Engine {
    * Returns true if current environment is `test`.
    *
    * @static
-   * @memberof Trek
    */
   static get isTest() {
     return this.env === 'test';
@@ -67,30 +65,18 @@ class Trek extends Engine {
    * Returns Trek package information.
    *
    * @static
-   * @memberof Trek
    */
   static get package() {
-    return require('../package.json');
+    return require('../package');
   }
 
   /**
    * Returns Trek current version.
    *
    * @static
-   * @memberof Trek
    */
   static get version() {
     return this.package.version;
-  }
-
-  /**
-   * Trek libs.
-   *
-   * @static
-   * @memberof Trek
-   */
-  static get lib() {
-    return require('./lib');
   }
 
   static get logger() {
@@ -111,15 +97,5 @@ if (!global.Trek) {
    * @global
    */
   global.Trek = Trek;
-
-  /**
-   * lib delegation.
-   */
-  /*
-  delegate(Trek, 'lib')
-    .getter('logger')
-    .getter('Mailer');
-  */
 }
 
-export default Trek;
