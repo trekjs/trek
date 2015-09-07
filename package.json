@@ -48,7 +48,7 @@
     "babel-plugin-espower": "^1.0.0",
     "istanbul": "^0.3.19",
     "koa-swig": "^2.0.0",
-    "mocha": "^2.3.0",
+    "mocha": "^2.3.1",
     "power-assert": "^1.0.0",
     "require-times": "^1.1.0",
     "supertest": "^1.1.0"
