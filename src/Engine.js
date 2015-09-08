@@ -253,15 +253,15 @@ class Engine extends Koa {
     return co.call(this, function* () {
       // TODO: https
       if (!args[0]) args[0] = this.config.get('site.port');
-      let app = this.listen(...args);
+      this.server = this.listen(...args);
+      let address = this.server.address();
       this.logger.info(
         chalk.green('%s application starting in %s on http://%s:%s'),
         Trek.version,
         Trek.env,
-        app.address().address === '::' ? '127.0.0.1' : app.address().address,
-        app.address().port
+        address.address === '::' ? '127.0.0.1' : address.address,
+        address.port
       );
-      this._httpServer = app;
     }).catch((e) => {
       this.logger.error(chalk.bold.red(`${e.stack}`));
       this.logger.error(chalk.red('boots failed.'));
