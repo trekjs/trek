@@ -119,24 +119,6 @@ class Engine extends Koa {
   }
 
   /**
-   * Get views render.
-   *
-   * @return {GeneratorFunction|Promise} render
-   */
-  get render() {
-    return this.context.render;
-  }
-
-  /**
-   * Set views render.
-   *
-   * @param {GeneratorFunction|Promise} render
-   */
-  set render(render) {
-    this.context.render = render;
-  }
-
-  /**
    * Get route mapper.
    *
    * @memberof Engine.prototype

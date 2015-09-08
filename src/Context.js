@@ -35,20 +35,6 @@ class Context {
   }
 
   /**
-   * The `app.render` delegation.
-   *
-   * @memberof Context.prototype
-   * @return {GeneratorFunction}
-   */
-  get render() {
-    return this._render;
-  }
-
-  set render(render) {
-    this._render = render;
-  }
-
-  /**
    * The `app.getService` delegation.
    *
    * @example
@@ -60,24 +46,6 @@ class Context {
    */
   getService(key) {
     return this.app.getService(key);
-  }
-
-  /**
-   * Get request user.
-   *
-   * @return {Mixed} user
-   */
-  get user() {
-    return this._user;
-  }
-
-  /**
-   * Set request user.
-   *
-   * @param {Mixed} user
-   */
-  set user(user) {
-    this._user = user;
   }
 
 }
