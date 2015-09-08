@@ -46,7 +46,7 @@ $ npm i && npm start
 ## Features
 
   * Using [Babel][] for writing next generation JavaScript, **ES6+**
-  * Working with [io.js][]
+  * Working with [Node.js v4][]
   * Loads environment variables(**.env**) and configurations(**js**|**json**|**toml**) automagically
   * Zippy [router][]
   * RESTful Routing, Rails Style, powered by [RouteMapper][]
@@ -64,7 +64,7 @@ $ npm i && npm start
 [trek-cli]: https://github.com/trekjs/trek-cli
 [Koa]: http://koajs.com/
 [Babel]: https://babeljs.io/
-[io.js]: https://iojs.org/
+[Node.js v4]: https://nodejs.org/
 [router]: https://github.com/trekjs/router
 [Routemapper]: https://github.com/trekjs/route-mapper
 [Example Trek apps]: https://github.com/trekjs/examples
