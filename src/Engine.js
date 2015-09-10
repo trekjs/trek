@@ -5,7 +5,6 @@
  */
 
 import { basename, dirname, join } from 'path';
-import camelCase from 'lodash/string/camelCase';
 import staticCache from 'koa-static-cache';
 import serveStatic from 'koa-serve-static';
 import chalk from 'chalk';
@@ -255,9 +254,10 @@ class Engine extends Koa {
 Router
   .METHODS
   .forEach((m) => {
-    let name = m === 'delete' ? 'del' : m;
-    Engine.prototype[m] = eval(`(function (c) {
-      return (function ${camelCase(name)}(path, ...handlers) {
+    let v = m.replace('-', '');
+    let name = v === 'delete' ? 'del' : v;
+    Engine.prototype[v] = eval(`(function (c) {
+      return (function ${name}(path, ...handlers) {
         handlers = c(handlers);
         this.router.add(m.toUpperCase(), path, handlers);
         return this;
