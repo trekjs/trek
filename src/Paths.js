@@ -81,6 +81,20 @@ class Paths {
     return this;
   }
 
+  /**
+   * Get the path pattern with the key path from paths
+   *
+   * @method get
+   * @memberof Paths.prototype
+   * @param {String} key The key path
+   * @return {String} path
+   */
+  getPattern(key) {
+    if (!this.blueprint.has(key)) return null;
+    let value = this.blueprint.get(key);
+    return value.with || value.glob || value;
+  }
+
 }
 
 export default Paths;

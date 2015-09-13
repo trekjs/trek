@@ -34,11 +34,11 @@ class Config {
     this.stores = new Map();
     // init list
     this.list = [
-      [this.paths.get('config/database'), 'database', null, true, Trek.env],
-      [this.paths.get('config/secrets'), 'secrets', null, true, Trek.env],
-      [this.paths.get('config/app.env'), 'user'], // app.${Trek.env}
-      [this.paths.get('config/app'), 'global'],
-      [this.paths.get('config/.env'), 'env', new Env()], // .env.${Trek.env}
+      ['config/database', 'database', null, true, Trek.env],
+      ['config/secrets', 'secrets', null, true, Trek.env],
+      ['config/app.env', 'user'], // app.${Trek.env}
+      ['config/app', 'global'],
+      ['config/.env', 'env', new Env()], // .env.${Trek.env}
     ];
   }
 
@@ -73,11 +73,12 @@ class Config {
     let tmp = [];
 
     for (let item of this.list) {
-      let [c, t, nc, n, e] = item;
-      let [loaded, err] = [true, null];
-      if (c) {
+      let [k, t, nc, n, e] = item;
+      let p = this.paths.get(k);
+      let [existed, loaded, err] = [!!p, true, null];
+      if (existed) {
         try {
-          let s = nc || (yield this.compile(`${this.root}/${c}`, n ? t : null, e));
+          let s = nc || (yield this.compile(`${this.root}/${p}`, n ? t : null, e));
           this.stores.set(t, s);
         } catch (e) {
           err = e;
@@ -85,8 +86,9 @@ class Config {
         }
       }
       tmp.unshift({
-        filename: c,
-        loaded: loaded,
+        pattern: this.paths.getPattern(k),
+        filename: p,
+        loaded: existed & loaded,
         error: err
       });
     }
@@ -97,8 +99,9 @@ class Config {
 
     tmp.forEach((e) => {
       let {
-        filename, loaded, error
+        pattern, filename, loaded, error
       } = e;
+      filename == filename || pattern;
       if (loaded) Trek.logger.debug('Loaded %s.', chalk.green(filename));
       else Trek.logger.warn('Missing %s or parse failed, %s.', chalk.red(filename), chalk.red(error));
     });
