@@ -257,7 +257,10 @@ Router
     let v = m.replace('-', '');
     let name = v === 'delete' ? 'del' : v;
     Engine.prototype[v] = eval(`(function (c) {
-      return (function ${name}(path, ...handlers) {
+      return (function ${name}(path) {
+        for (var _len = arguments.length - 1, handlers = Array(_len), _key = 0; _key < _len; _key++) {
+          handlers[_key] = arguments[_key + 1];
+        }
         handlers = c(handlers);
         this.router.add(m.toUpperCase(), path, handlers);
         return this;
