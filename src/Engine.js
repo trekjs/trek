@@ -237,8 +237,7 @@ class Engine extends Koa {
       this.server = this.listen(...args);
       let address = this.server.address();
       this.logger.info(
-        chalk.green('%s application starting in %s on http://%s:%s'),
-        Trek.version,
+        chalk.green('The application starting in %s on http://%s:%s'),
         Trek.env,
         address.address === '::' ? '127.0.0.1' : address.address,
         address.port

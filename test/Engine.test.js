@@ -1,6 +1,7 @@
 import assert from 'power-assert';
 import requireTimes from 'require-times';
 import co from 'co';
+import _ from 'lodash';
 import swig from 'koa-swig';
 import '../src/Trek';
 import Config from '../src/Config';
@@ -54,6 +55,18 @@ describe('Engine', () => {
 
     it('should equal to #config.paths', () => {
       assert(app.paths === app.config.paths);
+    });
+
+  });
+
+  describe('#run()', () => {
+
+    it('should be a function', () => {
+      assert(_.isFunction(app.run) === true);
+    });
+
+    it('should return a promise', () => {
+      assert(app.run().constructor.name === 'Promise');
     });
 
   });
