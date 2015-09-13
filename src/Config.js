@@ -51,13 +51,14 @@ class Config {
   dotenv() {
     let env = this.paths.get('config/.env'); // .env.${Trek.env}
     let existed = !!env;
-    let loaded = true;
+    let loaded = false;
     if (existed) {
       loaded = dotenv.config({
         path: `${this.root}/${env}`,
         silent: true
       });
     }
+    env = env || this.paths.getPattern('config/.env');
     if (loaded) Trek.logger.debug('Loaded environment variables from %s to %s.', chalk.green(env), chalk.gray('process.env'));
     else Trek.logger.warn('Missing %s dotenv file or parse failed.', chalk.red(env));
   }
@@ -94,7 +95,8 @@ class Config {
         pattern: this.paths.getPattern(k),
         filename: p,
         loaded: existed & loaded,
-        error: err
+        error: err,
+        namespace: t
       });
     }
 
@@ -104,9 +106,9 @@ class Config {
 
     tmp.forEach((e) => {
       let {
-        pattern, filename, loaded, error
+        pattern, filename, loaded, error, namespace
       } = e;
-      filename = filename || pattern;
+      filename = (namespace === 'env' ? 'process.env': filename) || pattern;
       if (loaded) Trek.logger.debug('Loaded %s.', chalk.green(filename));
       else Trek.logger.warn('Missing %s or parse failed, %s.', chalk.red(filename), chalk.red(error));
     });
