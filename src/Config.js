@@ -101,7 +101,7 @@ class Config {
       let {
         pattern, filename, loaded, error
       } = e;
-      filename == filename || pattern;
+      filename = filename || pattern;
       if (loaded) Trek.logger.debug('Loaded %s.', chalk.green(filename));
       else Trek.logger.warn('Missing %s or parse failed, %s.', chalk.red(filename), chalk.red(error));
     });
