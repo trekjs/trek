@@ -34,6 +34,7 @@ class Config {
     this.stores = new Map();
     // init list
     this.list = [
+      // key, namespace, init store, enable/disable namespace, env
       ['config/database', 'database', null, true, Trek.env],
       ['config/secrets', 'secrets', null, true, Trek.env],
       ['config/app.env', 'user'], // app.${Trek.env}
@@ -49,12 +50,16 @@ class Config {
    */
   dotenv() {
     let env = this.paths.get('config/.env'); // .env.${Trek.env}
-    let loaded = dotenv.config({
-      path: `${this.root}/${env}`,
-      silent: true
-    });
-    if (loaded) Trek.logger.debug('Loaded environment variables from %s.', chalk.green(env));
-    else Trek.logger.warn('Missing %s or parse failed.', chalk.red(env));
+    let existed = !!env;
+    let loaded = true;
+    if (existed) {
+      loaded = dotenv.config({
+        path: `${this.root}/${env}`,
+        silent: true
+      });
+    }
+    if (loaded) Trek.logger.debug('Loaded environment variables from %s to %s.', chalk.green(env), chalk.gray('process.env'));
+    else Trek.logger.warn('Missing %s dotenv file or parse failed.', chalk.red(env));
   }
 
   *load() {
@@ -75,7 +80,7 @@ class Config {
     for (let item of this.list) {
       let [k, t, nc, n, e] = item;
       let p = this.paths.get(k);
-      let [existed, loaded, err] = [!!p, true, null];
+      let [existed, loaded, err] = [!!(p || nc), true, null];
       if (existed) {
         try {
           let s = nc || (yield this.compile(`${this.root}/${p}`, n ? t : null, e));
