@@ -36,7 +36,7 @@
     "mz": "^2.0.0",
     "nconf": "^0.7.2",
     "nodemailer": "^1.4.0",
-    "route-mapper": "^0.4.1",
+    "route-mapper": "^0.4.2",
     "templatly": "^0.1.2",
     "toml": "^2.3.0",
     "trek-router": "^0.4.0",
