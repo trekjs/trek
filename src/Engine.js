@@ -232,6 +232,7 @@ class Engine extends Koa {
   run(...args) {
     this.logger.debug(chalk.green('booting ...'));
     return co.call(this, function* () {
+      yield this.bootstrap();
       // TODO: https
       if (!args[0]) args[0] = this.config.get('site.port');
       this.server = this.listen(...args);

@@ -75,12 +75,14 @@ class Config {
     for (let item of this.list) {
       let [c, t, nc, n, e] = item;
       let [loaded, err] = [true, null];
-      try {
-        let s = nc || (yield this.compile(`${this.root}/${c}`, n ? t : null, e));
-        this.stores.set(t, s);
-      } catch (e) {
-        err = e;
-        loaded = false;
+      if (c) {
+        try {
+          let s = nc || (yield this.compile(`${this.root}/${c}`, n ? t : null, e));
+          this.stores.set(t, s);
+        } catch (e) {
+          err = e;
+          loaded = false;
+        }
       }
       tmp.unshift({
         filename: c,
