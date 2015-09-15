@@ -135,7 +135,8 @@ class Engine extends Koa {
     let routesPath = this.paths.get('config/routes', true);
     let controllersPath = this.paths.get('app/controllers', true);
     try {
-      require(routesPath).call(this.routeMapper, this.routeMapper);
+      //require(routesPath).call(this.routeMapper, this.routeMapper);
+      this.routeMapper.draw(routesPath);
       this.routeMapper.routes.forEach(r => {
         let { controller, action } = r;
         let path = join(controllersPath, controller) + '.js';
@@ -161,10 +162,20 @@ class Engine extends Koa {
    */
   defaultMiddlewareStack() {
     let stackPath = this.paths.get('config/middleware', true);
-    try {
-      require(stackPath)(this);
-    } catch (e) {
-      this.logger.warn(`Load the middleware failed, ${chalk.red(e)}.`);
+    let existed = !!stackPath;
+    let loaded = false;
+    let err;
+    if (existed) {
+      try {
+        require(stackPath)(this);
+        loaded = true;
+      } catch (e) {
+        err = e;
+      }
+    }
+    if (!loaded) {
+      stackPath = stackPath || this.paths.getPattern('config/middleware');
+      this.logger.warn(`Missing ${stackPath} or require failed, ${chalk.red(err || '')}.`);
     }
   }
 
