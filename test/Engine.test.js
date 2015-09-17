@@ -71,4 +71,25 @@ describe('Engine', () => {
 
   });
 
+  describe('#*render()', () => {
+    var user = {
+      name: 'tobi'
+    };
+
+    before(() => {
+      app.engine('html', swig());
+    });
+
+    it('should render the template', () => {
+
+      return co(function *() {
+        var str = yield app.render('user', {
+          user: user
+        });
+        assert(str === '<p>tobi</p>\n');
+      });
+    });
+
+  });
+
 });

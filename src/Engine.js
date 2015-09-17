@@ -15,6 +15,7 @@ import Router from 'trek-router';
 import RouteMapper from 'route-mapper';
 import Config from './Config';
 import Context from './Context';
+import View from './View';
 
 /**
  * @class Engine
@@ -37,6 +38,7 @@ class Engine extends Koa {
     this.router = new Router();
     // override context
     this.context = new Context();
+    this.engines = new Map();
   }
 
   /**
@@ -200,6 +202,31 @@ class Engine extends Koa {
       yield next;
     });
     return this;
+  }
+
+  engine(ext, fn) {
+    if (typeof fn !== 'function') {
+      throw new Error('callback function required');
+    }
+
+    // get file extension
+    var extension = ext[0] !== '.'
+      ? '.' + ext
+      : ext;
+
+    // store engine
+    this.engines.set(extension, fn);
+  }
+
+  *render(name, options = Object.create(null)) {
+    var view = new View(name, Object.create({
+      //defaultEngine: this.get('view engine'),
+      defaultEngine: 'html',
+      root: this.paths.get('app/views', true),
+      engines: this.engines
+    }));
+    //console.log(yield view.getPath());
+    return yield view.render(options);
   }
 
   /**

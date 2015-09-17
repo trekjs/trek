@@ -48,6 +48,10 @@ class Context {
     return this.app.getService(key);
   }
 
+  *render(view, options) {
+    this.body = yield this.app.render(view, options);
+  }
+
 }
 
 // Sets Context's prototype to originalContext `koa/context`.
