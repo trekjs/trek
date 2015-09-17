@@ -40,8 +40,8 @@ class Engine extends Koa {
     this.context = new Context();
     this.engines = new Map();
     this.cache = Object.create(null);
-    console.log(this.state);
-    //this.state.config = this.config;
+    this.state = Object.create(null);
+    this.state.config = this.config;
   }
 
   /**

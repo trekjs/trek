@@ -91,6 +91,13 @@ describe('Engine', () => {
           user: user
         });
         assert(str === '<p>tobi</p>\n');
+
+        var str1 = yield app.render('config', {
+          user: {
+            name: 'robo'
+          }
+        });
+        assert(str1 === 'html\n');
       });
     });
 
