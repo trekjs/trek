@@ -44,6 +44,10 @@ class Engine extends Koa {
     this.state.config = this.config;
   }
 
+  set(key, value) {
+    this.config.set(key, value);
+  }
+
   /**
    * Set a working `rootPath` directory for app.
    *
@@ -245,7 +249,6 @@ class Engine extends Koa {
     if (renderOptions.cache) {
       view = this.cache[name];
     }
-
 
     if (!view) {
       view = new View(name, Object.create({

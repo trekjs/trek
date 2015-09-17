@@ -1,5 +1,6 @@
 import assert from 'power-assert';
 import requireTimes from 'require-times';
+import request from 'supertest';
 import co from 'co';
 import _ from 'lodash';
 import swig from 'koa-swig';
@@ -99,6 +100,34 @@ describe('Engine', () => {
         });
         assert(str1 === 'html\n');
       });
+    });
+
+  });
+
+  describe('#context', () => {
+
+    before(() => {
+      app.engine('html', swig());
+    });
+
+    describe('ctx.render', () => {
+
+      it('should render template', () => {
+
+        app.get('/', function* () {
+          yield this.render('user', {
+            user: {
+              name: 'trek'
+            }
+          });
+        });
+
+        return request(app.listen())
+          .get('/')
+          .expect(200, '<p>trek</p>\n');
+
+      });
+
     });
 
   });

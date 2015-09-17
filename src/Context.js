@@ -48,7 +48,12 @@ class Context {
     return this.app.getService(key);
   }
 
-  *render(view, options) {
+  *render(view, options = Object.create(null)) {
+    var app = this.app;
+
+    // merge ctx.state
+    options._state = this.state;
+
     this.body = yield this.app.render(view, options);
   }
 
