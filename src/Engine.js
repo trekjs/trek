@@ -39,6 +39,9 @@ class Engine extends Koa {
     // override context
     this.context = new Context();
     this.engines = new Map();
+    this.cache = Object.create(null);
+    console.log(this.state);
+    //this.state.config = this.config;
   }
 
   /**
@@ -205,8 +208,8 @@ class Engine extends Koa {
   }
 
   engine(ext, fn) {
-    if (typeof fn !== 'function') {
-      throw new Error('callback function required');
+    if (!fn || 'GeneratorFunction'  !== fn.constructor.name) {
+      throw new Error('GeneratorFunction required');
     }
 
     // get file extension
@@ -219,14 +222,56 @@ class Engine extends Koa {
   }
 
   *render(name, options = Object.create(null)) {
-    var view = new View(name, Object.create({
-      //defaultEngine: this.get('view engine'),
-      defaultEngine: 'html',
-      root: this.paths.get('app/views', true),
-      engines: this.engines
-    }));
-    //console.log(yield view.getPath());
-    return yield view.render(options);
+    var renderOptions = Object.create(null);
+    var view;
+
+    // merge app.state
+    Object.assign(renderOptions, this.state);
+
+    // merge options._state
+    if (options._state) {
+      Object.assign(renderOptions, options._state);
+    }
+
+    // merge options
+    Object.assign(renderOptions, options);
+
+    // set .cache unless explicitly provided
+    if (renderOptions.cache == null) {
+      renderOptions.cache = this.config.get('view.cache');
+    }
+
+    // primed cache
+    if (renderOptions.cache) {
+      view = this.cache[name];
+    }
+
+
+    if (!view) {
+      view = new View(name, Object.create({
+        defaultEngine: this.config.get('view.engine'),
+        root: this.paths.get('app/views', true),
+        engines: this.engines
+      }));
+
+      yield view.fetchPath();
+
+      if (!view.path) {
+        var dirs = Array.isArray(view.root) && view.root.length > 1
+          ? 'directories "' + view.root.slice(0, -1).join('", "') + '" or "' + view.root[view.root.length - 1] + '"'
+          : 'directory "' + view.root + '"'
+        var err = new Error('Failed to lookup view "' + name + '" in views ' + dirs);
+        err.view = view;
+        throw err;
+      }
+
+      if (renderOptions.cache) {
+        this.cache[name] = view;
+      }
+    }
+
+    // render
+    return yield view.render(renderOptions);
   }
 
   /**

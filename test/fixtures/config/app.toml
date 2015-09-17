@@ -3,6 +3,10 @@
 PORT = 233
 title = "TOML Example"
 
+[view]
+engine = 'html'
+cache = true
+
 [owner]
 name = "Tom Preston-Werner"
 bio = """GitHub Cofounder & CEO

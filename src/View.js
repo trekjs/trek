@@ -1,3 +1,9 @@
+/*!
+ * trek - View
+ * Copyright(c) 2015 Fangdun Cai
+ * MIT Licensed
+ */
+
 import fs from 'mz/fs';
 import _debug from 'debug';
 import { dirname, basename, extname, join, resolve } from 'path';
@@ -30,12 +36,11 @@ export default class View {
     // store loaded engine
     this.engine = opts.engines.get(this.ext);
 
+    // store filename
     this.fileName = fileName;
-    // lookup path
-    //this.path = yield this.lookup(fileName);
   }
 
-  *getPath() {
+  *fetchPath() {
     return this.path || (this.path = yield this.lookup(this.fileName));
   }
 
@@ -61,7 +66,7 @@ export default class View {
   }
 
   *render(options) {
-    yield this.getPath();
+    yield this.fetchPath();
     debug('render "%s"', this.path);
     return yield this.engine(this.path, options);
   }

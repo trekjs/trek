@@ -14,7 +14,11 @@ describe('Engine', () => {
   const ROOT_PATH = `${__dirname}/fixtures`;
 
   before(() => {
-    app = new Engine(ROOT_PATH);
+    return co(function* () {
+      app = new Engine(ROOT_PATH);
+      app.logger.level = 'debug';
+      yield app.bootstrap();
+    });
   });
 
   describe('#env', () => {
