@@ -29,6 +29,7 @@
     "dotenv": "^1.2.0",
     "glob": "^5.0.14",
     "hjson": "^1.7.4",
+    "js-yaml": "^3.4.2",
     "koa": "^1.0.0",
     "koa-serve-static": "0.0.1",
     "koa-static-cache": "^3.1.2",

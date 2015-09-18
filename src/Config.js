@@ -124,8 +124,8 @@ class Config {
    * @return {nconf.Memory}
    */
   *compile(filename, namespace, env) {
-    let context = yield this.render(filename);
-    let data = this.parse(context, filename);
+    let content = yield this.render(filename);
+    let data = this.parse(content, filename);
     let memory = new Memory({
       logicalSeparator: this.separator
     });
@@ -149,28 +149,28 @@ class Config {
    * @method render
    */
   *render(filename, locals = Object.create(null)) {
-    let context = yield readFile(filename, 'utf-8');
+    let content = yield readFile(filename, 'utf-8');
     Object.assign(locals, {
       env: process.env,
       config: this
     });
-    return templatly(context, locals);
+    return templatly(content, locals);
   }
 
   /**
    * Parse the file from `.js`, `.json`, `.toml`.
    *
    * @method parse
-   * @param {String} context The file raw context.
+   * @param {String} content The file raw content.
    * @param {String} filename The file path.
    * @return {nconf.Memory}
    */
-  parse(context, filename) {
+  parse(content, filename) {
     let ext = extname(filename).substring(1);
     // parser
     let p = this.parsers[ext];
     if (!p) return Object.create(null);
-    return p.parse(context, filename);
+    return p.parse(content, filename);
   }
 
   /**

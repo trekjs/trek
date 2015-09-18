@@ -15,7 +15,7 @@ import glob from 'glob';
  */
 class Paths {
 
-  constructor(root, formats = 'toml|json|js') {
+  constructor(root, formats = 'toml|json|js|yml') {
     this.root = root;
     this.formats = formats;
     this.blueprint = new Map();

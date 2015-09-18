@@ -12,8 +12,8 @@ describe('Paths', () => {
   });
 
   describe('#formats', () => {
-    it('should return `js|json|toml`', () => {
-      assert(paths.formats === 'toml|json|js');
+    it('should return `toml|json|js|yml`', () => {
+      assert(paths.formats === 'toml|json|js|yml');
     });
   });
 
