@@ -190,9 +190,9 @@ class Engine extends Koa {
 
   *bootstrap() {
     yield this.config.load();
+    yield this.loadServices();
     this.defaultMiddlewareStack();
     this.loadRoutes();
-    yield this.loadServices();
     this.use(function* dispatcher(next) {
       this.params = Object.create(null);
       let [handler, params] = this.app.router.find(this.method, this.path);
