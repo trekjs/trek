@@ -13,7 +13,7 @@ describe('Trek', () => {
     });
   });
 
-  it('hello world', () => {
+  it('hello world', (done) => {
     app.get('/', function*(next) {
       return 'Hello World';
     });
