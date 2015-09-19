@@ -212,8 +212,8 @@ class Engine extends Koa {
   }
 
   engine(ext, fn) {
-    if (!fn || 'GeneratorFunction'  !== fn.constructor.name) {
-      throw new Error('GeneratorFunction required');
+    if (!fn) {
+      throw new Error('GeneratorFunction or Function required');
     }
 
     // get file extension
