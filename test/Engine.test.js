@@ -132,4 +132,48 @@ describe('Engine', () => {
 
   });
 
+  describe('serve static', () => {
+
+    it('#index()', () => {
+
+      app.index(`${app.rootPath}/public/index.html`);
+
+      return request(app.listen())
+        .get('/')
+        .expect(200);
+
+    });
+
+    it('#favicon()', () => {
+
+      app.favicon(`${app.rootPath}/public/favicon.ico`);
+
+      return request(app.listen())
+        .get('/favicon.ico')
+        .expect(200);
+
+    });
+
+    it('#static()', () => {
+
+      app.static('/scripts', `${app.rootPath}/public/scripts`);
+
+      return request(app.listen())
+        .get('/scripts/main.js')
+        .expect(200);
+
+    });
+
+    it('#serveDir()', () => {
+
+      app.serveDir('/styles', `${app.rootPath}/public/styles`);
+
+      return request(app.listen())
+        .get('/styles/main.css')
+        .expect(200);
+
+    });
+
+  });
+
 });

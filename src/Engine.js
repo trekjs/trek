@@ -5,8 +5,7 @@
  */
 
 import { basename, dirname, join } from 'path';
-import staticCache from 'koa-static-cache';
-import serveStatic from 'koa-serve-static';
+import serveStatic from 'koa-static';
 import chalk from 'chalk';
 import co from 'co';
 import composition from 'composition';
@@ -297,18 +296,31 @@ class Engine extends Koa {
     }
   }
 
-  ['static'](root, options, files) {
-    return this.use(staticCache(root, options, files));
+  // Serves a file.
+  serveFile(path, file, options) {
+    var dir = dirname(file);
+    this.get(path, serveStatic(dir, options));
   }
 
-  serveFile(file, path, options) {
-    path = dirname(path);
-    this.get(file, serveStatic(path, options));
-    return this;
+  // Serves files from a directory.
+  serveDir(path, dir, options) {
+    dir = dirname(dir);
+    this.get(path + '*', serveStatic(dir, options));
   }
 
+  // Serves static files from a directory. It's an alias for `app#serveDir`.
+  ['static'](path, dir, options) {
+    this.serveDir(path, dir, options);
+  }
+
+  // Serves the default favicon - GET /favicon.ico.
+  favicon(file) {
+    this.serveFile('/favicon.ico', file);
+  }
+
+  // Index serves index file.
   index(file, options) {
-    return this.serveFile('/', file, options);
+    this.serveFile('/', file, options);
   }
 
   listen(...args) {

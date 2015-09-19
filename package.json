@@ -31,8 +31,7 @@
     "hjson": "^1.7.4",
     "js-yaml": "^3.4.2",
     "koa": "^1.0.0",
-    "koa-serve-static": "0.0.1",
-    "koa-static-cache": "^3.1.2",
+    "koa-static": "^1.4.9",
     "lodash": "^3.10.1",
     "mz": "^2.0.0",
     "nconf": "^0.7.2",
@@ -40,7 +39,7 @@
     "route-mapper": "^0.4.2",
     "templatly": "^0.1.2",
     "toml": "^2.3.0",
-    "trek-router": "^0.4.0",
+    "trek-router": "^0.5.0",
     "winston": "^1.0.1"
   },
   "devDependencies": {
