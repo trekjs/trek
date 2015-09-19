@@ -252,7 +252,7 @@ class Engine extends Koa {
 
     if (!view) {
       view = new View(name, Object.create({
-        defaultEngine: this.config.get('view.engine'),
+        defaultEngine: this.config.get('view.engine', 'html'),
         root: this.paths.get('app/views', true),
         engines: this.engines
       }));
