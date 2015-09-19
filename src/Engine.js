@@ -16,6 +16,8 @@ import Config from './Config';
 import Context from './Context';
 import View from './View';
 
+const METHODS = Router.METHODS;
+
 /**
  * @class Engine
  * @constructor
@@ -348,15 +350,21 @@ class Engine extends Koa {
     });
   }
 
+  all(path, ...handler) {
+    METHODS.forEach((m) => {
+      let v = m.replace('-', '');
+      this[v](path, ...handler);
+    });
+    return this;
+  }
+
 }
 
-Router
-  .METHODS
+METHODS
   .forEach((m) => {
     let v = m.replace('-', '');
-    let name = v === 'delete' ? 'del' : v;
     Engine.prototype[v] = eval(`(function (c) {
-      return (function ${name}(path) {
+      return (function $${v}(path) {
         for (var _len = arguments.length - 1, handlers = Array(_len), _key = 0; _key < _len; _key++) {
           handlers[_key] = arguments[_key + 1];
         }

@@ -104,6 +104,26 @@ describe('Engine', () => {
 
   });
 
+  describe('http verbs, get(), post(), all()', () => {
+
+    it('#all()', (done) => {
+
+      app.all('/tobi', function* (){
+        this.body = this.req.method;
+      });
+
+      request(app.listen())
+        .put('/tobi')
+        .expect('PUT', function(){
+          request(app.listen())
+          .get('/tobi')
+          .expect('GET', done);
+        });
+
+    });
+
+  });
+
   describe('#context', () => {
 
     before(() => {
