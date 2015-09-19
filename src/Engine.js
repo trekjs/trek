@@ -358,6 +358,15 @@ class Engine extends Koa {
     return this;
   }
 
+  match(methods = [], path, ...handler) {
+    methods.forEach((m) => {
+      if (METHODS.includes(m)) {
+        let v = m.replace('-', '');
+        this[v](path, ...handler);
+      }
+    });
+  }
+
 }
 
 METHODS
