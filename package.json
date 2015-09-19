@@ -52,7 +52,7 @@
     "supertest": "^1.1.0"
   },
   "engines": {
-    "iojs": "*"
+    "node": ">= 4"
   },
   "files": [
     "CHANGELOG.md",
