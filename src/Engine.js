@@ -188,12 +188,12 @@ class Engine extends Koa {
   }
 
   *bootstrap() {
+    if (this.isBooted) return;
     yield this.config.load();
     yield this.loadServices();
     this.defaultMiddlewareStack();
     this.loadRoutes();
     this.use(function* dispatcher(next) {
-      this.params = Object.create(null);
       let [handler, params] = this.app.router.find(this.method, this.path);
       if (handler) {
         params.forEach((i) => {
@@ -207,6 +207,7 @@ class Engine extends Koa {
       }
       yield next;
     });
+    this.isBooted = true;
     return this;
   }
 

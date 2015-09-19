@@ -110,7 +110,7 @@ describe('Engine', () => {
       app.engine('html', swig());
     });
 
-    describe('ctx.render', () => {
+    describe('#render()', () => {
 
       it('should render template', () => {
 
@@ -125,6 +125,67 @@ describe('Engine', () => {
         return request(app.listen())
           .get('/')
           .expect(200, '<p>trek</p>\n');
+
+      });
+
+    });
+
+    describe('#sendFile()', () => {
+
+      it('should send a file', () => {
+
+        app.get('/robot.txt', function* () {
+
+          yield this.sendFile(`${this.app.rootPath}/public/robot.txt`);
+
+        });
+
+        return request(app.listen())
+          .get('/robot.txt')
+          .expect(200, '// robots\n');
+
+      });
+
+    });
+
+    describe('#json()', () => {
+
+      it('should response with json', () => {
+
+        app.get('/users', function* () {
+
+          this.json([{
+            name: 'trek'
+          }]);
+
+        });
+
+        return request(app.listen())
+          .get('/users')
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .expect(200, '[{"name":"trek"}]');
+
+      });
+
+    });
+
+    describe('#jsonp()', () => {
+
+      it('should response with jsonp', () => {
+
+        app.get('/jsonp', function* () {
+
+          this.jsonp({
+            count: 1
+          });
+
+        });
+
+        return request(app.listen())
+          .get('/jsonp?callback=something')
+          .expect('Content-Type', 'application/javascript; charset=utf-8')
+          .expect('X-Content-Type-Options', 'nosniff')
+          .expect(200, /something\(\{"count":1\}\);/);
 
       });
 
