@@ -4,7 +4,6 @@ MOCHA = ./node_modules/.bin/_mocha
 BABEL = ./node_modules/.bin/babel
 BABEL_NODE = ./node_modules/.bin/babel-node
 ISTANBUL = ./node_modules/.bin/istanbul
-NODEMON = ./node_modules/.bin/nodemon
 ESLINT = ./node_modules/.bin/eslint
 
 TESTS = test/*.test.js
