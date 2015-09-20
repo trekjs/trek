@@ -12,7 +12,7 @@ Next generation full-stack JavaScript open source solution, based on [Koa][].
 ```js
 import Trek from 'trek';
 
-var app = new Trek;
+const app = new Trek;
 
 app.get('/', function* (next) {
   this.body = 'Hello World';
@@ -23,14 +23,8 @@ app.run(3000);
 
 ## Installation
 
-```bash
+```sh
 $ npm i trek
-```
-
-Or
-
-```bash
-$ npm i trekjs/trek
 ```
 
 
