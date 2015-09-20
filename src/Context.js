@@ -110,8 +110,8 @@ class Context {
    *
    * Examples:
    *
-   *     res.jsonp(null);
-   *     res.jsonp({ user: 'tj' });
+   *     ctx.jsonp(null);
+   *     ctx.jsonp({ user: 'tj' });
    *
    * @param {string|number|boolean|object} obj
    * @public
@@ -148,6 +148,16 @@ class Context {
     this.body = body;
   }
 
+  /**
+   * Check if the request was an _XMLHttpRequest_.
+   *
+   * @return {Boolean}
+   * @public
+   */
+  get xhr() {
+    var val = this.get('X-Requested-With') || '';
+    return val.toLowerCase() === 'xmlhttprequest';
+  }
 
 }
 
