@@ -124,6 +124,50 @@ describe('Engine', () => {
 
   });
 
+  describe('serve static', () => {
+
+    it('#index()', () => {
+
+      app.index(`${app.rootPath}/public/index.html`);
+
+      return request(app.listen())
+        .get('/')
+        .expect(200);
+
+    });
+
+    it('#favicon()', () => {
+
+      app.favicon(`${app.rootPath}/public/favicon.ico`);
+
+      return request(app.listen())
+        .get('/favicon.ico')
+        .expect(200);
+
+    });
+
+    it('#static()', () => {
+
+      app.static('/scripts', `${app.rootPath}/public/scripts`);
+
+      return request(app.listen())
+        .get('/scripts/main.js')
+        .expect(200);
+
+    });
+
+    it('#serveDir()', () => {
+
+      app.serveDir('/styles', `${app.rootPath}/public/styles`);
+
+      return request(app.listen())
+        .get('/styles/main.css')
+        .expect(200);
+
+    });
+
+  });
+
   describe('#context', () => {
 
     before(() => {
@@ -211,47 +255,21 @@ describe('Engine', () => {
 
     });
 
-  });
+    describe('#xhr', () => {
 
-  describe('serve static', () => {
+      it('should return true when X-Requested-With is xmlhttprequest', () => {
 
-    it('#index()', () => {
+        app.get('/xhr', function* () {
+          assert(this.xhr === true);
+          this.status = 200;
+        });
 
-      app.index(`${app.rootPath}/public/index.html`);
+        return request(app.listen())
+          .get('/xhr')
+          .set('X-Requested-With', 'xmlhttprequest')
+          .expect(200);
 
-      return request(app.listen())
-        .get('/')
-        .expect(200);
-
-    });
-
-    it('#favicon()', () => {
-
-      app.favicon(`${app.rootPath}/public/favicon.ico`);
-
-      return request(app.listen())
-        .get('/favicon.ico')
-        .expect(200);
-
-    });
-
-    it('#static()', () => {
-
-      app.static('/scripts', `${app.rootPath}/public/scripts`);
-
-      return request(app.listen())
-        .get('/scripts/main.js')
-        .expect(200);
-
-    });
-
-    it('#serveDir()', () => {
-
-      app.serveDir('/styles', `${app.rootPath}/public/styles`);
-
-      return request(app.listen())
-        .get('/styles/main.css')
-        .expect(200);
+      });
 
     });
 
