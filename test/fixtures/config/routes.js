@@ -1,4 +1,4 @@
 // routes
 
-resources('photos');
-resources('comments');
+resources('photos')
+resources('comments')

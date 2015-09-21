@@ -2,7 +2,7 @@
 export default {
 
   * index(next) {
-    this.body = 'photos#index';
+    this.body = 'photos#index'
   },
 
   * create(next) {
@@ -10,19 +10,19 @@ export default {
   },
 
   * ['new'](next) {
-    this.body = 'photos#new';
+    this.body = 'photos#new'
   },
 
   * show(next) {
-    this.body = 'photos#show';
+    this.body = 'photos#show'
   },
 
   * update(next) {
-    this.body = 'photos#update';
+    this.body = 'photos#update'
   },
 
   * destroy(next) {
-    this.body = 'photos#destroy';
+    this.body = 'photos#destroy'
   }
 
-};
+}
