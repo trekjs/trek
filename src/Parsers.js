@@ -1,38 +1,46 @@
-import Module from 'module';
-import toml from 'toml';
-import yaml from 'js-yaml';
-import hjson from 'hjson';
-import * as babel from 'babel';
+/*!
+ * trek - Parsers
+ * Copyright(c) 2015 Fangdun Cai
+ * MIT Licensed
+ */
 
-const BabelParser = {
+import Module from 'module'
+import toml from 'toml'
+import yaml from 'js-yaml'
+import json from 'hjson'
+import * as babel from 'babel'
 
-  parse(content = '', filename = '') {
-    let o = babel.transform(content);
-    let m = new Module(filename);
-    m._compile(o.code, filename);
-    return m.exports;
-  }
-
-};
-
-const YAMLParser = {
+const js = {
 
   parse(content = '', filename = '') {
-    return yaml.safeLoad(content);
+    let o = babel.transform(content)
+    let m = new Module(filename)
+    m._compile(o.code, filename)
+    return m.exports
   }
 
-};
+}
 
-const Parsers = {
+const yml = {
+
+  parse(content = '', filename = '') {
+    return yaml.safeLoad(content)
+  }
+
+}
+
+/**
+ * Includes `toml`, `yml`, `json`, `js` Parsers
+ * @namespace Parsers
+ */
+export default {
 
   toml,
 
-  yml: YAMLParser,
+  yml,
 
-  json: hjson,
+  json,
 
-  js: BabelParser
+  js
 
-};
-
-export default Parsers;
+}

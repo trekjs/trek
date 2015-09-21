@@ -4,98 +4,114 @@
  * MIT Licensed
  */
 
-import winston from 'winston';
-import Engine from './Engine';
+import winston from 'winston'
+import Engine from './Engine'
 
 /**
- * @class Trek
- * @namespace Trek
+ * Construct a Trek (app) instance
+ *
  * @extends Engine
- * @param {String} rootPath The app root path.
  */
 
 export default class Trek extends Engine {
 
   /**
-   * Returns the current Trek environment.
-   *
-   * @static
-   * @default 'development'
+   * Returns the current Trek environment
    *
    * @example
    *  Trek.env
    *  // => development | production | test
+   *
+   * @static
+   * @default 'development'
+   * @returns {Boolean}
    */
   static get env() {
-    return this._env || (this._env =
-      process.env.TREK_ENV ||
-      process.env.NODE_ENV ||
-      'development');
+    return this._env
+      || (this._env = process.env.TREK_ENV
+        || process.env.NODE_ENV
+        || 'development')
   }
 
   /**
-   * Returns true if current environment is `production`.
+   * Returns true if current environment is `production`
    *
    * @static
-   * @memberof Trek
+   * @returns {Boolean}
    */
   static get isProduction() {
-    return this.env === 'production';
+    return this.env === 'production'
   }
 
   /**
-   * Returns true if current environment is `development`.
+   * Returns true if current environment is `development`
    *
    * @static
+   * @returns {Boolean}
    */
   static get isDevelopment() {
-    return this.env === 'development';
+    return this.env === 'development'
   }
 
   /**
-   * Returns true if current environment is `test`.
+   * Returns true if current environment is `test`
    *
    * @static
+   * @returns {Boolean}
    */
   static get isTest() {
-    return this.env === 'test';
+    return this.env === 'test'
   }
 
   /**
-   * Returns Trek package information.
+   * Returns Trek package information
    *
    * @static
+   * @returns {Object}
    */
   static get package() {
-    return require('../package');
+    return require('../package')
   }
 
   /**
-   * Returns Trek current version.
+   * Returns Trek current version
    *
    * @static
+   * @returns {String}
    */
   static get version() {
-    return this.package.version;
+    return this.package.version
   }
 
+  /**
+   * Gets Trek's logger
+   *
+   * @static
+   * @returns {winston.Logger}
+   */
   static get logger() {
-    winston.default.transports.console.label = 'Trek';
-    return this._logger || (this._logger = winston.cli());
+    winston.default.transports.console.label = 'Trek'
+    return this._logger || (this._logger = winston.cli())
   }
 
+  /**
+   * Sets Trek's logger
+   *
+   * @static
+   * @param {Object} logger
+   * @returns {void}
+   */
   static set logger(logger) {
-    this._logger = logger;
+    this._logger = logger
   }
 
 }
 
 if (!global.Trek) {
   /**
-   * Puts `Trek` to the global.
+   * Puts `Trek` to the global
    *
    * @global
    */
-  global.Trek = Trek;
+  global.Trek = Trek
 }
-

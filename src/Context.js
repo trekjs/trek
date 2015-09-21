@@ -4,164 +4,194 @@
  * MIT Licensed
  */
 
-import { basename } from 'path';
-import send from 'koa-send';
-import originalContext from 'koa/lib/context';
+import { basename } from 'path'
+import send from 'koa-send'
+import originalContext from 'koa/lib/context'
 
 /**
- * The app's context.
+ * The app's context
  *
- * @class Context
  * @extends koa/lib/context
  */
-class Context {
+export default class Context {
 
   constructor() {
-    this.params = Object.create(null);
+    this.params = Object.create(null)
   }
 
   /**
-   * The `app.config` delegation.
+   * The `app.config` delegation
    *
-   * @memberof Context.prototype
-   * @return {Config}
+   * @returns {Config}
    */
   get config() {
-    return this.app.config;
+    return this.app.config
   }
 
   /**
-   * The `app.logger` delegation.
+   * The `app.logger` delegation
    *
-   * @memberof Context.prototype
-   * @return {winston.Logger}
+   * @example
+   *  ctx.logger.info('log somtehing')
+   *
+   * @returns {winston.Logger}
    */
   get logger() {
-    return this.app.logger;
+    return this.app.logger
   }
 
   /**
-   * The `app.getService` delegation.
+   * The `app.getService` delegation
    *
    * @example
    *  let db = ctx.getService('sequelize')
    *
-   * @method getService
-   * @memberof Context.prototype
-   * @return {Mixed} service
+   * @returns {Mixed} service
    */
   getService(key) {
-    return this.app.getService(key);
+    return this.app.getService(key)
   }
 
   /**
-   * Render `view` with the given `options`.
+   * Render `view` with the given `options`
    *
-   * Options:
+   * @example
+   *  yield ctx.render('site', { name: 'trek' })
    *
-   *  - `cache`     boolean hinting to the engine it should cache
-   *  - `filename`  filename of the view being rendered
-   *
-   * @public
+   * @param {String} view The name of view
+   * @param {Object} options
+   * @param {Boolean} options.cache Boolean hinting to the engine it should cache
+   * @param {String} options.filename Filename of the view being rendered
+   * @returns {void}
    */
   *render(view, options = Object.create(null)) {
     // merge ctx.state
-    options._state = this.state;
+    options._state = this.state
 
-    this.body = yield this.app.render(view, options);
+    this.body = yield this.app.render(view, options)
   }
 
   /**
-   * Options:
-   *    - `filename`
-   *    - `disposition`
+   * Transfer the file at the given `path`.
+   *
+   * Automatically sets the _Content-Type_ response header field.
+   * The callback `callback(err)` is invoked when the transfer is complete
+   * or when an error occurs. Be sure to check `res.sentHeader`
+   * if you wish to attempt responding, as the header and some data
+   * may have already been transferred.
+   *
+   * @example
+   *
+   * // The following example illustrates how `ctx.sendFile()` may
+   * // be used as an alternative for the `static()` middleware for
+   * // dynamic situations. The code backing `res.sendFile()` is actually
+   * // the same code, so HTTP cache support etc is identical.
+   *
+   *     app.get('/user/:uid/photos/:file', function*(next){
+   *       var uid = req.params.uid
+   *         , file = req.params.file
+   *
+   *       var yes = yield req.user.mayViewFilesFrom(uid)
+   *       if (yes) {
+   *         yield ctx.sendFile('/uploads/' + uid + '/' + file)
+   *       } else {
+   *         ctx.status = 403
+   *         ctx.body = 'Sorry! you cant see that.'
+   *       }
+   *     });
+   *
+   * @param {String} path The file path
+   * @param {Object} options
+   * @param {Number} options.maxAge Defaulting to 0 (can be string converted by `ms`)
+   * @param {String} options.root Directory for relative filenames
+   * @param {Object} options.headers Object of headers to serve with file
+   * @returns {void}
    */
   *sendFile(path, options = Object.create(null)) {
     var opts = Object.create({
       disposition: 'attachment'
-    });
-    Object.assign(opts, options);
+    })
+    Object.assign(opts, options)
 
     if (opts.disposition) {
-      var filename = opts.filename || basename(path);
-      this.attachment(filename);
+      var filename = opts.filename || basename(path)
+      this.attachment(filename)
     }
 
-    yield send(this, path, options);
+    yield send(this, path, options)
   }
 
   /**
-   * Send JSON response.
+   * Send JSON response
    *
-   * Examples:
-   *
+   * @example
    *     ctx.json(null);
    *     ctx.json({ user: 'tj' });
    *
-   * @param {string|number|boolean|object} obj
-   * @public
+   * @param {String|Number|Boolean|Object} obj
+   * @returns {void}
    */
   json(obj) {
-    this.body = obj;
+    this.body = obj
   }
 
   /**
    * Send JSON response with JSONP callback support.
    *
-   * Examples:
-   *
+   * @example
    *     ctx.jsonp(null);
    *     ctx.jsonp({ user: 'tj' });
    *
-   * @param {string|number|boolean|object} obj
-   * @public
+   * @param {String|Number|Boolean|Object} obj
+   * @param {String} [Name='callback']
+   * @returns {void}
    */
   jsonp(obj, name = 'callback') {
-    var body = JSON.stringify(obj);
-    var callback = this.query[name];
+    var body = JSON.stringify(obj)
+    var callback = this.query[name]
 
     // fixup callback
     if (Array.isArray(callback)) {
-      callback = callback[0];
+      callback = callback[0]
     }
 
     // jsonp
     if (typeof callback === 'string' && callback.length !== 0) {
 
       // restrict callback charset
-      callback = callback.replace(/[^\[\]\w$.]/g, '');
+      callback = callback.replace(/[^\[\]\w$.]/g, '')
 
       // replace chars not allowed in JavaScript that are in JSON
       body = body
         .replace(/\u2028/g, '\\u2028')
-        .replace(/\u2029/g, '\\u2029');
+        .replace(/\u2029/g, '\\u2029')
 
       // the /**/ is a specific security mitigation for "Rosetta Flash JSONP abuse"
       // the typeof check is just to reduce client error noise
-      body = '/**/ typeof ' + callback + ' === \'function\' && ' + callback + '(' + body + ');';
+      body = '/**/ typeof ' + callback + ' === \'function\' && ' + callback + '(' + body + ');'
     }
 
     if (!this.type) {
-      this.set('X-Content-Type-Options', 'nosniff');
-      this.type = 'js';
+      this.set('X-Content-Type-Options', 'nosniff')
+      this.type = 'js'
     }
-    this.body = body;
+    this.body = body
   }
 
   /**
-   * Check if the request was an _XMLHttpRequest_.
+   * Check if the request was an `XMLHttpRequest`.
    *
-   * @return {Boolean}
-   * @public
+   * @example
+   *  if (ctx.xhr) ctx.body = 'AJAX'
+   *
+   * @returns {Boolean}
    */
   get xhr() {
-    var val = this.get('X-Requested-With') || '';
-    return val.toLowerCase() === 'xmlhttprequest';
+    var val = this.get('X-Requested-With') || ''
+    return val.toLowerCase() === 'xmlhttprequest'
   }
 
 }
 
 // Sets Context's prototype to originalContext `koa/context`.
-Object.setPrototypeOf(Context.prototype, originalContext);
-
-export default Context;
+Object.setPrototypeOf(Context.prototype, originalContext)

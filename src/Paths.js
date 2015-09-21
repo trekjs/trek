@@ -4,31 +4,38 @@
  * MIT Licensed
  */
 
-import path from 'path';
-import glob from 'glob';
+import path from 'path'
+import glob from 'glob'
+import _debug from 'debug'
+
+const debug = _debug('trek:paths')
 
 /**
  *
- * @class Paths
- * @constructor
- * @param {String} root The app root path
  */
-class Paths {
+export default class Paths {
 
+  /**
+   * @param {String} root The root path
+   * @param {String} [formats='toml|json|js|yml'] The formats can parse and render
+   */
   constructor(root, formats = 'toml|json|js|yml') {
-    this.root = root;
-    this.formats = formats;
-    this.blueprint = new Map();
-    this.initialize();
+    this.root = root
+    this.formats = formats
+    this.blueprint = new Map()
+    this.initialize()
   }
 
+  /**
+   * @private
+   */
   initialize() {
     this
       .set('app')
       .set('app/controllers')
-      .set('app/models',         { glob: 'app/models/*.js', multi: true })
+      .set('app/models',        { glob: 'app/models/*.js', multi: true })
       .set('app/views')
-      .set('app/services',       { glob: 'app/services/*.js', multi: true })
+      .set('app/services',      { glob: 'app/services/*.js', multi: true })
 
       .set('lib')
 
@@ -44,58 +51,51 @@ class Paths {
 
       .set('public')
       .set('log',               { with: `log/${Trek.env}.log` })
-      .set('tmp');
+      .set('tmp')
   }
 
   /**
    * Get the path with the key path from paths
    *
-   * @method get
-   * @memberof Paths.prototype
    * @param {String} key The key path
    * @param {Boolean} [absolute=false] Relative or absolute path
-   * @return {String} path
+   * @returns {String} path
    */
   get(key, absolute = false) {
-    if (!this.blueprint.has(key)) return null;
-    let value = this.blueprint.get(key);
-    let pattern = value.glob || value.with;
+    if (!this.blueprint.has(key)) return null
+    let value = this.blueprint.get(key)
+    let pattern = value.glob || value.with
     if (pattern) {
-      let res = glob(pattern, { sync: true, realpath: absolute, cwd: this.root });
-      return value.multi ? res : res[0];
+      let res = glob(pattern, { sync: true, realpath: absolute, cwd: this.root })
+      return value.multi ? res : res[0]
     }
-    return path.join(absolute ? this.root : '', value);
+    return path.join(absolute ? this.root : '', value)
   }
 
   /**
-   * Set the value with the key path onto paths
+   * Set the `value` with the `key` path onto paths
    *
-   * @method set
-   * @memberof Paths.prototype
    * @param {String} key The key path
-   * @param {Object|String} [value=key]
-   * @return this
+   * @param {Object|String} value [value=key]
+   * @returns {Paths}
    */
   set(key, value) {
-    value = value || key;
-    this.blueprint.set(key, value);
-    return this;
+    value = value || key
+    debug(`set "${key}"`)
+    this.blueprint.set(key, value)
+    return this
   }
 
   /**
-   * Get the path pattern with the key path from paths
+   * Get the path pattern with the `key` path from paths
    *
-   * @method get
-   * @memberof Paths.prototype
    * @param {String} key The key path
-   * @return {String} path
+   * @returns {String} The file path
    */
   getPattern(key) {
-    if (!this.blueprint.has(key)) return null;
-    let value = this.blueprint.get(key);
-    return value.with || value.glob || value;
+    if (!this.blueprint.has(key)) return null
+    let value = this.blueprint.get(key)
+    return value.with || value.glob || value
   }
 
 }
-
-export default Paths;
