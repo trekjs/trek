@@ -64,6 +64,14 @@ describe('Engine', () => {
 
   });
 
+  describe('#path', () => {
+
+    it('should return empty string when parent is null', () => {
+      assert(app.path === '');
+    });
+
+  });
+
   describe('#run()', () => {
 
     it('should be a function', () => {
@@ -104,7 +112,23 @@ describe('Engine', () => {
 
   });
 
-  describe('http verbs, get(), post(), all()', () => {
+  describe('http verbs, get(), post()..., match(), all()', () => {
+
+    it('#match()', (done) => {
+
+      app.match(['get', 'post'], '/ping', function* (){
+        this.body = this.req.method;
+      });
+
+      request(app.listen())
+        .get('/ping')
+        .expect('GET', function(){
+          request(app.listen())
+          .post('/ping')
+          .expect('POST', done);
+        });
+
+    });
 
     it('#all()', (done) => {
 

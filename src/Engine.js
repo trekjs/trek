@@ -35,6 +35,8 @@ class Engine extends Koa {
   }
 
   initialize() {
+    // top-most app is mounted at /
+    this.mountpath = '/';
     this.config = new Config(this.rootPath);
     this.router = new Router();
     // override context
@@ -47,6 +49,12 @@ class Engine extends Koa {
 
   set(key, value) {
     this.config.set(key, value);
+  }
+
+  get path() {
+    return this.parent
+      ? this.parent.path + this.mountpath
+      : '';
   }
 
   /**
@@ -350,14 +358,6 @@ class Engine extends Koa {
     });
   }
 
-  all(path, ...handler) {
-    METHODS.forEach((m) => {
-      let v = m.replace('-', '');
-      this[v](path, ...handler);
-    });
-    return this;
-  }
-
   match(methods = [], path, ...handler) {
     methods.forEach((m) => {
       if (METHODS.includes(m)) {
@@ -365,6 +365,11 @@ class Engine extends Koa {
         this[v](path, ...handler);
       }
     });
+    return this;
+  }
+
+  all(path, ...handler) {
+    return this.match(METHODS, path, ...handler);
   }
 
 }
