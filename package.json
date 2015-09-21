@@ -1,6 +1,6 @@
 {
   "name": "trek",
-  "version": "0.1.11",
+  "version": "0.2.0",
   "description": "Next generation full-stack JavaScript open source solution.",
   "author": "Fangdun Cai <cfddream@gmail.com> (https://github.com/fundon)",
   "homepage": "https://trekjs.com/",
@@ -17,8 +17,10 @@
     "web"
   ],
   "scripts": {
-    "prepublish": "make clean && make build",
-    "test": "make test"
+    "build": "babel src --out-dir lib",
+    "lint": "eslint src",
+    "test": "make test",
+    "prepublish": "npm run clean && make clean && make build"
   },
   "dependencies": {
     "babel": "^5.8.23",
@@ -47,10 +49,12 @@
     "winston": "^1.0.1"
   },
   "devDependencies": {
+    "babel-eslint": "^4.1.3",
     "babel-plugin-espower": "^1.0.0",
+    "eslint": "^1.5.0",
     "istanbul": "^0.3.20",
     "koa-swig": "^2.0.0",
-    "mocha": "^2.3.2",
+    "mocha": "^2.3.3",
     "power-assert": "^1.0.1",
     "require-times": "^1.1.0",
     "supertest": "^1.1.0"

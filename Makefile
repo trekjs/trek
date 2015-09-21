@@ -24,7 +24,7 @@ endif
 
 build:
 	mkdir -p lib
-	$(BIN) $(BABEL) src --out-dir lib --copy-files
+	$(BIN) $(BABEL) src --out-dir lib
 
 clean:
 	rm -rf lib
@@ -64,5 +64,8 @@ bench:
 
 lint:
 	@$(ESLINT) src
+
+api:
+	@esdoc -c esdoc.json
 
 .PHONY: test bench
