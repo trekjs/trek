@@ -9,6 +9,15 @@ Next generation full-stack JavaScript open source solution, based on [Koa][].
   [![License][license-img]][license-url]
   [![Dependency status][david-img]][david-url]
 
+## Features
+
+  * Fast HTTP router which smartly prioritize routes, powered by [Router][].
+  * RESTful Routing, Rails Style, powered by [RouteMapper][].
+  * Loads environment variables(**.env**) and configurations(**js**|**json**|**toml**|**yml**) automagically
+  * Using [Babel][] for writing next generation JavaScript, **ES6+**
+  * Working with [Node.js v4][]
+  * MVC
+
 ```js
 import Trek from 'trek';
 
@@ -36,15 +45,6 @@ $ trek new trekapp
 $ cd trekapp
 $ npm i && npm start
 ```
-
-## Features
-
-  * Fast HTTP router which smartly prioritize routes, powered by [Router][].
-  * RESTful Routing, Rails Style, powered by [RouteMapper][].
-  * Loads environment variables(**.env**) and configurations(**js**|**json**|**toml**|**yml**) automagically
-  * Using [Babel][] for writing next generation JavaScript, **ES6+**
-  * Working with [Node.js v4][]
-  * MVC
 
 ## Quick Start
 
