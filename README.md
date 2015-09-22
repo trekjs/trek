@@ -39,11 +39,11 @@ $ npm i && npm start
 
 ## Features
 
+  * Fast HTTP router which smartly prioritize routes, powered by [Router][].
+  * RESTful Routing, Rails Style, powered by [RouteMapper][].
+  * Loads environment variables(**.env**) and configurations(**js**|**json**|**toml**|**yml**) automagically
   * Using [Babel][] for writing next generation JavaScript, **ES6+**
   * Working with [Node.js v4][]
-  * Loads environment variables(**.env**) and configurations(**js**|**json**|**toml**|**yml**) automagically
-  * Zippy [router][]
-  * RESTful Routing, Rails Style, powered by [RouteMapper][]
   * MVC
 
 ## Quick Start
@@ -59,7 +59,7 @@ $ npm i && npm start
 [Koa]: http://koajs.com/
 [Babel]: https://babeljs.io/
 [Node.js v4]: https://nodejs.org/
-[router]: https://github.com/trekjs/router
+[Router]: https://github.com/trekjs/router
 [Routemapper]: https://github.com/trekjs/route-mapper
 [Example Trek apps]: https://github.com/trekjs/examples
 
