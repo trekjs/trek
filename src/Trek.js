@@ -10,7 +10,7 @@ import Engine from './Engine'
 /**
  * Construct a Trek (app) instance
  *
- * @extends Engine
+ * @extends {Engine}
  */
 
 export default class Trek extends Engine {

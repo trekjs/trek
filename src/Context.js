@@ -11,7 +11,7 @@ import originalContext from 'koa/lib/context'
 /**
  * The app's context
  *
- * @extends koa/lib/context
+ * @extends {koa/lib/context}
  */
 export default class Context {
 

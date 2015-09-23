@@ -20,7 +20,7 @@ const METHODS = Router.METHODS
 
 /**
  * The Trek Engine Core
- * @extends Koa
+ * @extends {Koa}
  */
 export default class Engine extends Koa {
 
