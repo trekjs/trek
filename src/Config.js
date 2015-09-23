@@ -15,6 +15,10 @@ import Parsers from './Parsers'
 
 /**
  * The app's configuration
+ *
+ * @example
+ *
+ *  const config = new Config('./your-config-folder')
  */
 export default class Config {
 
@@ -50,6 +54,10 @@ export default class Config {
   /**
    * Load dotenv `.env.{development|test|production}`
    *
+   * @example
+   *
+   *  config.dotenv()
+   *
    * @returns {void}
    */
   dotenv() {
@@ -69,6 +77,10 @@ export default class Config {
 
   /**
    * Load app.toml app.{development|test|production}.toml
+   *
+   * @example
+   *
+   *  yield config.loadList()
    *
    * @returns {void}
    */
@@ -114,6 +126,13 @@ export default class Config {
   /**
    * Load dotenv and app config files
    *
+   * @example
+   *
+   *  yield config.load()
+   *  // load steps
+   *  // 0. config.dotenv()
+   *  // 1. yield config.loadList()
+   *
    * @returns {void}
    */
   *load() {
@@ -126,9 +145,13 @@ export default class Config {
   /**
    * Use templatly to render thie file, then parse file to Memory
    *
+   * @example
+   *
+   *  yield config.compile('./your-config.json', 'user', 'test')
+   *
    * @param {String} filename The file path
    * @param {String} namespace Set a namespace for current store
-   * @param {String} env
+   * @param {String} env Select env if you want
    * @returns {nconf.Memory}
    */
   *compile(filename, namespace, env) {
@@ -154,6 +177,12 @@ export default class Config {
   /**
    * First, uses native `template-strings` for rendering configuration file
    *
+   * @example
+   *
+   *  yield config.render('./your-config.yml', { name: 'your-app-name' })
+   *
+   * @param {String} filename The config file path
+   * @param {Object} locals An object whose properties define local variables for the configuration
    * @returns {String} The rendered template strings
    */
   *render(filename, locals = Object.create(null)) {
@@ -166,7 +195,11 @@ export default class Config {
   }
 
   /**
-   * Parse the file from `.js`, `.json`, `.toml`, `.yml`
+   * Parse the file from `.js`, `.json`, `.toml`, `.yml` formatters.
+   *
+   * @example
+   *
+   *  config.parse(content, filename)
    *
    * @param {String} content The file raw content
    * @param {String} filename The file path
@@ -181,13 +214,37 @@ export default class Config {
   }
 
   /**
-   * Get value by key from Config
+   * Assigns setting key to value
    *
-   *  search: env -> user -> global
+   * @example
+   *
+   *  config.set('port', 8080)
+   *  config.set('app.name', 'trek')
    *
    * @param {String} key
-   * @param {Mixed} [defaultValue]
-   * @returns {Mixed}
+   * @param {*} value
+   * @param {String} [type='user'] The namespace is `user` by default
+   * @returns {Config} this
+   */
+  set(key, value, type = 'user') {
+    if (this.stores.has(type)) {
+      this.stores.get(type).set(key, value)
+    }
+    return this
+  }
+
+  /**
+   * Get value by key from Config
+   *
+   * @example
+   *
+   *  // search: env -> user -> global
+   *  config.get('host')
+   *  config.get('port', 80) // 80 by default
+   *
+   * @param {String} key
+   * @param {*} [defaultValue]
+   * @returns {*}
    */
   get(key, defaultValue) {
     let value
@@ -196,20 +253,6 @@ export default class Config {
       if (value) return value
     }
     return defaultValue
-  }
-
-  /**
-   * Set value by key onto Config
-   *
-   * @param {String} key
-   * @param {Mixed} value
-   * @param {String} [type='user'] The namespace
-   * @returns {void}
-   */
-  set(key, value, type = 'user') {
-    if (this.stores.has(type)) {
-      this.stores.get(type).set(key, value)
-    }
   }
 
 }

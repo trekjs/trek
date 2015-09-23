@@ -5,9 +5,11 @@ import Config from '../src/Config'
 
 describe('Config', () => {
 
-  var config = new Config(__dirname + '/fixtures')
+  var config
+
   before(() => {
     return co(function *() {
+      config = new Config(__dirname + '/fixtures')
       yield config.load()
     })
   })
@@ -18,7 +20,7 @@ describe('Config', () => {
       assert(config.get('PORT') === 377)
     })
 
-    it('should return a secret key from secrets.js', () => {
+    it('should return a secret key from secrets.yml', () => {
       assert(config.get('secrets.secret_key') === 'Oabah4p')
     })
 

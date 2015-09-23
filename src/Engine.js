@@ -381,6 +381,10 @@ export default class Engine extends Koa {
   /**
    * Serves the default favicon - GET /favicon.ico
    *
+   * @example
+   *
+   *  app.favicon('public/favicon.ico')
+   *
    * @param {String} file
    * @returns {Engine} this
    */
