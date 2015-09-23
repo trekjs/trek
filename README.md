@@ -18,6 +18,8 @@ Next generation full-stack JavaScript open source solution, based on [Koa][].
   * Working with [Node.js v4][]
   * MVC
 
+## Usage
+
 ```js
 import Trek from 'trek';
 
