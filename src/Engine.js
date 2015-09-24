@@ -181,18 +181,18 @@ export default class Engine extends Koa {
   }
 
   /**
-   * Load default middleware stack
+   * Load middleware stack
    *
    * @private
    */
-  defaultMiddlewareStack() {
+  loadMiddlewareStack() {
     let stackPath = this.paths.get('config/middleware', true)
     let existed = !!stackPath
     let loaded = false
     let err
     if (existed) {
       try {
-        require(stackPath)(this)
+        require(stackPath)(this, this.config)
         loaded = true
       } catch (e) {
         err = e
@@ -213,7 +213,7 @@ export default class Engine extends Koa {
     if (this.isBooted) return
     yield this.config.load()
     yield this.loadServices()
-    this.defaultMiddlewareStack()
+    this.loadMiddlewareStack()
     this.loadRoutes()
     this.use(function* dispatcher(next) {
       let [handler, params] = this.app.router.find(this.method, this.path)

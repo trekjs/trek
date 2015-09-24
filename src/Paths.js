@@ -62,14 +62,10 @@ export default class Paths {
    * @returns {String} path
    */
   get(key, absolute = false) {
-    if (!this.blueprint.has(key)) return null
-    let value = this.blueprint.get(key)
-    let pattern = value.glob || value.with
-    if (pattern) {
-      let res = glob(pattern, { sync: true, realpath: absolute, cwd: this.root })
-      return value.multi ? res : res[0]
-    }
-    return path.join(absolute ? this.root : '', value)
+    let value = this.blueprint.get(key) || key
+    let pattern = value.glob || value.with || value
+    let res = glob(pattern, { sync: true, realpath: absolute, cwd: this.root })
+    return value.multi ? res : res[0]
   }
 
   /**

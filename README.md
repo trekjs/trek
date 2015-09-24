@@ -55,8 +55,6 @@ $ npm i && npm start
 
 ## Todo List
 
-* [ ] The default middleware
-* [ ] Session
 * ...
 
 ## License
