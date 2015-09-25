@@ -137,10 +137,11 @@ export default class Engine extends Koa {
   setService(key, value) {
     if (this.services.has(key)) {
       this.logger.warn(chalk.green(`service:${key} was registed`))
-      return
+      return this
     }
     this.logger.debug(chalk.yellow(`service:${key} setting...`))
     this.services.set(key, value)
+    return this
   }
 
   /**

@@ -192,6 +192,47 @@ describe('Engine', () => {
 
   })
 
+  describe('services', () => {
+
+    var db
+    before(() => {
+      db = {}
+    })
+
+    describe('#setService()', () => {
+
+      it('should set a service and return app self', () => {
+
+        assert(app.setService('db', db) === app)
+
+      })
+
+    })
+
+    describe('#getService()', () => {
+
+      it('should get a service', () => {
+
+        assert(app.getService('db') === db)
+
+      })
+
+    })
+
+    describe('#*loadServices()', () => {
+
+      it('should load all services', () => {
+
+        return co(function *() {
+          yield app.loadServices()
+        })
+
+      })
+
+    })
+
+  })
+
   describe('#context', () => {
 
     before(() => {
