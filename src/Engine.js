@@ -111,6 +111,12 @@ export default class Engine extends Koa {
   /**
    * Get all servides
    *
+   * @example
+   *
+   *  app.services
+   *  // return a `Map` object
+   *  // => map
+   *
    * @return {Map} services
    */
   get services() {
@@ -120,8 +126,13 @@ export default class Engine extends Koa {
   /**
    * Get a service by key
    *
+   * @example
+   *
+   *  app.getService('db')
+   *  // => db
+   *
    * @param {String} key
-   * @return {Mixed} service
+   * @return {*} service
    */
   getService(key) {
     return this.services.get(key)
@@ -130,8 +141,12 @@ export default class Engine extends Koa {
   /**
    * Stores a service
    *
+   * @example
+   *
+   *  app.setService('db', {})
+   *
    * @param {String} key the service name
-   * @param {Mixed} service the service instance
+   * @param {*} service the service instance
    * @returns {void}
    */
   setService(key, value) {
@@ -407,7 +422,7 @@ export default class Engine extends Koa {
   /**
    * Run the app
    *
-   * @param {Mixed} args
+   * @param {*} args
    * @returns {Promise}
    */
   run(...args) {
