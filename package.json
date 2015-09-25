@@ -38,7 +38,6 @@
     "lodash": "^3.10.1",
     "mz": "^2.0.0",
     "nconf": "^0.8.0",
-    "nodemailer": "^1.4.0",
     "route-mapper": "^0.4.5",
     "templatly": "^0.1.2",
     "toml": "^2.3.0",
