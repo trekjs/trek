@@ -139,7 +139,7 @@ export default class Engine extends Koa {
       this.logger.warn(chalk.green(`service:${key} was registed`))
       return
     }
-    this.logger.debug(chalk.yellow('service:%s'), key)
+    this.logger.debug(chalk.yellow(`service:${key} setting...`))
     this.services.set(key, value)
   }
 
@@ -330,10 +330,10 @@ export default class Engine extends Koa {
     let seq = []
     for (let file of files) {
       let name = basename(file, '.js').replace(/^[0-9]+-/, '')
+      this.logger.debug(chalk.green(`service:${name} init...`))
       let service = require(`${this.rootPath}/${file}`)(this, this.config)
       if (service) {
         this.setService(name, service)
-        this.logger.debug(chalk.green(`service:${name} init ...`))
         if (service.promise) yield service.promise
         this.logger.debug(chalk.green(`service:${name} booted`))
       }
@@ -410,7 +410,7 @@ export default class Engine extends Koa {
    * @returns {Promise}
    */
   run(...args) {
-    this.logger.debug(chalk.green('booting ...'))
+    this.logger.debug(chalk.green('booting...'))
     return co.call(this, function* () {
       yield this.bootstrap()
       // TODO: https
