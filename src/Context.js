@@ -22,6 +22,11 @@ export default class Context {
   /**
    * The `app.config` delegation
    *
+   * @example
+   *
+   *  ctx.config
+   *  // => app.config
+   *
    * @returns {Config}
    */
   get config() {
@@ -32,6 +37,7 @@ export default class Context {
    * The `app.logger` delegation
    *
    * @example
+   *
    *  ctx.logger.info('log somtehing')
    *
    * @returns {winston.Logger}
@@ -44,6 +50,7 @@ export default class Context {
    * The `app.getService` delegation
    *
    * @example
+   *
    *  let db = ctx.getService('sequelize')
    *
    * @returns {Mixed} service
@@ -56,6 +63,7 @@ export default class Context {
    * Render `view` with the given `options`
    *
    * @example
+   *
    *  yield ctx.render('site', { name: 'trek' })
    *
    * @param {String} view The name of view
@@ -75,30 +83,29 @@ export default class Context {
    * Transfer the file at the given `path`.
    *
    * Automatically sets the _Content-Type_ response header field.
-   * The callback `callback(err)` is invoked when the transfer is complete
-   * or when an error occurs. Be sure to check `res.sentHeader`
+   * When an error occurs. Be sure to check `res.sentHeader`
    * if you wish to attempt responding, as the header and some data
    * may have already been transferred.
    *
    * @example
    *
-   * // The following example illustrates how `ctx.sendFile()` may
-   * // be used as an alternative for the `static()` middleware for
-   * // dynamic situations. The code backing `res.sendFile()` is actually
-   * // the same code, so HTTP cache support etc is identical.
+   *  // The following example illustrates how `ctx.sendFile()` may
+   *  // be used as an alternative for the `static()` middleware for
+   *  // dynamic situations. The code backing `res.sendFile()` is actually
+   *  // the same code, so HTTP cache support etc is identical.
    *
-   *     app.get('/user/:uid/photos/:file', function*(next){
-   *       var uid = req.params.uid
-   *         , file = req.params.file
+   *  app.get('/user/:uid/photos/:file', function* (next){
+   *    var uid = req.params.uid
+   *      , file = req.params.file
    *
-   *       var yes = yield req.user.mayViewFilesFrom(uid)
-   *       if (yes) {
-   *         yield ctx.sendFile('/uploads/' + uid + '/' + file)
-   *       } else {
-   *         ctx.status = 403
-   *         ctx.body = 'Sorry! you cant see that.'
-   *       }
-   *     });
+   *    var yes = yield req.user.mayViewFilesFrom(uid)
+   *    if (yes) {
+   *      yield ctx.sendFile('/uploads/' + uid + '/' + file)
+   *    } else {
+   *      ctx.status = 403
+   *      ctx.body = 'Sorry! you cant see that.'
+   *    }
+   *  });
    *
    * @param {String} path The file path
    * @param {Object} options
@@ -125,6 +132,7 @@ export default class Context {
    * Send JSON response
    *
    * @example
+   *
    *     ctx.json(null);
    *     ctx.json({ user: 'tj' });
    *
@@ -139,6 +147,7 @@ export default class Context {
    * Send JSON response with JSONP callback support.
    *
    * @example
+   *
    *     ctx.jsonp(null);
    *     ctx.jsonp({ user: 'tj' });
    *
@@ -182,6 +191,7 @@ export default class Context {
    * Check if the request was an `XMLHttpRequest`.
    *
    * @example
+   *
    *  if (ctx.xhr) ctx.body = 'AJAX'
    *
    * @returns {Boolean}
