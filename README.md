@@ -1,6 +1,7 @@
-# trek
 
 ![Trek](http://trekjs.com/images/trek-logo.svg)
+
+# trek
 
 Next generation full-stack JavaScript open source solution, based on [Koa][].
 
