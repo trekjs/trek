@@ -1,5 +1,7 @@
 # trek
 
+![Trek](http://trekjs.com/images/trek-logo.svg)
+
 Next generation full-stack JavaScript open source solution, based on [Koa][].
 
   [![Gitter][gitter-img]][gitter-url]
