@@ -265,7 +265,9 @@ describe('Engine', () => {
 
         app.get('/robot.txt', function* () {
 
-          yield this.sendFile(`${this.app.rootPath}/public/robot.txt`)
+          yield this.sendFile('public/robot.txt', {
+            root: this.app.rootPath
+          })
 
         })
 
