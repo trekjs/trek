@@ -9,18 +9,7 @@ ESLINT = ./node_modules/.bin/eslint
 TESTS = test/*.test.js
 TREK_ENV ?= test
 
-BIN = iojs
-
-ifeq ($(findstring io.js, $(shell which node)),)
-  BIN = node
-endif
-
-ifeq (node, $(BIN))
-  FLAGS = --harmony
-else
-  FLAGS = --harmony_rest_parameters \
-          --harmony_spreadcalls
-endif
+BIN = node
 
 build:
 	mkdir -p lib
