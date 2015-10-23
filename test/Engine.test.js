@@ -116,8 +116,8 @@ describe('Engine', () => {
 
     it('#match()', (done) => {
 
-      app.match(['get', 'post'], '/ping', function* (){
-        this.body = this.req.method
+      app.match(['get', 'post'], '/ping', function *(ctx){
+        ctx.body = ctx.req.method
       })
 
       request(app.listen())
@@ -132,8 +132,8 @@ describe('Engine', () => {
 
     it('#all()', (done) => {
 
-      app.all('/tobi', function* (){
-        this.body = this.req.method
+      app.all('/tobi', function *(ctx){
+        ctx.body = ctx.req.method
       })
 
       request(app.listen())
@@ -243,8 +243,8 @@ describe('Engine', () => {
 
       it('should render template', () => {
 
-        app.get('/', function* () {
-          yield this.render('user', {
+        app.get('/', function *(ctx, next) {
+          yield ctx.render('user', {
             user: {
               name: 'trek'
             }
@@ -263,10 +263,10 @@ describe('Engine', () => {
 
       it('should send a file', () => {
 
-        app.get('/robot.txt', function* () {
+        app.get('/robot.txt', function *(ctx, next) {
 
-          yield this.sendFile('public/robot.txt', {
-            root: this.app.rootPath
+          yield ctx.sendFile('public/robot.txt', {
+            root: ctx.app.rootPath
           })
 
         })
@@ -283,9 +283,9 @@ describe('Engine', () => {
 
       it('should response with json', () => {
 
-        app.get('/users', function* () {
+        app.get('/users', function *(ctx) {
 
-          this.json([{
+          ctx.json([{
             name: 'trek'
           }])
 
@@ -304,9 +304,9 @@ describe('Engine', () => {
 
       it('should response with jsonp', () => {
 
-        app.get('/jsonp', function* () {
+        app.get('/jsonp', function *(ctx) {
 
-          this.jsonp({
+          ctx.jsonp({
             count: 1
           })
 
@@ -326,9 +326,9 @@ describe('Engine', () => {
 
       it('should return true when X-Requested-With is xmlhttprequest', () => {
 
-        app.get('/xhr', function* () {
-          assert(this.xhr === true)
-          this.status = 200
+        app.get('/xhr', function *(ctx) {
+          assert(ctx.xhr === true)
+          ctx.status = 200
         })
 
         return request(app.listen())

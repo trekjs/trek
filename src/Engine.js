@@ -8,7 +8,7 @@ import { basename, dirname, join } from 'path'
 import serveStatic from 'koa-static'
 import chalk from 'chalk'
 import co from 'co'
-import composition from 'composition'
+import compose from 'koa-compose'
 import Koa from 'koa'
 import Router from 'trek-router'
 import RouteMapper from 'route-mapper'
@@ -29,6 +29,7 @@ export default class Engine extends Koa {
    */
   constructor(rootPath) {
     super()
+
     this.initialized = false
     this.env = Trek.env
     if (rootPath) this.rootPath = rootPath
@@ -231,19 +232,19 @@ export default class Engine extends Koa {
     yield this.loadServices()
     this.loadMiddlewareStack()
     this.loadRoutes()
-    this.use(function* dispatcher(next) {
-      let [handler, params] = this.app.router.find(this.method, this.path)
+    this.use(function *dispatcher(ctx, next) {
+      let [handler, params] = ctx.app.router.find(ctx.method, ctx.path)
       if (handler) {
         params.forEach((i) => {
-          this.params[i.name] = i.value
-        });
-        let body = yield handler.call(this, next)
+          ctx.params[i.name] = i.value
+        })
+        let body = yield (yield handler(ctx, next))
         if (body) {
-          this.body = body
-          return;
+          ctx.body = body
+          return
         }
       }
-      yield next
+      yield next(ctx)
     })
     this.isBooted = true
 
@@ -366,7 +367,10 @@ export default class Engine extends Koa {
    */
   serveFile(path, file, options) {
     var dir = dirname(file)
-    return this.get(path, serveStatic(dir, options))
+    //return this.get(path, serveStatic(dir, options))
+    return this.get(path, function *(ctx, next) {
+      return serveStatic(dir, options).call(ctx, next)
+    })
   }
 
   /**
@@ -379,7 +383,10 @@ export default class Engine extends Koa {
    */
   serveDir(path, dir, options) {
     dir = dirname(dir)
-    return this.get(path + '*', serveStatic(dir, options))
+    //return this.get(path + '*', serveStatic(dir, options))
+    return this.get(path + '*', function *(ctx, next) {
+      return serveStatic(dir, options).call(ctx, next)
+    })
   }
 
   /**
@@ -489,5 +496,5 @@ METHODS
         this.router.add(m.toUpperCase(), path, handlers)
         return this
       });
-    })`)(composition)
+    })`)(compose)
   })
