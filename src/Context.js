@@ -125,8 +125,7 @@ export default class Context {
       this.attachment(filename)
     }
 
-    // NOTE: waiting for https://github.com/koajs/send/issues/38
-    yield send(this, path, options).call(this)
+    yield send(this, path, options)
   }
 
   /**
