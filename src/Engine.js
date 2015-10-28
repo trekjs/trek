@@ -232,19 +232,18 @@ export default class Engine extends Koa {
     yield this.loadServices()
     this.loadMiddlewareStack()
     this.loadRoutes()
-    this.use(function *dispatcher(ctx, next) {
+    this.use((ctx, next) => {
       let [handler, params] = ctx.app.router.find(ctx.method, ctx.path)
       if (handler) {
         params.forEach((i) => {
           ctx.params[i.name] = i.value
         })
-        let body = yield (yield handler(ctx, next))
-        if (body) {
-          ctx.body = body
+        return handler(ctx, next).then(body => {
+          if (body) ctx.body = body
           return
-        }
+        })
       }
-      yield next(ctx)
+      return next(ctx)
     })
     this.isBooted = true
 

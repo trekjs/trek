@@ -1,29 +1,29 @@
 
 export default {
 
-  * index(ctx, next) {
+  index(ctx, next) {
     return 'comments#index'
   },
 
-  * create(ctx, next) {
+  create(ctx, next) {
     let name = 'trek'
     let age = 233
     return { name, age }
   },
 
-  * ['new'](ctx, next) {
+  ['new'](ctx, next) {
     ctx.body = 'comments#new'
   },
 
-  * show(ctx, next) {
+  show(ctx, next) {
     ctx.body = 'comments#show'
   },
 
-  * update(ctx, next) {
+  update(ctx, next) {
     ctx.body = 'comments#update'
   },
 
-  * destroy(ctx, next) {
+  destroy(ctx, next) {
     ctx.body = 'comments#destroy'
   }
 

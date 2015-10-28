@@ -116,7 +116,7 @@ describe('Engine', () => {
 
     it('#match()', (done) => {
 
-      app.match(['get', 'post'], '/ping', function *(ctx){
+      app.match(['get', 'post'], '/ping', function (ctx){
         ctx.body = ctx.req.method
       })
 
@@ -132,7 +132,7 @@ describe('Engine', () => {
 
     it('#all()', (done) => {
 
-      app.all('/tobi', function *(ctx){
+      app.all('/tobi', function (ctx){
         ctx.body = ctx.req.method
       })
 
@@ -243,13 +243,13 @@ describe('Engine', () => {
 
       it('should render template', () => {
 
-        app.get('/', function *(ctx, next) {
+        app.get('/', co.wrap(function *(ctx, next) {
           yield ctx.render('user', {
             user: {
               name: 'trek'
             }
           })
-        })
+        }))
 
         return request(app.listen())
           .get('/')
@@ -263,13 +263,13 @@ describe('Engine', () => {
 
       it('should send a file', () => {
 
-        app.get('/robot.txt', function *(ctx, next) {
+        app.get('/robot.txt', co.wrap(function *(ctx, next) {
 
           yield ctx.sendFile('public/robot.txt', {
             root: ctx.app.rootPath
           })
 
-        })
+        }))
 
         return request(app.listen())
           .get('/robot.txt')
@@ -283,7 +283,7 @@ describe('Engine', () => {
 
       it('should response with json', () => {
 
-        app.get('/users', function *(ctx) {
+        app.get('/users', function (ctx) {
 
           ctx.json([{
             name: 'trek'
@@ -304,7 +304,7 @@ describe('Engine', () => {
 
       it('should response with jsonp', () => {
 
-        app.get('/jsonp', function *(ctx) {
+        app.get('/jsonp', function (ctx) {
 
           ctx.jsonp({
             count: 1
@@ -326,7 +326,7 @@ describe('Engine', () => {
 
       it('should return true when X-Requested-With is xmlhttprequest', () => {
 
-        app.get('/xhr', function *(ctx) {
+        app.get('/xhr', function (ctx) {
           assert(ctx.xhr === true)
           ctx.status = 200
         })

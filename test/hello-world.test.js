@@ -14,11 +14,11 @@ describe('Trek', () => {
   })
 
   it('hello world', (done) => {
-    app.get('/', function*(next) {
+    app.get('/', function (next) {
       return 'Hello World'
     })
 
-    app.post('/', function*(next) {
+    app.post('/', function (next) {
       return 'Post'
     })
 
