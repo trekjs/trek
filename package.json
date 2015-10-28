@@ -64,7 +64,7 @@
     "lib"
   ],
   "babel": {
-    "loose": true,
+    "stage": 0,
     "blacklist": [
       "es6.arrowFunctions",
       "es6.blockScoping",
