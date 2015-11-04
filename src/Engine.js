@@ -169,6 +169,10 @@ export default class Engine extends Koa {
     return this._routeMapper || (this._routeMapper = new RouteMapper())
   }
 
+  use(x) {
+    return super.use.call(this, convert(x))
+  }
+
   /**
    * @private
    */
@@ -367,8 +371,8 @@ export default class Engine extends Koa {
   serveFile(path, file, options) {
     var dir = dirname(file)
     //return this.get(path, serveStatic(dir, options))
-    return this.get(path, function (ctx, next) {
-      return serveStatic(dir, options).call(ctx, next)
+    return this.get(path, function *(next) {
+      yield serveStatic(dir, options).call(this, next)
     })
   }
 
@@ -383,8 +387,8 @@ export default class Engine extends Koa {
   serveDir(path, dir, options) {
     dir = dirname(dir)
     //return this.get(path + '*', serveStatic(dir, options))
-    return this.get(path + '*', function (ctx, next) {
-      return serveStatic(dir, options).call(ctx, next)
+    return this.get(path + '*', function *(next) {
+      yield serveStatic(dir, options).call(this, next)
     })
   }
 
