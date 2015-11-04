@@ -8,7 +8,7 @@ import { basename, dirname, join } from 'path'
 import serveStatic from 'koa-static'
 import chalk from 'chalk'
 import co from 'co'
-import compose from 'koa-compose'
+import convert from 'koa-convert'
 import Koa from 'koa'
 import Router from 'trek-router'
 import RouteMapper from 'route-mapper'
@@ -188,7 +188,7 @@ export default class Engine extends Koa {
           if (c && (a = c[action])) {
             if (!Array.isArray(a)) a = [a]
             this.logger.debug(m, r.as, r.path, controller, action)
-            this[m](r.path, ...a)
+            this[m](r.path, convert.compose(...a))
           }
         });
       });
@@ -495,5 +495,5 @@ METHODS
         this.router.add(m.toUpperCase(), path, handlers)
         return this
       });
-    })`)(compose)
+    })`)(convert.compose)
   })
