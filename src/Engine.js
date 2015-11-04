@@ -367,7 +367,7 @@ export default class Engine extends Koa {
   serveFile(path, file, options) {
     var dir = dirname(file)
     //return this.get(path, serveStatic(dir, options))
-    return this.get(path, function *(ctx, next) {
+    return this.get(path, function (ctx, next) {
       return serveStatic(dir, options).call(ctx, next)
     })
   }
@@ -383,7 +383,7 @@ export default class Engine extends Koa {
   serveDir(path, dir, options) {
     dir = dirname(dir)
     //return this.get(path + '*', serveStatic(dir, options))
-    return this.get(path + '*', function *(ctx, next) {
+    return this.get(path + '*', function (ctx, next) {
       return serveStatic(dir, options).call(ctx, next)
     })
   }
