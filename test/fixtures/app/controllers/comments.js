@@ -1,3 +1,4 @@
+'use strict'
 
 export default {
 
@@ -6,8 +7,8 @@ export default {
   },
 
   create(ctx, next) {
-    let name = 'trek'
-    let age = 233
+    const name = 'trek'
+    const age = 233
     return { name, age }
   },
 

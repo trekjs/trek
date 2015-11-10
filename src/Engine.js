@@ -1,9 +1,12 @@
+'use strict'
+
 /*!
  * trek - Engine
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
 
+import _ from 'lodash'
 import { basename, dirname, join } from 'path'
 import serveStatic from 'koa-static'
 import chalk from 'chalk'
@@ -59,7 +62,7 @@ export default class Engine extends Koa {
    */
   set(key, value) {
     this.config.set(key, value)
-    return this;
+    return this
   }
 
   /**
@@ -68,9 +71,7 @@ export default class Engine extends Koa {
    * @returns {String}
    */
   get path() {
-    return this.parent
-      ? this.parent.path + this.mountpath
-      : ''
+    return this.parent ? this.parent.path + this.mountpath : ''
   }
 
   /**
@@ -178,15 +179,15 @@ export default class Engine extends Koa {
    */
   loadRoutes() {
     this.logger.debug(`Start load the routes.`)
-    let routesPath = this.paths.get('config/routes', true)
-    let controllersPath = this.paths.get('app/controllers', true)
+    const routesPath = this.paths.get('config/routes', true)
+    const controllersPath = this.paths.get('app/controllers', true)
     try {
       //require(routesPath).call(this.routeMapper, this.routeMapper)
       this.routeMapper.draw(routesPath)
       this.routeMapper.routes.forEach(r => {
-        let { controller, action } = r
-        let path = join(controllersPath, controller) + '.js'
-        let c = require(path)
+        const { controller, action } = r
+        const path = join(controllersPath, controller) + '.js'
+        const c = Trek.require(path)
         r.verb.forEach((m) => {
           let a
           if (c && (a = c[action])) {
@@ -194,8 +195,8 @@ export default class Engine extends Koa {
             this.logger.debug(m, r.as, r.path, controller, action)
             this[m](r.path, convert.compose(...a))
           }
-        });
-      });
+        })
+      })
     } catch (e) {
       this.logger.warn(`Load the routes failed, ${chalk.red(e)}.`)
     }
@@ -208,12 +209,12 @@ export default class Engine extends Koa {
    */
   loadMiddlewareStack() {
     let stackPath = this.paths.get('config/middleware', true)
-    let existed = !!stackPath
+    const existed = !!stackPath
     let loaded = false
     let err
     if (existed) {
       try {
-        require(stackPath)(this, this.config)
+        Trek.require(stackPath)(this, this.config)
         loaded = true
       } catch (e) {
         err = e
@@ -221,7 +222,8 @@ export default class Engine extends Koa {
     }
     if (!loaded) {
       stackPath = stackPath || this.paths.getPattern('config/middleware')
-      this.logger.warn(`Missing ${stackPath} or require failed, ${chalk.red(err || '')}.`)
+      this.logger.warn(
+        `Missing ${stackPath} or require failed, ${chalk.red(err || '')}.`)
     }
   }
 
@@ -237,7 +239,7 @@ export default class Engine extends Koa {
     this.loadMiddlewareStack()
     this.loadRoutes()
     this.use((ctx, next) => {
-      let [handler, params] = ctx.app.router.find(ctx.method, ctx.path)
+      var [handler, params] = ctx.app.router.find(ctx.method, ctx.path)
       if (handler) {
         params.forEach((i) => {
           ctx.params[i.name] = i.value
@@ -267,9 +269,7 @@ export default class Engine extends Koa {
     }
 
     // get file extension
-    var extension = ext[0] !== '.'
-      ? '.' + ext
-      : ext
+    var extension = ext[0] !== '.' ? '.' + ext : ext
 
     // store engine
     this.engines.set(extension, fn)
@@ -285,12 +285,13 @@ export default class Engine extends Koa {
    *
    * @param {String} view The name of view
    * @param {Object} options
-   * @param {Boolean} options.cache Boolean hinting to the engine it should cache
+   * @param {Boolean} options.cache Boolean hinting to the engine
+   *                                        it should cache
    * @param {String} options.filename Filename of the view being rendered
    * @returns {String}
    */
   *render(name, options = Object.create(null)) {
-    var renderOptions = Object.create(null)
+    var renderOptions = {}
     var view
 
     // merge app.state
@@ -324,10 +325,12 @@ export default class Engine extends Koa {
       yield view.fetchPath()
 
       if (!view.path) {
-        var dirs = Array.isArray(view.root) && view.root.length > 1
-          ? 'directories "' + view.root.slice(0, -1).join('", "') + '" or "' + view.root[view.root.length - 1] + '"'
-          : 'directory "' + view.root + '"'
-        var err = new Error('Failed to lookup view "' + name + '" in views ' + dirs)
+        var dirs = Array.isArray(view.root) && view.root.length > 1 ?
+          'directories "' + view.root.slice(0, -1).join('", "') +
+            '" or "' + view.root[view.root.length - 1] + '"' :
+          'directory "' + view.root + '"'
+        var err = new Error(
+          'Failed to lookup view "' + name + '" in views ' + dirs)
         err.view = view
         throw err
       }
@@ -346,12 +349,13 @@ export default class Engine extends Koa {
    * @returns {void}
    */
   *loadServices() {
-    let files = this.paths.get('app/services')
-    let seq = []
-    for (let file of files) {
-      let name = basename(file, '.js').replace(/^[0-9]+-/, '')
+    const files = this.paths.get('app/services')
+    const seq = []
+    let file
+    for (file of files) {
+      var name = basename(file, '.js').replace(/^[0-9]+-/, '')
       this.logger.debug(chalk.green(`service:${name} init...`))
-      let service = require(`${this.rootPath}/${file}`)(this, this.config)
+      var service = Trek.require(`${this.rootPath}/${file}`)(this, this.config)
       if (service) {
         this.setService(name, service)
         if (service.promise) yield service.promise
@@ -442,7 +446,7 @@ export default class Engine extends Koa {
       // TODO: https
       if (!args[0]) args[0] = this.config.get('site.port')
       this.server = this.listen(...args)
-      let address = this.server.address()
+      const address = this.server.address()
       this.logger.info(
         chalk.green('The application starting in %s on http://%s:%s'),
         Trek.env,
@@ -456,7 +460,8 @@ export default class Engine extends Koa {
   }
 
   /**
-   * Match adds a route > handler to the router for multiple HTTP methods provided
+   * Match adds a route > handler to the router for
+   * multiple HTTP methods provided
    *
    * @param {String[]} methods
    * @param {String} path
@@ -466,7 +471,7 @@ export default class Engine extends Koa {
   match(methods = [], path, ...handler) {
     methods.forEach((m) => {
       if (METHODS.includes(m)) {
-        let v = m.replace('-', '')
+        const v = m.replace('-', '')
         this[v](path, ...handler)
       }
     })
@@ -488,16 +493,17 @@ export default class Engine extends Koa {
 }
 
 METHODS
-  .forEach((m) => {
-    let v = m.replace('-', '')
-    Engine.prototype[v] = eval(`(function (c) {
-      return (function $${v}(path) {
-        for (var _len = arguments.length - 1, handlers = Array(_len), _key = 0; _key < _len; _key++) {
-          handlers[_key] = arguments[_key + 1]
-        }
-        handlers = c(handlers)
-        this.router.add(m.toUpperCase(), path, handlers)
-        return this
-      });
-    })`)(convert.compose)
-  })
+.forEach((m) => {
+  const v = m.replace('-', '')
+  Engine.prototype[v] = eval(`(function (c) {
+  return (function $${v}(path) {
+    for (var _len = arguments.length - 1,
+         handlers = Array(_len), _key = 0; _key < _len; _key++) {
+      handlers[_key] = arguments[_key + 1]
+    }
+    handlers = c(handlers)
+    this.router.add(m.toUpperCase(), path, handlers)
+    return this
+  });
+})`)(convert.compose)
+})

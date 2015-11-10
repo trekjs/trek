@@ -1,4 +1,9 @@
+'use strict'
+
 // routes
 
-resources('photos')
-resources('comments')
+const rm = routeMapper
+
+rm
+.resources('photos')
+.resources('comments')

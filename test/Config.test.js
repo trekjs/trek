@@ -1,3 +1,5 @@
+'use strict'
+
 import co from 'co'
 import assert from 'power-assert'
 import '../src/Trek'
@@ -81,7 +83,7 @@ describe('Config', () => {
   describe('#set()', () => {
 
     it('should return new value when reseting', () => {
-      assert(config.get('owner.age') === 144);
+      assert(config.get('owner.age') === 144)
       config.set('owner.age', 233)
       assert(config.get('owner.age') === 233)
     })

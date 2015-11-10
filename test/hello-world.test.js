@@ -1,3 +1,5 @@
+'use strict'
+
 import co from 'co'
 import Trek from '../src/Trek'
 import request from 'supertest'
@@ -14,21 +16,21 @@ describe('Trek', () => {
   })
 
   it('hello world', (done) => {
-    app.get('/', function (next) {
+    app.get('/', (next) => {
       return 'Hello World'
     })
 
-    app.post('/', function (next) {
+    app.post('/', (next) => {
       return 'Post'
     })
 
     request(app.listen())
-      .get('/')
-      .expect(200, 'Hello World', () => {
-        request(app.listen())
-          .post('/')
-          .expect(200, 'Post', done)
-      })
+    .get('/')
+    .expect(200, 'Hello World', () => {
+      request(app.listen())
+      .post('/')
+      .expect(200, 'Post', done)
+    })
   })
 
   describe('comments resources', () => {
@@ -41,26 +43,26 @@ describe('Trek', () => {
 
     it('GET /comments', () => {
       return request(server)
-        .get('/comments')
-        .expect(200, 'comments#index')
+      .get('/comments')
+      .expect(200, 'comments#index')
     })
 
     it('POST /comments', () => {
       return request(server)
-        .post('/comments')
-        .expect(200, '{"name":"trek","age":233}')
+      .post('/comments')
+      .expect(200, '{"name":"trek","age":233}')
     })
 
     it('DELETE /comments', () => {
       return request(server)
-        .delete('/comments/233')
-        .expect(200, 'comments#destroy')
+      .delete('/comments/233')
+      .expect(200, 'comments#destroy')
     })
 
     it('GET /comments/new', () => {
       return request(server)
-        .get('/comments/new')
-        .expect(200, 'comments#new')
+      .get('/comments/new')
+      .expect(200, 'comments#new')
     })
 
   })

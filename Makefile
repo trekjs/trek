@@ -11,6 +11,9 @@ TREK_ENV ?= test
 
 BIN = node
 
+FLAGS = --harmony_array_includes \
+				--harmony_rest_parameters
+
 build:
 	mkdir -p lib
 	$(BIN) $(BABEL) src --out-dir lib
@@ -21,7 +24,7 @@ clean:
 test:
 		@TREK_ENV=$(TREK_ENV) $(BIN) $(FLAGS) \
 		$(MOCHA) \
-		--require ./test/babel-hook \
+		--compilers js:babel-core/register \
 		--check-leaks \
 		$(TESTS) \
 		--bail
@@ -30,9 +33,9 @@ test-ci:
 	@TREK_ENV=$(TREK_ENV) $(BIN) $(FLAGS) \
 		$(ISTANBUL) cover \
 		$(MOCHA) \
+		--compilers js:babel-core/register \
 		--report lcovonly \
 		-- -u exports \
-		--require ./test/babel-hook \
 		--check-leaks \
 		$(TESTS) \
 		--bail
@@ -42,8 +45,8 @@ test-cov:
 	@TREK_ENV=$(TREK_ENV) $(BIN) $(FLAGS) \
 		$(ISTANBUL) cover \
 		$(MOCHA) \
+		--compilers js:babel-core/register \
 		-- -u exports \
-		--require ./test/babel-hook \
 		--check-leaks \
 		$(TESTS) \
 		--bail

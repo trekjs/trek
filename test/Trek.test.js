@@ -1,3 +1,5 @@
+'use strict'
+
 import assert  from 'power-assert'
 import co from 'co'
 import Trek from '../src/Trek'

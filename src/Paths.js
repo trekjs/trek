@@ -1,3 +1,5 @@
+'use strict'
+
 /*!
  * trek - Paths
  * Copyright(c) 2015 Fangdun Cai
@@ -17,7 +19,8 @@ export default class Paths {
 
   /**
    * @param {String} root The root path
-   * @param {String} [formats='toml|json|js|yml'] The formats can parse and render
+   * @param {String} [formats='toml|json|js|yml'] The formats can parse and
+   *                                              render
    */
   constructor(root, formats = 'toml|json|js|yml') {
     this.root = root
@@ -31,27 +34,28 @@ export default class Paths {
    */
   initialize() {
     this
-      .set('app')
-      .set('app/controllers')
-      .set('app/models',        { glob: 'app/models/*.js', multi: true })
-      .set('app/views')
-      .set('app/services',      { glob: 'app/services/*.js', multi: true })
+    .set('app')
+    .set('app/controllers')
+    .set('app/models',        { glob: 'app/models/*.js', multi: true })
+    .set('app/views')
+    .set('app/services',      { glob: 'app/services/*.js', multi: true })
 
-      .set('lib')
+    .set('lib')
 
-      .set('config')
-      .set('config/app',        { glob: `config/app.?(${this.formats})` })
-      .set(`config/app.env`,    { glob: `config/app.${Trek.env}.?(${this.formats})` })
-      .set('config/.env',       { with: `config/.env.${Trek.env}` })
-      .set('config/database',   { glob: `config/database.?(${this.formats})` })
-      .set('config/secrets',    { glob: `config/secrets.?(${this.formats})` })
-      .set('config/routes',     { with: 'config/routes.js' })
-      .set('config/middleware', { with: 'config/middleware.js' })
-      .set('config/locales')
+    .set('config')
+    .set('config/app',        { glob: `config/app.?(${this.formats})` })
+    .set(`config/app.env`,
+         { glob: `config/app.${Trek.env}.?(${this.formats})` })
+    .set('config/.env',       { with: `config/.env.${Trek.env}` })
+    .set('config/database',   { glob: `config/database.?(${this.formats})` })
+    .set('config/secrets',    { glob: `config/secrets.?(${this.formats})` })
+    .set('config/routes',     { with: 'config/routes.js' })
+    .set('config/middleware', { with: 'config/middleware.js' })
+    .set('config/locales')
 
-      .set('public')
-      .set('log',               { with: `log/${Trek.env}.log` })
-      .set('tmp')
+    .set('public')
+    .set('log',               { with: `log/${Trek.env}.log` })
+    .set('tmp')
   }
 
   /**
@@ -62,9 +66,11 @@ export default class Paths {
    * @returns {String} path
    */
   get(key, absolute = false) {
-    let value = this.blueprint.get(key) || key
-    let pattern = value.glob || value.with || value
-    let res = glob(pattern, { sync: true, realpath: absolute, cwd: this.root })
+    const value = this.blueprint.get(key) || key
+    const pattern = value.glob || value.with || value
+    const res = glob(pattern,
+                     { sync: true, realpath: absolute, cwd: this.root }
+    )
     return value.multi ? res : res[0]
   }
 
@@ -90,7 +96,7 @@ export default class Paths {
    */
   getPattern(key) {
     if (!this.blueprint.has(key)) return null
-    let value = this.blueprint.get(key)
+    const value = this.blueprint.get(key)
     return value.with || value.glob || value
   }
 
