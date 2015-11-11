@@ -46,9 +46,12 @@
   },
   "devDependencies": {
     "babel-cli": "^6.1.2",
-    "babel-eslint": "^4.1.4",
+    "babel-eslint": "^4.1.5",
     "babel-plugin-external-helpers-2": "^6.0.15",
+    "babel-plugin-syntax-async-functions": "^6.0.14",
     "babel-plugin-syntax-export-extensions": "^6.0.14",
+    "babel-plugin-transform-async-to-generator": "^6.0.14",
+    "babel-plugin-transform-async-to-module-method": "^6.0.14",
     "babel-plugin-transform-es2015-destructuring": "^6.0.18",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.1.3",
     "babel-plugin-transform-es2015-parameters": "^6.0.18",
@@ -82,12 +85,14 @@
       "stage-3",
       {
         "plugins": [
+          "syntax-async-functions",
           "syntax-export-extensions",
+          "transform-async-to-generator",
           "transform-es2015-destructuring",
           "transform-es2015-modules-commonjs",
           "transform-es2015-parameters",
-          "transform-object-rest-spread",
           "transform-export-extensions",
+          "transform-object-rest-spread",
           "transform-strict-mode"
         ]
       }

@@ -33,9 +33,9 @@ test-ci:
 	@TREK_ENV=$(TREK_ENV) $(BIN) $(FLAGS) \
 		$(ISTANBUL) cover \
 		$(MOCHA) \
-		--compilers js:babel-core/register \
 		--report lcovonly \
 		-- -u exports \
+		--compilers js:babel-core/register \
 		--check-leaks \
 		$(TESTS) \
 		--bail
@@ -45,8 +45,8 @@ test-cov:
 	@TREK_ENV=$(TREK_ENV) $(BIN) $(FLAGS) \
 		$(ISTANBUL) cover \
 		$(MOCHA) \
-		--compilers js:babel-core/register \
 		-- -u exports \
+		--compilers js:babel-core/register \
 		--check-leaks \
 		$(TESTS) \
 		--bail
