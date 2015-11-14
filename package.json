@@ -23,7 +23,7 @@
     "prepublish": "make clean && make build"
   },
   "dependencies": {
-    "babel-core": "^6.1.19",
+    "babel-core": "^6.1.21",
     "chalk": "^1.1.1",
     "co": "^4.6.0",
     "debug": "^2.2.0",
@@ -38,6 +38,7 @@
     "lodash": "^3.10.1",
     "mz": "^2.1.0",
     "nconf": "^0.8.2",
+    "power-assert": "^1.2.0",
     "route-mapper": "^0.5.0",
     "templatly": "^0.1.2",
     "toml": "^2.3.0",
@@ -47,16 +48,9 @@
   "devDependencies": {
     "babel-cli": "^6.1.18",
     "babel-eslint": "^4.1.5",
-    "babel-plugin-external-helpers-2": "^6.1.18",
-    "babel-plugin-syntax-async-functions": "^6.1.18",
-    "babel-plugin-syntax-export-extensions": "^6.1.18",
-    "babel-plugin-transform-async-to-generator": "^6.1.18",
-    "babel-plugin-transform-async-to-module-method": "^6.1.18",
     "babel-plugin-transform-es2015-destructuring": "^6.1.18",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.1.18",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.1.20",
     "babel-plugin-transform-es2015-parameters": "^6.1.18",
-    "babel-plugin-transform-export-extensions": "^6.1.18",
-    "babel-plugin-transform-strict-mode": "^6.1.18",
     "babel-preset-stage-1": "^6.1.18",
     "babel-preset-stage-2": "^6.1.18",
     "babel-preset-stage-3": "^6.1.18",
@@ -85,15 +79,9 @@
       "stage-3",
       {
         "plugins": [
-          "syntax-async-functions",
-          "syntax-export-extensions",
-          "transform-async-to-generator",
           "transform-es2015-destructuring",
           "transform-es2015-modules-commonjs",
-          "transform-es2015-parameters",
-          "transform-export-extensions",
-          "transform-object-rest-spread",
-          "transform-strict-mode"
+          "transform-es2015-parameters"
         ]
       }
     ]
