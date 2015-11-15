@@ -1,4 +1,4 @@
-javascript:
+eslint:
   enabled: true
-  linter: eslint
   config_file: .eslintrc
+  ignore_file: .eslintignore
