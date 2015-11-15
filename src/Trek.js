@@ -1,3 +1,5 @@
+'use strict'
+
 /*!
  * trek - Trek
  * Copyright(c) 2015 Fangdun Cai
@@ -27,10 +29,9 @@ export default class Trek extends Engine {
    * @returns {Boolean}
    */
   static get env() {
-    return this._env
-      || (this._env = process.env.TREK_ENV
-        || process.env.NODE_ENV
-        || 'development')
+    return this._env ||
+      (this._env = process.env.TREK_ENV ||
+       process.env.NODE_ENV || 'development')
   }
 
   /**
@@ -103,6 +104,12 @@ export default class Trek extends Engine {
    */
   static set logger(logger) {
     this._logger = logger
+  }
+
+  // NOTE(fundon): https://github.com/babel/babel/issues/2683
+  static require(path) {
+    const m = require(path)
+    return m.default || m
   }
 
 }

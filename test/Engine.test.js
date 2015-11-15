@@ -1,3 +1,5 @@
+'use strict'
+
 import assert from 'power-assert'
 import requireTimes from 'require-times'
 import request from 'supertest'
@@ -116,33 +118,33 @@ describe('Engine', () => {
 
     it('#match()', (done) => {
 
-      app.match(['get', 'post'], '/ping', function* (){
-        this.body = this.req.method
+      app.match(['get', 'post'], '/ping', (ctx) => {
+        ctx.body = ctx.req.method
       })
 
       request(app.listen())
-        .get('/ping')
-        .expect('GET', function(){
-          request(app.listen())
-          .post('/ping')
-          .expect('POST', done)
-        })
+      .get('/ping')
+      .expect('GET', () => {
+        request(app.listen())
+        .post('/ping')
+        .expect('POST', done)
+      })
 
     })
 
     it('#all()', (done) => {
 
-      app.all('/tobi', function* (){
-        this.body = this.req.method
+      app.all('/tobi', (ctx) => {
+        ctx.body = ctx.req.method
       })
 
       request(app.listen())
-        .put('/tobi')
-        .expect('PUT', function(){
-          request(app.listen())
-          .get('/tobi')
-          .expect('GET', done)
-        })
+      .put('/tobi')
+      .expect('PUT', () => {
+        request(app.listen())
+        .get('/tobi')
+        .expect('GET', done)
+      })
 
     })
 
@@ -155,8 +157,8 @@ describe('Engine', () => {
       app.index(`${app.rootPath}/public/index.html`)
 
       return request(app.listen())
-        .get('/')
-        .expect(200)
+      .get('/')
+      .expect(200)
 
     })
 
@@ -165,8 +167,8 @@ describe('Engine', () => {
       app.favicon(`${app.rootPath}/public/favicon.ico`)
 
       return request(app.listen())
-        .get('/favicon.ico')
-        .expect(200)
+      .get('/favicon.ico')
+      .expect(200)
 
     })
 
@@ -175,8 +177,8 @@ describe('Engine', () => {
       app.static('/scripts', `${app.rootPath}/public/scripts`)
 
       return request(app.listen())
-        .get('/scripts/main.js')
-        .expect(200)
+      .get('/scripts/main.js')
+      .expect(200)
 
     })
 
@@ -185,8 +187,8 @@ describe('Engine', () => {
       app.serveDir('/styles', `${app.rootPath}/public/styles`)
 
       return request(app.listen())
-        .get('/styles/main.css')
-        .expect(200)
+      .get('/styles/main.css')
+      .expect(200)
 
     })
 
@@ -243,17 +245,17 @@ describe('Engine', () => {
 
       it('should render template', () => {
 
-        app.get('/', function* () {
-          yield this.render('user', {
+        app.get('/', co.wrap(function *(ctx, next) {
+          yield ctx.render('user', {
             user: {
               name: 'trek'
             }
           })
-        })
+        }))
 
         return request(app.listen())
-          .get('/')
-          .expect(200, '<p>trek</p>\n')
+        .get('/')
+        .expect(200, '<p>trek</p>\n')
 
       })
 
@@ -263,17 +265,17 @@ describe('Engine', () => {
 
       it('should send a file', () => {
 
-        app.get('/robot.txt', function* () {
+        app.get('/robot.txt', co.wrap(function *(ctx, next) {
 
-          yield this.sendFile('public/robot.txt', {
-            root: this.app.rootPath
+          yield ctx.sendFile('public/robot.txt', {
+            root: ctx.app.rootPath
           })
 
-        })
+        }))
 
         return request(app.listen())
-          .get('/robot.txt')
-          .expect(200, '// robots\n')
+        .get('/robot.txt')
+        .expect(200, '// robots\n')
 
       })
 
@@ -283,18 +285,18 @@ describe('Engine', () => {
 
       it('should response with json', () => {
 
-        app.get('/users', function* () {
+        app.get('/users', (ctx) => {
 
-          this.json([{
+          ctx.json([{
             name: 'trek'
           }])
 
         })
 
         return request(app.listen())
-          .get('/users')
-          .expect('Content-Type', 'application/json; charset=utf-8')
-          .expect(200, '[{"name":"trek"}]')
+        .get('/users')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(200, '[{"name":"trek"}]')
 
       })
 
@@ -304,19 +306,19 @@ describe('Engine', () => {
 
       it('should response with jsonp', () => {
 
-        app.get('/jsonp', function* () {
+        app.get('/jsonp', (ctx) => {
 
-          this.jsonp({
+          ctx.jsonp({
             count: 1
           })
 
         })
 
         return request(app.listen())
-          .get('/jsonp?callback=something')
-          .expect('Content-Type', 'application/javascript; charset=utf-8')
-          .expect('X-Content-Type-Options', 'nosniff')
-          .expect(200, /something\(\{"count":1\}\)/)
+        .get('/jsonp?callback=something')
+        .expect('Content-Type', 'application/javascript; charset=utf-8')
+        .expect('X-Content-Type-Options', 'nosniff')
+        .expect(200, /something\(\{"count":1\}\)/)
 
       })
 
@@ -326,15 +328,15 @@ describe('Engine', () => {
 
       it('should return true when X-Requested-With is xmlhttprequest', () => {
 
-        app.get('/xhr', function* () {
-          assert(this.xhr === true)
-          this.status = 200
+        app.get('/xhr', (ctx) => {
+          assert(ctx.xhr === true)
+          ctx.status = 200
         })
 
         return request(app.listen())
-          .get('/xhr')
-          .set('X-Requested-With', 'xmlhttprequest')
-          .expect(200)
+        .get('/xhr')
+        .set('X-Requested-With', 'xmlhttprequest')
+        .expect(200)
 
       })
 

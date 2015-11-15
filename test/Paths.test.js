@@ -1,3 +1,5 @@
+'use strict'
+
 import assert from 'power-assert'
 import '../src/Trek'
 import Paths from '../src/Paths'

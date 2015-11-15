@@ -1,3 +1,5 @@
+'use strict'
+
 /*!
  * trek - Context
  * Copyright(c) 2015 Fangdun Cai
@@ -68,7 +70,8 @@ export default class Context {
    *
    * @param {String} view The name of view
    * @param {Object} options
-   * @param {Boolean} options.cache Boolean hinting to the engine it should cache
+   * @param {Boolean} options.cache Boolean hinting to the engine
+   *                                        it should cache
    * @param {String} options.filename Filename of the view being rendered
    * @returns {void}
    */
@@ -109,7 +112,8 @@ export default class Context {
    *
    * @param {String} path The file path
    * @param {Object} options
-   * @param {Number} options.maxAge Defaulting to 0 (can be string converted by `ms`)
+   * @param {Number} options.maxAge Defaulting to 0
+   *                                (can be string converted by `ms`)
    * @param {String} options.root Directory for relative filenames
    * @param {Object} options.headers Object of headers to serve with file
    * @returns {void}
@@ -175,9 +179,11 @@ export default class Context {
         .replace(/\u2028/g, '\\u2028')
         .replace(/\u2029/g, '\\u2029')
 
-      // the /**/ is a specific security mitigation for "Rosetta Flash JSONP abuse"
+      // the /**/ is a specific security mitigation for
+      // "Rosetta Flash JSONP abuse"
       // the typeof check is just to reduce client error noise
-      body = '/**/ typeof ' + callback + ' === \'function\' && ' + callback + '(' + body + ');'
+      body = '/**/ typeof ' + callback + ' === \'function\' && ' +
+        callback + '(' + body + ');'
     }
 
     if (!this.type) {

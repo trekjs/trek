@@ -9,18 +9,10 @@ ESLINT = ./node_modules/.bin/eslint
 TESTS = test/*.test.js
 TREK_ENV ?= test
 
-BIN = iojs
+BIN = node
 
-ifeq ($(findstring io.js, $(shell which node)),)
-  BIN = node
-endif
-
-ifeq (node, $(BIN))
-  FLAGS = --harmony
-else
-  FLAGS = --harmony_rest_parameters \
-          --harmony_spreadcalls
-endif
+FLAGS = --harmony_array_includes \
+				--harmony_rest_parameters
 
 build:
 	mkdir -p lib
@@ -32,7 +24,7 @@ clean:
 test:
 		@TREK_ENV=$(TREK_ENV) $(BIN) $(FLAGS) \
 		$(MOCHA) \
-		--require ./test/babel-hook \
+		--compilers js:babel-core/register \
 		--check-leaks \
 		$(TESTS) \
 		--bail
@@ -43,7 +35,7 @@ test-ci:
 		$(MOCHA) \
 		--report lcovonly \
 		-- -u exports \
-		--require ./test/babel-hook \
+		--compilers js:babel-core/register \
 		--check-leaks \
 		$(TESTS) \
 		--bail
@@ -54,7 +46,7 @@ test-cov:
 		$(ISTANBUL) cover \
 		$(MOCHA) \
 		-- -u exports \
-		--require ./test/babel-hook \
+		--compilers js:babel-core/register \
 		--check-leaks \
 		$(TESTS) \
 		--bail

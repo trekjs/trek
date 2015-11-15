@@ -1,3 +1,5 @@
+'use strict'
+
 /*!
  * trek - Parsers
  * Copyright(c) 2015 Fangdun Cai
@@ -8,13 +10,13 @@ import Module from 'module'
 import toml from 'toml'
 import yaml from 'js-yaml'
 import json from 'hjson'
-import * as babel from 'babel'
+import * as babel from 'babel-core'
 
 const js = {
 
   parse(content = '', filename = '') {
-    let o = babel.transform(content)
-    let m = new Module(filename)
+    const o = babel.transform(content)
+    const m = new Module(filename)
     m._compile(o.code, filename)
     return m.exports
   }

@@ -1,1 +1,3 @@
-console.log("Hello, Trek.js!")
+'use strict'
+
+console.log('Hello, Trek.js!')

@@ -1,3 +1,5 @@
+'use strict'
+
 /*!
  * trek - Config
  * Copyright(c) 2015 Fangdun Cai
@@ -62,7 +64,7 @@ export default class Config {
    */
   dotenv() {
     let env = this.paths.get('config/.env') // .env.${Trek.env}
-    let existed = !!env
+    const existed = !!env
     let loaded = false
     if (existed) {
       loaded = dotenv.config({
@@ -71,8 +73,10 @@ export default class Config {
       })
     }
     env = env || this.paths.getPattern('config/.env')
-    if (loaded) Trek.logger.debug('Loaded environment variables from %s to %s.', chalk.green(env), chalk.gray('process.env'))
-    else Trek.logger.warn('Missing %s dotenv file or parse failed.', chalk.red(env))
+    if (loaded) Trek.logger.debug('Loaded environment variables from %s to %s.',
+                                  chalk.green(env), chalk.gray('process.env'))
+    else Trek.logger.warn('Missing %s dotenv file or parse failed.',
+                          chalk.red(env))
   }
 
   /**
@@ -85,15 +89,16 @@ export default class Config {
    * @returns {void}
    */
   *loadList() {
-    let tmp = []
+    const tmp = []
 
-    for (let item of this.list) {
-      let [k, t, nc, n, e] = item
-      let p = this.paths.get(k)
-      let [existed, loaded, err] = [!!(p || nc), true, null]
+    for (var item of this.list) {
+      var [k, t, nc, n, e] = item
+      var p = this.paths.get(k)
+      var [existed, loaded, err] = [!!(p || nc), true, null]
       if (existed) {
         try {
-          let s = nc || (yield this.compile(`${this.root}/${p}`, n ? t : null, e))
+          var s = nc ||
+            (yield this.compile(`${this.root}/${p}`, n ? t : null, e))
           this.stores.set(t, s)
         } catch (e) {
           err = e
@@ -109,17 +114,18 @@ export default class Config {
       })
     }
 
-    for (let [k, s] of this.stores.entries()) {
+    for (var [k, s] of this.stores.entries()) {
       s.loadSync()
     }
 
     tmp.forEach((e) => {
-      let {
+      var {
         pattern, filename, loaded, error, namespace
       } = e
-      filename = (namespace === 'env' ? 'process.env': filename) || pattern
+      filename = (namespace === 'env' ? 'process.env' : filename) || pattern
       if (loaded) Trek.logger.debug('Loaded %s.', chalk.green(filename))
-      else Trek.logger.warn('Missing %s or parse failed, %s.', chalk.red(filename), chalk.red(error))
+      else Trek.logger.warn('Missing %s or parse failed, %s.',
+                            chalk.red(filename), chalk.red(error))
     })
   }
 
@@ -155,9 +161,9 @@ export default class Config {
    * @returns {nconf.Memory}
    */
   *compile(filename, namespace, env) {
-    let content = yield this.render(filename)
+    const content = yield this.render(filename)
     let data = this.parse(content, filename)
-    let memory = new Memory({
+    const memory = new Memory({
       logicalSeparator: this.separator
     })
     // select env
@@ -182,11 +188,12 @@ export default class Config {
    *  yield config.render('./your-config.yml', { name: 'your-app-name' })
    *
    * @param {String} filename The config file path
-   * @param {Object} locals An object whose properties define local variables for the configuration
+   * @param {Object} locals An object whose properties define local variables
+   *                        for the configuration
    * @returns {String} The rendered template strings
    */
   *render(filename, locals = Object.create(null)) {
-    let content = yield readFile(filename, 'utf-8')
+    const content = yield readFile(filename, 'utf-8')
     Object.assign(locals, {
       env: process.env,
       config: this
@@ -206,9 +213,9 @@ export default class Config {
    * @returns {nconf.Memory}
    */
   parse(content, filename) {
-    let ext = extname(filename).substring(1)
+    const ext = extname(filename).substring(1)
     // parser
-    let p = this.parsers[ext]
+    const p = this.parsers[ext]
     if (!p) return Object.create(null)
     return p.parse(content, filename)
   }
@@ -248,7 +255,8 @@ export default class Config {
    */
   get(key, defaultValue) {
     let value
-    for (let s of this.stores.values()) {
+    let s
+    for (s of this.stores.values()) {
       value = s.get(key)
       if (value) return value
     }

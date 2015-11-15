@@ -1,3 +1,5 @@
+'use strict'
+
 /*!
  * trek - View
  * Copyright(c) 2015 Fangdun Cai
@@ -29,14 +31,17 @@ export default class View {
     this.root = opts.root
 
     if (!this.ext && !this.defaultEngine) {
-      throw new Error('No default engine was specified and no extension was provided.')
+      throw new Error(
+        'No default engine was specified and no extension was provided.'
+      )
     }
 
     var fileName = name
 
     if (!this.ext) {
       // get extension from default engine name
-      this.ext = this.defaultEngine[0] !== '.' ? '.' + this.defaultEngine : this.defaultEngine
+      this.ext = this.defaultEngine[0] !== '.' ?
+        '.' + this.defaultEngine : this.defaultEngine
 
       fileName += this.ext
     }

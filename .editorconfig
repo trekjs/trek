@@ -1,3 +1,4 @@
+# editorconfig.org
 root = true
 
 [*]
@@ -14,3 +15,6 @@ trim_trailing_whitespace = false
 [*.{js,json,css,html}]
 indent_style = space
 indent_size = 2
+
+[Makefile]
+indent_style = tab

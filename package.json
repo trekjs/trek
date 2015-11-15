@@ -23,40 +23,49 @@
     "prepublish": "make clean && make build"
   },
   "dependencies": {
-    "babel": "^5.8.23",
+    "babel-core": "^6.1.21",
     "chalk": "^1.1.1",
     "co": "^4.6.0",
-    "composition": "^2.2.1",
     "debug": "^2.2.0",
     "dotenv": "^1.2.0",
-    "glob": "^5.0.15",
+    "glob": "^6.0.1",
     "hjson": "^1.7.4",
     "js-yaml": "^3.4.3",
-    "koa": "^1.1.0",
-    "koa-send": "^2.0.1",
-    "koa-static": "^1.5.1",
+    "koa": "^2.0.0-alpha.3",
+    "koa-convert": "^1.1.0",
+    "koa-send": "^3.1.0",
+    "koa-static": "^1.5.2",
     "lodash": "^3.10.1",
     "mz": "^2.1.0",
     "nconf": "^0.8.2",
-    "route-mapper": "^0.4.5",
+    "power-assert": "^1.2.0",
+    "route-mapper": "^0.5.0",
     "templatly": "^0.1.2",
     "toml": "^2.3.0",
-    "trek-router": "^0.5.0",
-    "winston": "^1.1.1"
+    "trek-router": "^1.0.0",
+    "winston": "^2.1.0"
   },
   "devDependencies": {
-    "babel-eslint": "^4.1.3",
-    "babel-plugin-espower": "^1.0.0",
-    "eslint": "^1.5.1",
-    "istanbul": "^0.3.22",
+    "babel-cli": "^6.1.18",
+    "babel-eslint": "^4.1.5",
+    "babel-plugin-transform-es2015-destructuring": "^6.1.18",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.1.20",
+    "babel-plugin-transform-es2015-parameters": "^6.1.18",
+    "babel-preset-stage-1": "^6.1.18",
+    "babel-preset-stage-2": "^6.1.18",
+    "babel-preset-stage-3": "^6.1.18",
+    "co": "^4.6.0",
+    "eslint": "^1.9.0",
+    "eslint-plugin-babel": "^2.1.1",
+    "istanbul": "^0.4.0",
     "koa-swig": "^2.1.0",
     "mocha": "^2.3.3",
-    "power-assert": "^1.0.1",
+    "power-assert": "^1.1.0",
     "require-times": "^1.1.0",
     "supertest": "^1.1.0"
   },
   "engines": {
-    "node": ">= 4"
+    "node": "4.*"
   },
   "files": [
     "CHANGELOG.md",
@@ -64,16 +73,15 @@
     "lib"
   ],
   "babel": {
-    "loose": true,
-    "blacklist": [
-      "regenerator",
-      "es6.constants",
-      "es6.literals",
-      "es6.forOf",
-      "es6.tailCall",
-      "es6.properties.computed",
-      "es6.properties.shorthand",
-      "es6.templateLiterals"
+    "presets": [
+      "stage-1",
+      "stage-2",
+      "stage-3"
+    ],
+    "plugins": [
+      "transform-es2015-destructuring",
+      "transform-es2015-modules-commonjs",
+      "transform-es2015-parameters"
     ]
   }
 }
