@@ -5,9 +5,16 @@ node_js:
   - "5"
   - "6"
 
+cache:
+  directories:
+    - wrk/bin
+before_script:
+  - "[ ! -f wrk/bin/wrk ] && rm -rf wrk && git clone https://github.com/wg/wrk.git && make -C wrk && mkdir wrk/bin && mv wrk/wrk wrk/bin || true"
+  - export PATH=$PATH:$PWD/wrk/bin/
 branches:
   only:
     - next
-
-script: "npm run bench"
-after_script: "npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
+script:
+  - "npm run bench"
+after_script:
+  - "npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
