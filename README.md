@@ -24,6 +24,8 @@
 
 * **Modern**. ES6+, only for node v6
 
+* **Future**. Designed for usage with `async` and `await`
+
 
 ## Usage
 
