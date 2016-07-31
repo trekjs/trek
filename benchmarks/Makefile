@@ -10,9 +10,8 @@ middleware:
 	@./run 30 $@
 	@./run 50 $@
 	@./run 100 $@
+	@./run 500 $@
 	@./run 1024 $@
-	@./run 5120 $@
-	@./run 10240 $@
 	@echo
 
 .PHONY: all middleware
