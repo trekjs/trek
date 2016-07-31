@@ -22,6 +22,7 @@
 ## Usage
 
 ```js
+```
 
 ```sh
 ```
@@ -30,7 +31,8 @@
 
   [MIT](LICENSE)
 
-[trek]: http://trekjs.com/
+
+[trek]: https://trekjs.com/
 
 [gitter-img]: https://badges.gitter.im/Join%20Chat.svg
 [gitter-url]:https://gitter.im/trekjs/trek?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
