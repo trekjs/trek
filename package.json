@@ -1,0 +1,51 @@
+{
+  "name": "trek",
+  "version": "0.0.0",
+  "description": "Next generation full-stack JavaScript open source solution.",
+  "author": "Fangdun Cai <cfddream@gmail.com> (https://github.com/fundon)",
+  "homepage": "https://trekjs.com/",
+  "repository": "trekjs/trek",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "keywords": [
+    "async/await",
+    "es6",
+    "framework",
+    "middleware",
+    "mvc",
+    "rest",
+    "server",
+    "trek",
+    "web"
+  ],
+  "scripts": {
+    "build": "babel lib --out-dir dist",
+    "lint": "eslint lib",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "babel-cli": "6",
+    "babel-plugin-transform-async-to-generator": "6.8.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.11.5",
+    "babel-preset-es2016": "6.11.3"
+  },
+  "engines": {
+    "node": ">= 6"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "dist",
+    "lib"
+  ],
+  "babel": {
+    "plugins": [
+      "transform-async-to-generator",
+      "transform-es2015-modules-commonjs"
+    ],
+    "presets": [
+      "es2016"
+    ]
+  }
+}
