@@ -12,7 +12,7 @@ class Middleware extends Array {
   }
 
   next(i, context, nextFunc) {
-    i = i >>> 0;
+    i = i | 0;
     const fn = this[i] || nextFunc;
     let nextCalled = 0;
 
