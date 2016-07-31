@@ -37,12 +37,14 @@ $ npm install trek@next
 
 ```js
 import Trek from 'trek'
-import sleep from 'then-sleep'
 
 const app = new Trek()
 
-app.use(async ({ res }) => {
-  await sleep(500)
+app.use(async ({ res }, next) => {
+  const start = new Date()
+  await next()
+  const ms = new Date() - start
+  console.log(`${ms}ms`)
   res.end('Hello Trek!')
 })
 
