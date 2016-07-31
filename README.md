@@ -17,7 +17,13 @@
 
 </div>
 
+
 ## Features
+
+* **Fast**. Ultra-high performance middleware
+
+* **Modern**. ES6+, only for node v6
+
 
 ## Usage
 
@@ -26,6 +32,7 @@
 
 ```sh
 ```
+
 
 ## License
 

@@ -14,7 +14,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 class Trek extends _http.Server {
 
-  constructor(requestListener) {
+  constructor() {
     super();
     this.middleware = new _Middleware2.default();
   }
