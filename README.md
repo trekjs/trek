@@ -24,15 +24,29 @@
 
 * **Modern**. ES6+, only for node v6
 
-* **Future**. Designed for usage with `async` and `await`
+* **Future**. Designed for usage with `async` and `await` (ES7)
 
 
-## Usage
-
-```js
-```
+## Installation
 
 ```sh
+$ npm install trek@next
+```
+
+## Hello Trek
+
+```js
+import Trek from 'trek'
+import sleep from 'then-sleep'
+
+const app = new Trek()
+
+app.use(async ({ res }) => {
+  await sleep(500)
+  res.end('Hello Trek!')
+})
+
+app.run(3000)
 ```
 
 
