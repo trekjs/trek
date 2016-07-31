@@ -1,7 +1,7 @@
 {
   "name": "trek",
   "version": "0.0.0",
-  "description": "Next generation full-stack JavaScript open source solution.",
+  "description": "Fast Async Web Framework for modern node",
   "author": "Fangdun Cai <cfddream@gmail.com> (https://github.com/fundon)",
   "homepage": "https://trekjs.com/",
   "repository": "trekjs/trek",
@@ -19,6 +19,7 @@
     "web"
   ],
   "scripts": {
+    "bench": "cd benchmarks; make all",
     "build": "babel lib --out-dir dist",
     "lint": "eslint lib",
     "prepublish": "npm run build"
