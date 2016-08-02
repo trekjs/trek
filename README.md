@@ -18,7 +18,7 @@
 
 ## Features
 
-* **Easy**. Designed for usage with async and await
+* **Easy**. Designed for usage with `async` and `await`
 
 * **Fast**. High performance middleware and router
 
