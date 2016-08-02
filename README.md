@@ -4,7 +4,7 @@
 
 <h1><a id="user-content-trek" class="anchor" href="#trek" aria-hidden="true"><span class="octicon octicon-link"></span></a>Trek.js</h1>
 
-<p>Fast Async Web Framework for modern node</p>
+<p>Fast Async Web Framework For Modern Node.js</p>
 
 <p>
   <a href="https://travis-ci.org/trekjs/trek"><img src="https://img.shields.io/travis/trekjs/trek.svg" alt="Build status"></a>
@@ -18,11 +18,13 @@
 
 ## Features
 
+* **Easy**. Designed for usage with async and await
+
 * **Fast**. High performance middleware and router
 
-* **Modern**. ES6+, only for node v6
+* **Modern**. ES6+, only for Node.js v6
 
-* **Future**. Usage with `async` and `await` (ES7)
+* **Amiable**. Similar to Express.js and Koa.js
 
 
 ## Installation
