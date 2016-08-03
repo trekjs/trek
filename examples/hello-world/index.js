@@ -1,4 +1,4 @@
-import Trek, { Router } from '../../lib/'
+import Trek, { Router } from '../..'
 
 const app = new Trek()
 
@@ -27,15 +27,19 @@ app.use(async ({ req, res }, next) => {
 })
 
 app.use(async ({ req, res }, next) => {
-  console.log(req.accept)
   const route = router.find(req.method, req.path)
   if (route) {
-    let [handler, params] = route
+    const [handler] = route
     if (handler !== undefined) {
-      await handler({ req, res })
+      return await handler({ req, res })
     }
   }
   await next()
+})
+
+app.use(async ({ res }) => {
+  res.status = 404
+  res.end()
 })
 
 app.run(3000)
