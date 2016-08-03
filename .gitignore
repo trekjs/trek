@@ -1,7 +1,7 @@
 node_modules
-test.js
-coverage
 npm-debug.log
+coverage
+.nyc_output
 examples/*/log/*.log
 .env*
 !.env.example

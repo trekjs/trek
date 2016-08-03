@@ -16,4 +16,5 @@ script:
   - "npm run build"
   - "npm run bench"
 after_script:
-  - "npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
+  - npm install codecov
+  - ./node_modules/.bin/codecov
