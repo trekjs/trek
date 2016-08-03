@@ -1,6 +1,7 @@
 'use strict'
 
-const Trek = require('../dist/trek').default
+const Trek = require('..').default
+
 const app = new Trek()
 
 // number of middleware
