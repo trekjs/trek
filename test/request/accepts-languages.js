@@ -5,13 +5,13 @@ test.beforeEach(t => {
   t.context = context().req
 })
 
-test('when Accept-Language is populated', t => {
+test('with no arguments when Accept-Language is populated', t => {
   const req = t.context
   req.headers['accept-language'] = 'en;q=0.8, es, pt'
   t.deepEqual(req.acceptsLanguages(), ['es', 'pt', 'en'])
 })
 
-test('when Accept-Language is populated', t => {
+test('with multiple arguments when Accept-Language is populated', t => {
   const req = t.context
   req.headers['accept-language'] = 'en;q=0.8, es, pt'
   t.is(req.acceptsLanguages('es', 'en'), 'es')

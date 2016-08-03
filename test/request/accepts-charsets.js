@@ -5,13 +5,13 @@ test.beforeEach(t => {
   t.context = context().req
 })
 
-test('when Accept-Charset is populated', t => {
+test('with no arguments when Accept-Charset is populated', t => {
   const req = t.context
   req.headers['accept-charset'] = 'utf-8, iso-8859-1;q=0.2, utf-7;q=0.5'
   t.deepEqual(req.acceptsCharsets(), ['utf-8', 'utf-7', 'iso-8859-1'])
 })
 
-test('when Accept-Charset is populated', t => {
+test('with multiple arguments when Accept-Charset is populated', t => {
   const req = t.context
   req.headers['accept-charset'] = 'utf-8, iso-8859-1;q=0.2, utf-7;q=0.5'
   t.is(req.acceptsCharsets('utf-7', 'utf-8'), 'utf-8')

@@ -5,19 +5,19 @@ test.beforeEach(t => {
   t.context = context().req
 })
 
-test('when Accept is populated', (t) => {
+test('with no arguments when Accept is populated', t => {
   const req = t.context
   req.headers.accept = 'application/*;q=0.2, image/jpeg;q=0.8, text/html, text/plain'
   t.deepEqual(req.accepts(), ['text/html', 'text/plain', 'image/jpeg', 'application/*'])
 })
 
-test('when Accept is populated', (t) => {
+test('with no valid types when Accept is populated', t => {
   const req = t.context
   req.headers.accept = 'application/*;q=0.2, image/jpeg;q=0.8, text/html, text/plain'
   t.false(req.accepts('image/png', 'image/tiff'))
 })
 
-test('when Accept is not populated', (t) => {
+test('when Accept is not populated', t => {
   const req = t.context
   t.is(req.accepts('text/html', 'text/plain', 'image/jpeg', 'application/*'), 'text/html')
 })
