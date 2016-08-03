@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Response = undefined;
 
 var _stream = require('stream');
 
@@ -13,13 +12,10 @@ var _vary = require('vary');
 
 var _vary2 = _interopRequireDefault(_vary);
 
-var _proxy = require('./proxy');
-
-var _proxy2 = _interopRequireDefault(_proxy);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class Response {
+
   constructor(res) {
     this.res = res;
   }
@@ -55,15 +51,37 @@ class Response {
 
   set status(code) {
     this.statusCode = code;
+    return this;
   }
 
   vary(field) {
     (0, _vary2.default)(this, field);
   }
 
-  // Must!
-  end(...args) {
-    return this.res.end(...args);
+  /**
+   * Set header `field` to `val`, or pass
+   * an object of header fields.
+   *
+   * Examples:
+   *
+   *    res.set('Foo', ['bar', 'baz']);
+   *    res.set('Accept', 'application/json');
+   *    res.set({ Accept: 'text/plain', 'X-API-Key': 'tobi' });
+   *
+   * @param {String|Object|Array} field
+   * @param {String} val
+   * @api public
+   */
+
+  set(field, val) {
+    if (2 == arguments.length) {
+      if (Array.isArray(val)) val = val.map(String);else val = String(val);
+      this.setHeader(field, val);
+    } else {
+      for (const key in field) {
+        this.set(key, field[key]);
+      }
+    }
   }
 
   send(code, body = null) {
@@ -75,7 +93,7 @@ class Response {
     // responses
     if (Buffer.isBuffer(body)) return this.end(body);
     if ('string' === typeof body) return this.end(body);
-    if (body instanceof _stream2.default) return body.pipe(res);
+    if (body instanceof _stream2.default) return body.pipe(this);
 
     // body: json
     if ('object' === typeof body) {
@@ -86,9 +104,4 @@ class Response {
     this.end(body);
   }
 }
-
-exports.Response = Response;
-
-exports.default = res => {
-  return (0, _proxy2.default)(new Response(res), res);
-};
+exports.default = Response;

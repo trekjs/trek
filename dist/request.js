@@ -3,13 +3,20 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Request = undefined;
+
+var _url = require('url');
 
 var _accepts = require('accepts');
 
 var _accepts2 = _interopRequireDefault(_accepts);
 
-var _url = require('url');
+var _contentType = require('content-type');
+
+var _contentType2 = _interopRequireDefault(_contentType);
+
+var _fresh = require('fresh');
+
+var _fresh2 = _interopRequireDefault(_fresh);
 
 var _typeIs = require('type-is');
 
@@ -23,13 +30,10 @@ var _parseurl = require('parseurl');
 
 var _parseurl2 = _interopRequireDefault(_parseurl);
 
-var _proxy = require('./proxy');
-
-var _proxy2 = _interopRequireDefault(_proxy);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class Request {
+
   constructor(req) {
     this.req = req;
   }
@@ -53,7 +57,7 @@ class Request {
    */
 
   get accept() {
-    return (0, _accepts2.default)(this);
+    return (0, _accepts2.default)(this.req);
   }
 
   /**
@@ -153,6 +157,42 @@ class Request {
   }
 
   /**
+   * Get the charset when present or undefined.
+   *
+   * @return {String}
+   * @api public
+   */
+
+  get charset() {
+    const type = this.get('Content-Type');
+    return type && _contentType2.default.parse(type).parameters.charset || '';
+  }
+
+  /**
+   * Check if the request is fresh, aka
+   * Last-Modified and/or the ETag
+   * still match.
+   *
+   * @return {Boolean}
+   * @api public
+   */
+
+  get fresh() {
+    const method = this.method;
+    const s = this.res.status;
+
+    // GET or HEAD for weak freshness validation only
+    if ('GET' !== method && 'HEAD' !== method) return false;
+
+    // 2xx or 304 as per rfc2616 14.26
+    if (s >= 200 && s < 300 || 304 == s) {
+      return (0, _fresh2.default)(this.header, this.res.header);
+    }
+
+    return false;
+  }
+
+  /**
    * Parse Range header field, capping to the given `size`.
    *
    * Unspecified ranges such as "0-" require knowledge of your resource length. In
@@ -178,7 +218,7 @@ class Request {
    */
 
   range(size, options) {
-    let range = this.get('Range');
+    const range = this.get('Range');
     if (!range) return;
     return (0, _rangeParser2.default)(size, range, options);
   }
@@ -324,9 +364,4 @@ class Request {
     }
   }
 }
-
-exports.Request = Request;
-
-exports.default = req => {
-  return (0, _proxy2.default)(new Request(req), req);
-};
+exports.default = Request;
