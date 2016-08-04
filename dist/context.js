@@ -20,12 +20,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 class Context {
 
-  constructor(req, res) {
+  constructor(app, req, res) {
+    this.app = app;
     this.req = (0, _delegateProxy2.default)(new _request2.default(req), req);
     this.res = (0, _delegateProxy2.default)(new _response2.default(res), res);
 
-    Reflect.defineProperty(this.req, 'res', { value: this.res });
-    Reflect.defineProperty(this.res, 'req', { value: this.req });
+    Reflect.defineProperty(this.req, 'app', { get: () => app });
+    Reflect.defineProperty(this.res, 'app', { get: () => app });
+
+    Reflect.defineProperty(this.req, 'res', { get: () => this.res });
+    Reflect.defineProperty(this.res, 'req', { get: () => this.req });
+
+    Reflect.defineProperty(this.req, 'config', { get: () => app.config });
+    Reflect.defineProperty(this.res, 'config', { get: () => app.config });
   }
 
 }

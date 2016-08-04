@@ -74,13 +74,13 @@ class Response {
    */
 
   set(field, val) {
-    if (2 == arguments.length) {
+    if (2 === arguments.length) {
       if (Array.isArray(val)) val = val.map(String);else val = String(val);
       this.setHeader(field, val);
     } else {
-      for (const key in field) {
+      Object.keys(field).forEach(key => {
         this.set(key, field[key]);
-      }
+      });
     }
   }
 

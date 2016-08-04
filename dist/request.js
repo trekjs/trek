@@ -165,7 +165,8 @@ class Request {
 
   get charset() {
     const type = this.get('Content-Type');
-    return type && _contentType2.default.parse(type).parameters.charset || '';
+    if (!type) return '';
+    return _contentType2.default.parse(type).parameters.charset || '';
   }
 
   /**
@@ -185,11 +186,42 @@ class Request {
     if ('GET' !== method && 'HEAD' !== method) return false;
 
     // 2xx or 304 as per rfc2616 14.26
-    if (s >= 200 && s < 300 || 304 == s) {
+    if (s >= 200 && s < 300 || 304 === s) {
       return (0, _fresh2.default)(this.header, this.res.header);
     }
 
     return false;
+  }
+
+  /**
+   * Parse the "Host" header field host
+   * and support X-Forwarded-Host when a
+   * proxy is enabled.
+   *
+   * @return {String} hostname:port
+   * @api public
+   */
+
+  get host() {
+    let host = this.config.get('proxy') && this.get('X-Forwarded-Host');
+    host = host || this.get('Host');
+    if (!host) return '';
+    return host.split(/\s*,\s*/)[0];
+  }
+
+  /**
+   * Parse the "Host" header field hostname
+   * and support X-Forwarded-Host when a
+   * proxy is enabled.
+   *
+   * @return {String} hostname
+   * @api public
+   */
+
+  get hostname() {
+    const host = this.host;
+    if (!host) return '';
+    return host.split(':')[0];
   }
 
   /**

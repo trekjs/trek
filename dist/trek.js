@@ -10,9 +10,9 @@ var _onFinished = require('on-finished');
 
 var _onFinished2 = _interopRequireDefault(_onFinished);
 
-var _Context = require('./Context');
+var _context = require('./context');
 
-var _Context2 = _interopRequireDefault(_Context);
+var _context2 = _interopRequireDefault(_context);
 
 var _middleware = require('./middleware');
 
@@ -24,7 +24,13 @@ class Trek extends _http.Server {
 
   constructor() {
     super();
+    this.initConfig();
     this.middleware = new _middleware2.default();
+  }
+
+  initConfig() {
+    this.config = new Map();
+    this.config.set('proxy', false);
   }
 
   use(fn) {
@@ -42,7 +48,7 @@ class Trek extends _http.Server {
           console.log(err);
         }
       });
-      this.middleware.compose(new _Context2.default(req, res));
+      this.middleware.compose(new _context2.default(this, req, res));
     });
 
     return new Promise((resolve, reject) => {
