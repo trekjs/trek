@@ -39,7 +39,7 @@ class Trek extends _http.Server {
     return this;
   }
 
-  run(port = 3000, host = '0.0.0.0') {
+  run() {
     // Lazy on request
     this.on('request', (req, res) => {
       (0, _onFinished2.default)(res, err => {
@@ -51,9 +51,11 @@ class Trek extends _http.Server {
       this.middleware.compose(new _context2.default(this, req, res));
     });
 
-    return new Promise((resolve, reject) => {
-      this.listen(port, host, err => err ? reject(err) : resolve());
-    });
+    try {
+      return Promise.resolve(this.listen(...arguments));
+    } catch (err) {
+      return Promise.reject(err);
+    }
   }
 
 }

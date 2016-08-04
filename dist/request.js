@@ -36,6 +36,7 @@ class Request {
 
   constructor(req) {
     this.req = req;
+    this.originalUrl = req.url;
   }
 
   /**
@@ -57,7 +58,9 @@ class Request {
    */
 
   get accept() {
-    return (0, _accepts2.default)(this.req);
+    if (this._accept) return this._accept;
+    this._accept = (0, _accepts2.default)(this.req);
+    return this._accept;
   }
 
   /**
@@ -225,6 +228,50 @@ class Request {
   }
 
   /**
+   * Return the protocol string "http" or "https"
+   * when requested with TLS. When the proxy setting
+   * is enabled the "X-Forwarded-Proto" header
+   * field will be trusted. If you're running behind
+   * a reverse proxy that supplies https for you this
+   * may be enabled.
+   *
+   * @return {String}
+   * @api public
+   */
+
+  get protocol() {
+    const proxy = this.config.get('proxy');
+    if (this.socket.encrypted) return 'https';
+    if (!proxy) return 'http';
+    const proto = this.get('X-Forwarded-Proto') || 'http';
+    return proto.split(/\s*,\s*/)[0];
+  }
+
+  /**
+   * Get origin of URL.
+   *
+   * @return {String}
+   * @api public
+   */
+
+  get origin() {
+    return `${ this.protocol }://${ this.host }`;
+  }
+
+  /**
+   * Get full request URL.
+   *
+   * @return {String}
+   * @api public
+   */
+
+  get href() {
+    // support: `GET http://example.com/foo`
+    if (/^https?:\/\//i.test(this.originalUrl)) return this.originalUrl;
+    return this.origin + this.originalUrl;
+  }
+
+  /**
    * Parse Range header field, capping to the given `size`.
    *
    * Unspecified ranges such as "0-" require knowledge of your resource length. In
@@ -253,17 +300,6 @@ class Request {
     const range = this.get('Range');
     if (!range) return;
     return (0, _rangeParser2.default)(size, range, options);
-  }
-
-  /**
-   * Get origin of URL.
-   *
-   * @return {String}
-   * @api public
-   */
-
-  get origin() {
-    return `${ this.protocol }://${ this.host }`;
   }
 
   /**

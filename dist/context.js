@@ -25,6 +25,8 @@ class Context {
     this.req = (0, _delegateProxy2.default)(new _request2.default(req), req);
     this.res = (0, _delegateProxy2.default)(new _response2.default(res), res);
 
+    Reflect.defineProperty(this, 'config', { get: () => app.config });
+
     Reflect.defineProperty(this.req, 'app', { get: () => app });
     Reflect.defineProperty(this.res, 'app', { get: () => app });
 
