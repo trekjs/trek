@@ -6,6 +6,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _url = require('url');
 
+var _querystring = require('querystring');
+
+var _querystring2 = _interopRequireDefault(_querystring);
+
 var _accepts = require('accepts');
 
 var _accepts2 = _interopRequireDefault(_accepts);
@@ -30,15 +34,18 @@ var _parseurl = require('parseurl');
 
 var _parseurl2 = _interopRequireDefault(_parseurl);
 
+var _proxyAddr = require('proxy-addr');
+
+var _proxyAddr2 = _interopRequireDefault(_proxyAddr);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const METHODS = ['GET', 'HEAD', 'PUT', 'DELETE', 'OPTIONS', 'TRACE'];
-
+const METHODS = ['GET', 'HEAD', 'PUT', 'DELETE', 'OPTIONS', 'TRACE']; /* eslint max-lines: ["error", 1000] */
 class Request {
 
   constructor(req) {
     this.req = req;
-    this.originalUrl = req.url;
+    this.originalUrl = req.originalUrl = req.url;
   }
 
   /**
@@ -60,7 +67,9 @@ class Request {
    */
 
   get accept() {
-    return this._accept = this._accept || (0, _accepts2.default)(this.req);
+    if (this._accept) return this._accept;
+    this._accept = (0, _accepts2.default)(this.req);
+    return this._accept;
   }
 
   /**
@@ -206,7 +215,7 @@ class Request {
    */
 
   get host() {
-    let host = this.config.get('proxy') && this.get('X-Forwarded-Host');
+    let host = this.config.get('trust proxy') && this.get('X-Forwarded-Host');
     host = host || this.get('Host');
     if (!host) return '';
     return host.split(/\s*,\s*/)[0];
@@ -240,7 +249,7 @@ class Request {
    */
 
   get protocol() {
-    const proxy = this.config.get('proxy');
+    const proxy = this.config.get('trust proxy');
     if (this.socket.encrypted) return 'https';
     if (!proxy) return 'http';
     const proto = this.get('X-Forwarded-Proto') || 'http';
@@ -279,7 +288,39 @@ class Request {
    */
 
   get idempotent() {
-    return !!~METHODS.indexOf(this.method);
+    return METHODS.indexOf(this.method) !== -1;
+  }
+
+  /**
+   * Return the remote address from the trusted proxy.
+   *
+   * The is the remote address on the socket unless
+   * "trust proxy" is set.
+   *
+   * @return {String}
+   * @public
+   */
+
+  get ip() {
+    if (!this.config.get('trust proxy')) return '';
+    return (0, _proxyAddr2.default)(this, this.config.get('trust proxy fn'));
+  }
+
+  /**
+   * When "trust proxy" is set, trusted proxy addresses + client.
+   *
+   * For example if the value were "client, proxy1, proxy2"
+   * you would receive the array `["client", "proxy1", "proxy2"]`
+   * where "proxy2" is the furthest down-stream and "proxy1" and
+   * "proxy2" were trusted.
+   *
+   * @return {Array}
+   * @public
+   */
+
+  get ips() {
+    if (!this.config.get('trust proxy')) return [];
+    return _proxyAddr2.default.all(this, this.config.get('trust proxy fn'));
   }
 
   /**
@@ -350,7 +391,8 @@ class Request {
   get query() {
     const str = this.querystring;
     const c = this._querycache = this._querycache || {};
-    return c[str] || (c[str] = qs.parse(str));
+    const q = c[str] || (c[str] = _querystring2.default.parse(str));
+    return q;
   }
 
   /**
@@ -361,7 +403,7 @@ class Request {
    */
 
   set query(obj) {
-    this.querystring = qs.stringify(obj);
+    this.querystring = _querystring2.default.stringify(obj);
   }
 
   /**
@@ -387,6 +429,19 @@ class Request {
 
   set search(str) {
     this.querystring = str;
+  }
+
+  /**
+   * Return parsed Content-Length when present.
+   *
+   * @return {Number}
+   * @api public
+   */
+
+  get length() {
+    const len = this.get('Content-Length');
+    if (len === '') return;
+    return ~~len;
   }
 
   /**
@@ -465,6 +520,33 @@ class Request {
       default:
         return this.headers[field] || '';
     }
+  }
+
+  /**
+   * Inspect implementation.
+   *
+   * @return {Object}
+   * @api public
+   */
+
+  inspect() {
+    if (!this.req) return;
+    return this.toJSON();
+  }
+
+  /**
+   * Return JSON representation.
+   *
+   * @return {Object}
+   * @api public
+   */
+
+  toJSON() {
+    return {
+      method: this.method,
+      url: this.url,
+      header: this.header
+    };
   }
 }
 exports.default = Request;

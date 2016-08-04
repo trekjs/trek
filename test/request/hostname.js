@@ -25,7 +25,7 @@ test('when X-Forwarded-Host is present and proxy is not trusted', t => {
 
 test('when X-Forwarded-Host is present and proxy is trusted', t => {
   const req = t.context
-  req.config.set('proxy', true)
+  req.config.set('trust proxy', true)
   req.header['x-forwarded-host'] = 'bar.com, baz.com'
   req.header.host = 'foo.com'
   t.is(req.hostname, 'bar.com')

@@ -30,7 +30,7 @@ class Trek extends _http.Server {
 
   initConfig() {
     this.config = new Map();
-    this.config.set('proxy', false);
+    this.config.set('trust proxy', false);
   }
 
   use(fn) {

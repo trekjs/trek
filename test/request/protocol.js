@@ -15,7 +15,7 @@ test('when unencrypted', t => {
 
 test('when X-Forwarded-Proto is set and proxy is trusted', t => {
   const req = request()
-  req.config.set('proxy', true)
+  req.config.set('trust proxy', true)
   req.req.socket = {}
   req.header['x-forwarded-proto'] = 'https, http'
   t.is(req.protocol, 'https')
@@ -23,7 +23,7 @@ test('when X-Forwarded-Proto is set and proxy is trusted', t => {
 
 test('when X-Forwarded-Proto is set and X-Forwarded-Proto is empty', t => {
   const req = request()
-  req.config.set('proxy', true)
+  req.config.set('trust proxy', true)
   req.req.socket = {}
   req.header['x-forwarded-proto'] = ''
   t.is(req.protocol, 'http')
