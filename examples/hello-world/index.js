@@ -1,4 +1,4 @@
-import Trek, { Router } from '../..'
+import Trek, { Router } from '../../lib'
 
 const app = new Trek()
 
