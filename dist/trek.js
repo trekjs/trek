@@ -48,7 +48,7 @@ class Trek extends _http.Server {
           console.log(err);
         }
       });
-      this.middleware.compose(new _context2.default(this, req, res));
+      this.middleware.compose(new _context2.default(this, this.config, req, res));
     });
 
     try {

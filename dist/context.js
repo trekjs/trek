@@ -20,21 +20,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 class Context {
 
-  constructor(app, req, res) {
-    this.app = app;
-    this.req = (0, _delegateProxy2.default)(new _request2.default(req), req);
-    this.res = (0, _delegateProxy2.default)(new _response2.default(res), res);
+  constructor(app, config, req, res) {
+    req = (0, _delegateProxy2.default)(new _request2.default(req), req);
+    res = (0, _delegateProxy2.default)(new _response2.default(res), res);
 
-    Reflect.defineProperty(this, 'config', { get: () => app.config });
+    Reflect.defineProperty(this, 'app', { value: app });
+    Reflect.defineProperty(this, 'config', { value: config });
+    Reflect.defineProperty(this, 'req', { value: req });
+    Reflect.defineProperty(this, 'res', { value: res });
 
-    Reflect.defineProperty(this.req, 'app', { get: () => app });
-    Reflect.defineProperty(this.res, 'app', { get: () => app });
+    Reflect.defineProperty(this.req, 'app', { value: app });
+    Reflect.defineProperty(this.req, 'res', { value: res });
+    Reflect.defineProperty(this.req, 'config', { value: config });
 
-    Reflect.defineProperty(this.req, 'res', { get: () => this.res });
-    Reflect.defineProperty(this.res, 'req', { get: () => this.req });
-
-    Reflect.defineProperty(this.req, 'config', { get: () => app.config });
-    Reflect.defineProperty(this.res, 'config', { get: () => app.config });
+    Reflect.defineProperty(this.res, 'app', { value: app });
+    Reflect.defineProperty(this.res, 'req', { value: req });
+    Reflect.defineProperty(this.res, 'config', { value: config });
   }
 
 }
