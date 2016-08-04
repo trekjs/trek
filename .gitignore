@@ -2,6 +2,7 @@ node_modules
 npm-debug.log
 coverage
 .nyc_output
+*-v8.log
 examples/*/log/*.log
 .env*
 !.env.example
