@@ -32,6 +32,8 @@ var _parseurl2 = _interopRequireDefault(_parseurl);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+const METHODS = ['GET', 'HEAD', 'PUT', 'DELETE', 'OPTIONS', 'TRACE'];
+
 class Request {
 
   constructor(req) {
@@ -58,9 +60,7 @@ class Request {
    */
 
   get accept() {
-    if (this._accept) return this._accept;
-    this._accept = (0, _accepts2.default)(this.req);
-    return this._accept;
+    return this._accept = this._accept || (0, _accepts2.default)(this.req);
   }
 
   /**
@@ -272,6 +272,17 @@ class Request {
   }
 
   /**
+   * Check if the request is idempotent.
+   *
+   * @return {Boolean}
+   * @api public
+   */
+
+  get idempotent() {
+    return !!~METHODS.indexOf(this.method);
+  }
+
+  /**
    * Parse Range header field, capping to the given `size`.
    *
    * Unspecified ranges such as "0-" require knowledge of your resource length. In
@@ -327,6 +338,30 @@ class Request {
     url.pathname = path;
     url.path = null;
     this.url = (0, _url.format)(url);
+  }
+
+  /**
+   * Get parsed query-string.
+   *
+   * @return {Object}
+   * @api public
+   */
+
+  get query() {
+    const str = this.querystring;
+    const c = this._querycache = this._querycache || {};
+    return c[str] || (c[str] = qs.parse(str));
+  }
+
+  /**
+   * Set query-string as an object.
+   *
+   * @param {Object} obj
+   * @api public
+   */
+
+  set query(obj) {
+    this.querystring = qs.stringify(obj);
   }
 
   /**

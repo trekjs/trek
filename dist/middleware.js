@@ -19,7 +19,7 @@ class Middleware extends Array {
     return {
       done: i === this.length,
       value: fn && fn(context, () => {
-        if (nextCalled) {
+        if (1 === nextCalled) {
           throw new Error('next() called multiple times');
         }
         nextCalled = 1;
