@@ -13,9 +13,9 @@ branches:
   only:
     - next
 script:
-  - "npm run build"
-  - "npm run bench"
-  - "npm test"
+  - npm run build
+  - npm run bench
+  - npm test
 after_script:
   - npm install codecov
   - ./node_modules/.bin/codecov
