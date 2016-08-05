@@ -78,9 +78,10 @@ class Response {
       if (Array.isArray(val)) val = val.map(String);else val = String(val);
       this.setHeader(field, val);
     } else {
-      Object.keys(field).forEach(key => {
+      /* eslint guard-for-in: 0 */
+      for (const key in field) {
         this.set(key, field[key]);
-      });
+      }
     }
   }
 

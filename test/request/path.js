@@ -1,5 +1,5 @@
 import test from 'ava'
-import parseurl from 'parseurl'
+import parse from 'parseurl'
 import context from '../helpers/context'
 
 test.beforeEach(t => {
@@ -32,6 +32,6 @@ test('ctx.path= should change .url but not .originalUrl', t => {
 test('ctx.path= should not affect parseurl', t => {
   const { req } = context({ url: '/login?foo=bar' })
   req.path = '/login'
-  const url = parseurl(req)
+  const url = parse(req)
   t.is(url.path, '/login?foo=bar')
 })

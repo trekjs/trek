@@ -197,12 +197,26 @@ class Request {
     // GET or HEAD for weak freshness validation only
     if ('GET' !== method && 'HEAD' !== method) return false;
 
+    console.log(method, s, this.header, this.res.header, (0, _fresh2.default)(this.header, this.res.header));
     // 2xx or 304 as per rfc2616 14.26
     if (s >= 200 && s < 300 || 304 === s) {
       return (0, _fresh2.default)(this.header, this.res.header);
     }
 
     return false;
+  }
+
+  /**
+  * Check if the request is stale, aka
+   * "Last-Modified" and / or the "ETag" for the
+   * resource has changed.
+   *
+   * @return {Boolean}
+   * @api public
+   */
+
+  get stale() {
+    return !this.fresh;
   }
 
   /**
@@ -254,6 +268,19 @@ class Request {
     if (!proxy) return 'http';
     const proto = this.get('X-Forwarded-Proto') || 'http';
     return proto.split(/\s*,\s*/)[0];
+  }
+
+  /**
+   * Short-hand for:
+   *
+   *    this.protocol == 'https'
+   *
+   * @return {Boolean}
+   * @api public
+   */
+
+  get secure() {
+    return 'https' === this.protocol;
   }
 
   /**
@@ -362,7 +389,7 @@ class Request {
    */
 
   get path() {
-    return (0, _parseurl2.default)(this).pathname;
+    return (0, _parseurl2.default)(this.req).pathname;
   }
 
   /**
@@ -373,7 +400,7 @@ class Request {
    */
 
   set path(path) {
-    const url = (0, _parseurl2.default)(this);
+    const url = (0, _parseurl2.default)(this.req);
     if (url.pathname === path) return;
 
     url.pathname = path;
@@ -404,6 +431,35 @@ class Request {
 
   set query(obj) {
     this.querystring = _querystring2.default.stringify(obj);
+  }
+
+  /**
+   * Get query string.
+   *
+   * @return {String}
+   * @api public
+   */
+
+  get querystring() {
+    if (!this.req) return '';
+    return (0, _parseurl2.default)(this.req).query || '';
+  }
+
+  /**
+   * Set querystring.
+   *
+   * @param {String} str
+   * @api public
+   */
+
+  set querystring(str) {
+    const url = (0, _parseurl2.default)(this.req);
+    if (url.search === `?${ str }`) return;
+
+    url.search = str;
+    url.path = null;
+
+    this.url = (0, _url.format)(url);
   }
 
   /**

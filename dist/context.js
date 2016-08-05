@@ -25,9 +25,9 @@ class Context {
     res = (0, _delegateProxy2.default)(new _response2.default(res), res);
 
     Reflect.defineProperty(this, 'app', { value: app });
-    Reflect.defineProperty(this, 'config', { value: config });
     Reflect.defineProperty(this, 'req', { value: req });
     Reflect.defineProperty(this, 'res', { value: res });
+    Reflect.defineProperty(this, 'config', { value: config });
 
     Reflect.defineProperty(this.req, 'app', { value: app });
     Reflect.defineProperty(this.req, 'res', { value: res });
