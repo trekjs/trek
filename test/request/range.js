@@ -3,7 +3,7 @@ import Request from '../../lib/request'
 
 function req (ret) {
   return {
-    get () { return ret },
+    get: () => ret,
     __proto__: Request.prototype
   }
 }
