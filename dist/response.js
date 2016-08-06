@@ -4,9 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _path = require('path');
+
 var _stream = require('stream');
 
 var _stream2 = _interopRequireDefault(_stream);
+
+var _contentDisposition = require('content-disposition');
+
+var _contentDisposition2 = _interopRequireDefault(_contentDisposition);
 
 var _vary = require('vary');
 
@@ -56,6 +62,18 @@ class Response {
 
   vary(field) {
     (0, _vary2.default)(this.res, field);
+  }
+
+  /**
+   * Set Content-Disposition header to "attachment" with optional `filename`.
+   *
+   * @param {String} filename
+   * @api public
+   */
+
+  attachment(filename) {
+    if (filename) this.type = (0, _path.extname)(filename);
+    this.set('Content-Disposition', (0, _contentDisposition2.default)(filename));
   }
 
   /**
@@ -143,7 +161,7 @@ class Response {
     // body: json
     if ('object' === typeof body) {
       this.setHeader('Content-Type', 'application/json');
-      this.end(JSON.stringify(body));
+      return this.end(JSON.stringify(body));
     }
 
     this.end(body);
