@@ -41,7 +41,7 @@
     "vary": "1.1.0"
   },
   "devDependencies": {
-    "ava": "0.15.2",
+    "ava": "0.16.0",
     "babel-cli": "6.11.4",
     "babel-plugin-transform-async-to-generator": "6.8.0",
     "babel-plugin-transform-es2015-modules-commonjs": "6.11.5",
