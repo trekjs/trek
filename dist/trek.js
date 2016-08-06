@@ -24,12 +24,15 @@ class Trek extends _http.Server {
 
   constructor() {
     super();
+    // just using raw req & raw res
+    this.raw = false;
     this.initConfig();
     this.middleware = new _middleware2.default();
   }
 
   initConfig() {
     this.config = new Map();
+    this.config.set('subdomain offset', 2);
     this.config.set('trust proxy', false);
   }
 
@@ -48,7 +51,7 @@ class Trek extends _http.Server {
           console.log(err);
         }
       });
-      this.middleware.compose(new _context2.default(this, this.config, req, res));
+      this.middleware.compose(this.raw ? { req, res } : new _context2.default(this, this.config, req, res));
     });
 
     try {

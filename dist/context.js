@@ -36,6 +36,9 @@ class Context {
     Reflect.defineProperty(this.res, 'app', { value: app });
     Reflect.defineProperty(this.res, 'req', { value: req });
     Reflect.defineProperty(this.res, 'config', { value: config });
+
+    // Cache ip
+    req.ip = req._ip;
   }
 
 }

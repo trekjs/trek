@@ -34,13 +34,11 @@ var _parseurl = require('parseurl');
 
 var _parseurl2 = _interopRequireDefault(_parseurl);
 
-var _proxyAddr = require('proxy-addr');
-
-var _proxyAddr2 = _interopRequireDefault(_proxyAddr);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const METHODS = ['GET', 'HEAD', 'PUT', 'DELETE', 'OPTIONS', 'TRACE']; /* eslint max-lines: ["error", 1000] */
+/* eslint max-lines: ["error", 1000] */
+const METHODS = ['GET', 'HEAD', 'PUT', 'DELETE', 'OPTIONS', 'TRACE'];
+
 class Request {
 
   constructor(req) {
@@ -197,7 +195,6 @@ class Request {
     // GET or HEAD for weak freshness validation only
     if ('GET' !== method && 'HEAD' !== method) return false;
 
-    console.log(method, s, this.header, this.res.header, (0, _fresh2.default)(this.header, this.res.header));
     // 2xx or 304 as per rfc2616 14.26
     if (s >= 200 && s < 300 || 304 === s) {
       return (0, _fresh2.default)(this.header, this.res.header);
@@ -207,7 +204,7 @@ class Request {
   }
 
   /**
-  * Check if the request is stale, aka
+   * Check if the request is stale, aka
    * "Last-Modified" and / or the "ETag" for the
    * resource has changed.
    *
@@ -251,6 +248,25 @@ class Request {
   }
 
   /**
+   * Return subdomains as an array.
+   *
+   * Subdomains are the dot-separated parts of the host before the main domain of
+   * the app. By default, the domain of the app is assumed to be the last two
+   * parts of the host. This can be changed by setting "subdomain offset".
+   *
+   * For example, if the domain is "tobi.ferrets.example.com":
+   * If "subdomain offset" is not set, req.subdomains is `["ferrets", "tobi"]`.
+   * If "subdomain offset" is 3, req.subdomains is `["tobi"]`.
+   *
+   * @return {Array}
+   * @public
+   */
+
+  get subdomains() {
+    return (this.host || '').split('.').reverse().slice(this.config.get('subdomain offset'));
+  }
+
+  /**
    * Return the protocol string "http" or "https"
    * when requested with TLS. When the proxy setting
    * is enabled the "X-Forwarded-Proto" header
@@ -273,7 +289,7 @@ class Request {
   /**
    * Short-hand for:
    *
-   *    this.protocol == 'https'
+   *    req.protocol == 'https'
    *
    * @return {Boolean}
    * @api public
@@ -325,29 +341,29 @@ class Request {
    * "trust proxy" is set.
    *
    * @return {String}
-   * @public
+   * @private
    */
 
-  get ip() {
-    if (!this.config.get('trust proxy')) return '';
-    return (0, _proxyAddr2.default)(this, this.config.get('trust proxy fn'));
+  get _ip() {
+    return this.ips[0] || this.socket.remoteAddress || '';
   }
 
   /**
-   * When "trust proxy" is set, trusted proxy addresses + client.
+   * When `app.proxy` is `true`, parse
+   * the "X-Forwarded-For" ip address list.
    *
    * For example if the value were "client, proxy1, proxy2"
    * you would receive the array `["client", "proxy1", "proxy2"]`
-   * where "proxy2" is the furthest down-stream and "proxy1" and
-   * "proxy2" were trusted.
+   * where "proxy2" is the furthest down-stream.
    *
    * @return {Array}
-   * @public
+   * @api public
    */
 
   get ips() {
-    if (!this.config.get('trust proxy')) return [];
-    return _proxyAddr2.default.all(this, this.config.get('trust proxy fn'));
+    const proxy = this.config.get('trust proxy');
+    const val = this.get('X-Forwarded-For');
+    return proxy && val ? val.split(/\s*,\s*/) : [];
   }
 
   /**
