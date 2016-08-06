@@ -543,9 +543,9 @@ class Request {
    */
 
   is(types) {
-    if (!types) return (0, _typeIs2.default)(this);
+    if (!types) return (0, _typeIs2.default)(this.req);
     if (!Array.isArray(types)) types = [...arguments];
-    return (0, _typeIs2.default)(this, types);
+    return (0, _typeIs2.default)(this.req, types);
   }
 
   /**
