@@ -55,7 +55,27 @@ class Response {
   }
 
   vary(field) {
-    (0, _vary2.default)(this, field);
+    (0, _vary2.default)(this.res, field);
+  }
+
+  /**
+   * Return response header.
+   *
+   * Examples:
+   *
+   *     res.get('Content-Type')
+   *     // => "text/plain"
+   *
+   *     res.get('content-type')
+   *     // => "text/plain"
+   *
+   * @param {String} field
+   * @return {String}
+   * @api public
+   */
+
+  get(field) {
+    return this.header[field.toLowerCase()] || '';
   }
 
   /**
@@ -64,9 +84,9 @@ class Response {
    *
    * Examples:
    *
-   *    res.set('Foo', ['bar', 'baz']);
-   *    res.set('Accept', 'application/json');
-   *    res.set({ Accept: 'text/plain', 'X-API-Key': 'tobi' });
+   *    res.set('Foo', ['bar', 'baz'])
+   *    res.set('Accept', 'application/json')
+   *    res.set({ Accept: 'text/plain', 'X-API-Key': 'tobi' })
    *
    * @param {String|Object|Array} field
    * @param {String} val
@@ -85,6 +105,30 @@ class Response {
     }
   }
 
+  /**
+   * Append additional header `field` with value `val`.
+   *
+   * Examples:
+   *
+   *    res.append('Link', ['<http://localhost/>', '<http://localhost:3000/>'])
+   *    res.append('Set-Cookie', 'foo=bar; Path=/; HttpOnly')
+   *    res.append('Warning', '199 Miscellaneous warning')
+   *
+   * @param {String} field
+   * @param {String|Array} val
+   * @api public
+   */
+
+  append(field, val) {
+    const prev = this.get(field);
+
+    if (prev) {
+      val = Array.isArray(prev) ? prev.concat(val) : [prev].concat(val);
+    }
+
+    return this.set(field, val);
+  }
+
   send(code, body = null) {
     this.statusCode = code;
 
@@ -94,7 +138,7 @@ class Response {
     // responses
     if (Buffer.isBuffer(body)) return this.end(body);
     if ('string' === typeof body) return this.end(body);
-    if (body instanceof _stream2.default) return body.pipe(this);
+    if (body instanceof _stream2.default) return body.pipe(this.res);
 
     // body: json
     if ('object' === typeof body) {
