@@ -15,32 +15,30 @@ test('res.status= when a status code and valid should not throw', () => {
   })
 })
 
+test('res.status= when a status string should throw', () => {
+  assert.throws(() => {
+    response().status = 'forbidden'
+  }, 'code must be a number')
+})
+
 test('res.status= when a status code and invalid should throw', t => {
   t.throws(() => {
     response().status = 999
   }, 'invalid status code: 999')
 })
 
-test('res.status= when a status code and custom status', () => {
-  test.before(() => {
-    statuses['700'] = 'custom status'
-  })
-
-  test('res.status= when a status code and custom status should set the status', t => {
-    const res = response()
-    res.status = 700
-    t.is(res.status, 700)
-  })
-
-  test('res.status= when a status code and custom status should not throw', t => {
-    t.notThrows(() => {
-      response().status = 700
-    })
-  })
+test.before(() => {
+  statuses['700'] = 'custom status'
 })
 
-test('res.status= when a status string should throw', () => {
-  assert.throws(() => {
-    response().status = 'forbidden'
-  }, 'code must be a number')
+test('res.status= when a status code and custom status should set the status', t => {
+  const res = response()
+  res.status = 700
+  t.is(res.status, 700)
+})
+
+test('res.status= when a status code and custom status should not throw', t => {
+  t.notThrows(() => {
+    response().status = 700
+  })
 })
