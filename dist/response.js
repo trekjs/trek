@@ -4,11 +4,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _path = require('path');
+var _assert = require('assert');
+
+var _assert2 = _interopRequireDefault(_assert);
 
 var _stream = require('stream');
 
 var _stream2 = _interopRequireDefault(_stream);
+
+var _path = require('path');
+
+var _http = require('http');
 
 var _contentDisposition = require('content-disposition');
 
@@ -88,8 +94,10 @@ class Response {
    */
 
   set status(code) {
+    (0, _assert2.default)('number' === typeof code, 'status code must be a number');
+    (0, _assert2.default)(_http.STATUS_CODES[code], `invalid status code: ${ code }`);
+    (0, _assert2.default)(!this.headersSent, 'headers have already been sent');
     this.statusCode = code;
-    return this;
   }
 
   /**
