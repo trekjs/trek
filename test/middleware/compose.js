@@ -13,7 +13,10 @@ test('middleware compose should return result and not throws', async t => {
 
 test('middleware compose should return result and throws', async t => {
   const middleware = t.context
-  t.throws(middleware.compose({}, () => {
-    throw new Error('throw an error')
-  }), 'throw an error')
+  middleware.push((ctx, next) => {
+    ctx.a = 1
+    next()
+    next()
+  })
+  t.throws(middleware.compose({}), 'next() called multiple times')
 })
