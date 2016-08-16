@@ -12,6 +12,7 @@ before_script:
 branches:
   only:
     - next
+    - no-proxy
 script:
   - npm run build
   - npm run bench
