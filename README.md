@@ -8,7 +8,7 @@
 
 <p>
   <a href="https://travis-ci.org/trekjs/trek"><img src="https://img.shields.io/travis/trekjs/trek.svg" alt="Build status"></a>
-  <a href="https://codecov.io/gh/trekjs/trek"><img src="https://codecov.io/gh/trekjs/trek/branch/next/graph/badge.svg" alt="Codecov" /></a>
+  <a href="https://codecov.io/gh/trekjs/trek"><img src="https://codecov.io/gh/trekjs/trek/branch/master/graph/badge.svg" alt="Codecov" /></a>
   <a href="https://npmjs.org/package/trek"><img src="https://img.shields.io/npm/v/trek.svg" alt="NPM version"></a>
   <a href="https://www.npmjs.com/package/trek"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License"></a>
 </p>
