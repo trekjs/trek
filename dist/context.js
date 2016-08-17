@@ -14,12 +14,9 @@ var _response2 = _interopRequireDefault(_response);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import delegateProxy from 'delegate-proxy'
 class Context {
 
   constructor(app, config, req, res) {
-    // req = delegateProxy(new Request(req), req)
-    // res = delegateProxy(new Response(res), res)
     req = new _request2.default(req);
     res = new _response2.default(res);
 
