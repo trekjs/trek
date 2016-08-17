@@ -11,7 +11,8 @@ before_script:
   - export PATH=$PATH:$PWD/wrk/bin/
 branches:
   only:
-    - next
+    - master
+    - proxy-request-and-response
 script:
   - npm run build
   - npm run bench
