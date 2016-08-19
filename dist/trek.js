@@ -10,13 +10,13 @@ var _onFinished = require('on-finished');
 
 var _onFinished2 = _interopRequireDefault(_onFinished);
 
+var _trekMiddleware = require('trek-middleware');
+
+var _trekMiddleware2 = _interopRequireDefault(_trekMiddleware);
+
 var _context = require('./context');
 
 var _context2 = _interopRequireDefault(_context);
-
-var _middleware = require('./middleware');
-
-var _middleware2 = _interopRequireDefault(_middleware);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27,7 +27,7 @@ class Trek extends _http.Server {
     // just using raw req & raw res
     this.raw = false;
     this.initConfig();
-    this.middleware = new _middleware2.default();
+    this.middleware = new _trekMiddleware2.default();
   }
 
   initConfig() {
