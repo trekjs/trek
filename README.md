@@ -18,13 +18,13 @@
 
 ## Features
 
-* **Easy**. Designed for usage with `async` and `await`
+* **Elegant**. Use `async` and `await` for asynchronous programs
 
 * **Fast**. High performance middleware and router
 
 * **Modern**. ES6+, only for Node.js v6
 
-* **Amiable**. Similar to Express.js and Koa.js
+* **Amiable**. Similar to [Express.js][] and [Koa.js][]
 
 
 ## Installation
@@ -58,3 +58,5 @@ app.run(3000)
 
 
 [trek]: https://trekjs.com/
+[express.js]: http://expressjs.com
+[koa.js]:  http://koajs.com
