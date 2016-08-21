@@ -20,10 +20,11 @@ var _context2 = _interopRequireDefault(_context);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-class Trek extends _http.Server {
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+
+class Trek {
 
   constructor() {
-    super();
     // just using raw req & raw res
     this.raw = false;
     this.initConfig();
@@ -43,22 +44,22 @@ class Trek extends _http.Server {
   }
 
   run() {
-    // Lazy on request
-    this.on('request', (req, res) => {
-      (0, _onFinished2.default)(res, err => {
-        // handle err
-        if (err) {
-          console.log(err);
-        }
-      });
-      this.middleware.compose(this.raw ? { req, res } : new _context2.default(this, this.config, req, res));
-    });
+    var _this = this,
+        _arguments = arguments;
 
-    try {
-      return Promise.resolve(this.listen(...arguments));
-    } catch (err) {
-      return Promise.reject(err);
-    }
+    return _asyncToGenerator(function* () {
+      const server = new _http.Server(function (req, res) {
+        (0, _onFinished2.default)(res, function (err) {
+          // handle err
+          if (err) {
+            console.log(err);
+          }
+        });
+        _this.middleware.compose(_this.raw ? { req, res } : new _context2.default(_this, _this.config, req, res));
+      });
+
+      return yield server.listen(..._arguments);
+    })();
   }
 
 }

@@ -23,7 +23,7 @@ test('res.attachment([filename]) when given a no-ascii filename should set the e
   t.is(res.header['content-disposition'], str)
 })
 
-test.cb('res.attachment([filename]) when given a no-ascii filename should work with http client', t => {
+test('res.attachment([filename]) when given a no-ascii filename should work with http client', t => {
   const app = new Trek()
 
   app.use(({ res }) => {
@@ -48,7 +48,6 @@ test.cb('res.attachment([filename]) when given a no-ascii filename should work w
       res.on('end', () => {
         t.is(res.headers['content-disposition'], 'attachment; filename="include-no-ascii-char-???-ok.json"; filename*=UTF-8\'\'include-no-ascii-char-%E4%B8%AD%E6%96%87%E5%90%8D-ok.json')
         t.deepEqual(JSON.parse(buf), { foo: 'bar' })
-        t.end()
       })
     })
   })

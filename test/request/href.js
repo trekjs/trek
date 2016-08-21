@@ -26,7 +26,7 @@ test('should work with `GET http://example.com/foo`', t => {
   app.use(({ req, res }) => {
     res.end(req.href)
   })
-  app.listen(function () {
+  app.run(function () {
     const address = this.address()
     http.get({
       host: 'localhost',
@@ -42,7 +42,6 @@ test('should work with `GET http://example.com/foo`', t => {
       })
       res.on('end', () => {
         t.is(buf, 'http://example.com/foo')
-        test.cb()
       })
     })
   })
