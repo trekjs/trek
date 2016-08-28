@@ -2,7 +2,7 @@ import Stream from 'stream'
 import Trek from '../../lib/trek'
 import Context from '../../lib/context'
 
-const createContext = (req, res, app = new Trek()) => {
+const createContext = async (req, res, app = new Trek()) => {
   const socket = new Stream.Duplex()
   req = Object.assign({ headers: {}, socket }, Stream.Readable.prototype, req)
   res = Object.assign({ _headers: {}, socket }, Stream.Writable.prototype, res)
@@ -12,11 +12,14 @@ const createContext = (req, res, app = new Trek()) => {
     res._headers[k.toLowerCase()] = v
   }
   res.removeHeader = k => delete res._headers[k.toLowerCase()]
+
+  await app.initialize(false)
+
   return new Context(app, app.config, req, res)
 }
 
 export default createContext
 
-export const request = (req, res, app) => createContext(req, res, app).req
+export const request = async (req, res, app) => (await createContext(req, res, app)).req
 
-export const response = (req, res, app) => createContext(req, res, app).res
+export const response = async (req, res, app) => (await createContext(req, res, app)).res

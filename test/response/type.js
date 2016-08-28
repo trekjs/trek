@@ -1,8 +1,8 @@
 import test from 'ava'
 import { response } from '../helpers/context'
 
-test.beforeEach(t => {
-  t.context = response()
+test.beforeEach(async t => {
+  t.context = await response()
 })
 
 test('res.type= with a mime should set the Content-Type', t => {

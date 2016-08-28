@@ -1,8 +1,8 @@
 import test from 'ava'
 import { response } from '../helpers/context'
 
-test.beforeEach(t => {
-  t.context = response()
+test.beforeEach(async t => {
+  t.context = await response()
 })
 
 test('res.append(name, val) should append multiple headers', t => {
