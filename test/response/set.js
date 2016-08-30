@@ -1,8 +1,8 @@
 import test from 'ava'
-import context from '../helpers/context'
+import { response } from '../helpers/context'
 
-test.beforeEach(t => {
-  t.context = context().res
+test.beforeEach(async t => {
+  t.context = await response()
 })
 
 test('res.set(name, val) should set a field value', t => {

@@ -1,8 +1,8 @@
 import test from 'ava'
 import { request } from '../helpers/context'
 
-test.beforeEach(t => {
-  t.context = request()
+test.beforeEach(async t => {
+  t.context = await request()
 })
 
 test('with no content-type present', t => {
