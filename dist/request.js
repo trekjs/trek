@@ -202,7 +202,7 @@ class Request {
    */
 
   get charset() {
-    const type = this.get('Content-Type');
+    const type = this.get('content-type');
     if (!type) return '';
     return _contentType2.default.parse(type).parameters.charset || '';
   }
@@ -254,7 +254,7 @@ class Request {
    */
 
   get host() {
-    let host = this.config.get('trust proxy') && this.get('X-Forwarded-Host');
+    let host = this.config.get('trust proxy') && this.get('x-forwarded-host');
     host = host || this.get('Host');
     if (!host) return '';
     return host.split(/\s*,\s*/)[0];
@@ -310,7 +310,7 @@ class Request {
     const proxy = this.config.get('trust proxy');
     if (this.socket.encrypted) return 'https';
     if (!proxy) return 'http';
-    const proto = this.get('X-Forwarded-Proto') || 'http';
+    const proto = this.get('x-forwarded-proto') || 'http';
     return proto.split(/\s*,\s*/)[0];
   }
 
@@ -390,7 +390,7 @@ class Request {
 
   get ips() {
     const proxy = this.config.get('trust proxy');
-    const val = this.get('X-Forwarded-For');
+    const val = this.get('x-forwarded-for');
     return proxy && val ? val.split(/\s*,\s*/) : [];
   }
 
@@ -420,7 +420,7 @@ class Request {
    */
 
   range(size, options) {
-    const range = this.get('Range');
+    const range = this.get('range');
     if (!range) return;
     return (0, _rangeParser2.default)(size, range, options);
   }
@@ -539,7 +539,7 @@ class Request {
    */
 
   get length() {
-    const len = this.get('Content-Length');
+    const len = this.get('content-length');
     if (len === '') return;
     return ~~len;
   }
@@ -585,7 +585,7 @@ class Request {
    */
 
   get type() {
-    const type = this.get('Content-Type');
+    const type = this.get('content-type');
     if (!type) return '';
     return type.split(';')[0];
   }

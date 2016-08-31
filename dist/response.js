@@ -58,7 +58,7 @@ class Response {
 
   set etag(val) {
     if (!/^(W\/)?"/.test(val)) val = `"${ val }"`;
-    this.set('ETag', val);
+    this.set('etag', val);
   }
 
   /**
@@ -69,7 +69,7 @@ class Response {
    */
 
   get etag() {
-    return this.get('ETag');
+    return this.get('etag');
   }
 
   /**
@@ -128,7 +128,7 @@ class Response {
 
   attachment(filename) {
     if (filename) this.type = (0, _path.extname)(filename);
-    this.set('Content-Disposition', (0, _contentDisposition2.default)(filename));
+    this.set('content-disposition', (0, _contentDisposition2.default)(filename));
   }
 
   /**
@@ -143,7 +143,7 @@ class Response {
 
   set lastModified(val) {
     if ('string' === typeof val) val = new Date(val);
-    this.set('Last-Modified', val.toUTCString());
+    this.set('last-modified', val.toUTCString());
   }
 
   /**
@@ -177,9 +177,9 @@ class Response {
   set type(type) {
     type = (0, _mimeTypes.contentType)(type) || false;
     if (type) {
-      this.set('Content-Type', type);
+      this.set('content-type', type);
     } else {
-      this.remove('Content-Type');
+      this.remove('content-type');
     }
   }
 
@@ -192,7 +192,7 @@ class Response {
    */
 
   get type() {
-    const type = this.get('Content-Type');
+    const type = this.get('content-type');
     if (!type) return '';
     return type.split(';')[0];
   }
@@ -316,7 +316,7 @@ class Response {
 
     // body: json
     if ('object' === typeof body) {
-      this.res.setHeader('Content-Type', 'application/json');
+      this.res.setHeader('content-type', 'application/json');
       return this.end(JSON.stringify(body));
     }
 
