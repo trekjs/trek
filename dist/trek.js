@@ -63,8 +63,22 @@ class Trek extends _engine2.default {
       _this.usePlugin(..._plugins2.default);
 
       if (all) {
-        const plugins = yield _this.paths.get('app/plugins');
-        _this.usePlugin(...plugins);
+        let plugins = yield _this.paths.get('app/plugins');
+        if (plugins) {
+          if (Array.isArray(plugins)) {
+            // app/plugins/*.js
+            plugins = plugins.map(function (p) {
+              return _this.loader.require(p);
+            });
+          } else {
+            // app/plugins/index.js
+            plugins = _this.loader.require(plugins);
+          }
+          if (!Array.isArray(plugins)) {
+            plugins = [plugins];
+          }
+          _this.usePlugin(...plugins);
+        }
       }
 
       yield _this.callHook('created');

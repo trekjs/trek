@@ -4,7 +4,7 @@ import Trek from '../../lib/trek'
   const app = new Trek()
 
   app.paths.set('app', { single: true })
-  app.paths.set('app/plugins', { glob: 'app/plugins/*.js' })
+  app.paths.set('app/plugins', { glob: 'app/plugins/index.js', single: true })
   app.paths.set('app/controllers', { glob: 'app/controllers/*.js' })
 
   await app.initialize()
