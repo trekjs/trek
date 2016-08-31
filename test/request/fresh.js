@@ -1,8 +1,8 @@
 import test from 'ava'
-import context from '../helpers/context'
+import { request } from '../helpers/context'
 
-test.beforeEach(t => {
-  t.context = context().req
+test.beforeEach(async t => {
+  t.context = await request()
 })
 
 test('the request method is not GET and HEAD', t => {

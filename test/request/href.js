@@ -4,7 +4,7 @@ import test from 'ava'
 import Trek from '../../lib/trek'
 import context from '../helpers/context'
 
-test('should return the full request url', t => {
+test('should return the full request url', async t => {
   const socket = new Stream.Duplex()
   const rawReq = {
     url: '/users/1?next=/dashboard',
@@ -14,19 +14,22 @@ test('should return the full request url', t => {
     socket
   }
   Reflect.setPrototypeOf(rawReq, Stream.Readable.prototype)
-  const req = context(rawReq).req
+  const req = (await context(rawReq)).req
   t.is(req.href, 'http://localhost/users/1?next=/dashboard')
   // change it also work
   req.url = '/foo/users/1?next=/dashboard'
   t.is(req.href, 'http://localhost/users/1?next=/dashboard')
 })
 
-test('should work with `GET http://example.com/foo`', t => {
+test('should work with `GET http://example.com/foo`', async t => {
   const app = new Trek()
-  app.use(({ req, res }) => {
+
+  await app.initialize(false)
+
+  app.middleware.use(({ req, res }) => {
     res.end(req.href)
   })
-  app.listen(function () {
+  app.run(function () {
     const address = this.address()
     http.get({
       host: 'localhost',
@@ -42,7 +45,6 @@ test('should work with `GET http://example.com/foo`', t => {
       })
       res.on('end', () => {
         t.is(buf, 'http://example.com/foo')
-        test.cb()
       })
     })
   })

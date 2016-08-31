@@ -36,6 +36,14 @@ class Response {
     this.res = res;
   }
 
+  get socket() {
+    return this.res.socket;
+  }
+
+  set socket(socket) {
+    this.res.socket = socket;
+  }
+
   /**
    * Set the ETag of a response.
    * This will normalize the quotes if necessary.
@@ -72,7 +80,7 @@ class Response {
    */
 
   get header() {
-    return this._headers || {};
+    return this.res._headers || {};
   }
 
   /**
@@ -83,7 +91,7 @@ class Response {
    */
 
   get status() {
-    return this.statusCode;
+    return this.res.statusCode;
   }
 
   /**
@@ -96,8 +104,8 @@ class Response {
   set status(code) {
     (0, _assert2.default)('number' === typeof code, 'status code must be a number');
     (0, _assert2.default)(_http.STATUS_CODES[code], `invalid status code: ${ code }`);
-    (0, _assert2.default)(!this.headersSent, 'headers have already been sent');
-    this.statusCode = code;
+    (0, _assert2.default)(!this.res.headersSent, 'headers have already been sent');
+    this.res.statusCode = code;
   }
 
   /**
@@ -243,7 +251,7 @@ class Response {
   set(field, val) {
     if (2 === arguments.length) {
       if (Array.isArray(val)) val = val.map(String);else val = String(val);
-      this.setHeader(field, val);
+      this.res.setHeader(field, val);
     } else {
       /* eslint guard-for-in: 0 */
       for (const key in field) {
@@ -284,7 +292,15 @@ class Response {
    */
 
   remove(field) {
-    this.removeHeader(field);
+    this.res.removeHeader(field);
+  }
+
+  end(...args) {
+    return this.res.end.apply(this.res, args);
+  }
+
+  set statusCode(code) {
+    this.res.statusCode = code;
   }
 
   send(code, body = null) {
@@ -300,7 +316,7 @@ class Response {
 
     // body: json
     if ('object' === typeof body) {
-      this.setHeader('Content-Type', 'application/json');
+      this.res.setHeader('Content-Type', 'application/json');
       return this.end(JSON.stringify(body));
     }
 

@@ -1,5 +1,5 @@
 import test from 'ava'
-import Middleware from '../../lib/middleware'
+import Middleware from 'trek-middleware'
 
 test.beforeEach(t => {
   t.context = new Middleware()

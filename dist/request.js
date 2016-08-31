@@ -46,6 +46,30 @@ class Request {
     this.originalUrl = req.originalUrl = req.url;
   }
 
+  get socket() {
+    return this.req.socket;
+  }
+
+  set socket(socket) {
+    this.req.socket = socket;
+  }
+
+  get method() {
+    return this.req.method;
+  }
+
+  set method(method) {
+    this.req.method = method;
+  }
+
+  get url() {
+    return this.req.url;
+  }
+
+  set url(url) {
+    this.req.url = url;
+  }
+
   /**
    * Return request header.
    *
@@ -55,6 +79,10 @@ class Request {
 
   get header() {
     return this.headers;
+  }
+
+  get headers() {
+    return this.req.headers;
   }
 
   /**
