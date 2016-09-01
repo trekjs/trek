@@ -51,12 +51,9 @@ class Config {
         return app.paths.get(path);
       }))).filter(function (path) {
         return path !== undefined;
+      }).forEach(function (config) {
+        return Object.assign(_this.store, app.loader.require(config));
       });
-
-      let config;
-      for (config of configs) {
-        Object.assign(_this.store, app.loader.require(config));
-      }
     })();
   }
 
