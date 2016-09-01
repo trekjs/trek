@@ -47,9 +47,11 @@ class Config {
     return _asyncToGenerator(function* () {
       app.paths.set('config/env.js', { single: true, glob: `config/${ app.env.current }.js` });
 
-      const configs = (yield Promise.all(['config/defaults.js', 'config/env.js', 'config/local.js'].map(function (path) {
+      const configs = yield Promise.all(['config/defaults.js', 'config/env.js', 'config/local.js'].map(function (path) {
         return app.paths.get(path);
-      }))).filter(function (path) {
+      }));
+
+      configs.filter(function (path) {
         return path !== undefined;
       }).forEach(function (config) {
         return Object.assign(_this.store, app.loader.require(config));
