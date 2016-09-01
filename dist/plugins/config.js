@@ -24,7 +24,7 @@ class Config {
 
   static install(app) {
     app.paths.set('config', { single: true });
-    app.paths.set('config/default.js', { single: true });
+    app.paths.set('config/defaults.js', { single: true });
     app.paths.set('config/local.js', { single: true });
 
     const config = new Config(app);
@@ -47,7 +47,7 @@ class Config {
     return _asyncToGenerator(function* () {
       app.paths.set('config/env.js', { single: true, glob: `config/${ app.env.current }.js` });
 
-      const configs = (yield Promise.all(['config/default.js', 'config/env.js', 'config/local.js'].map(function (path) {
+      const configs = (yield Promise.all(['config/defaults.js', 'config/env.js', 'config/local.js'].map(function (path) {
         return app.paths.get(path);
       }))).filter(function (path) {
         return path !== undefined;
