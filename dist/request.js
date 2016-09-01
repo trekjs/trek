@@ -36,7 +36,6 @@ var _parseurl2 = _interopRequireDefault(_parseurl);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* eslint max-lines: ["error", 1000] */
 const METHODS = ['GET', 'HEAD', 'PUT', 'DELETE', 'OPTIONS', 'TRACE'];
 
 class Request {

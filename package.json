@@ -94,10 +94,7 @@
       "babel/object-curly-spacing": 0,
       "curly": 0,
       "import/no-named-as-default": 0,
-      "max-lines": [
-        "error",
-        500
-      ],
+      "max-lines": 0,
       "no-warning-comments": [
         "error",
         {
