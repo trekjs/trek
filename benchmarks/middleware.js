@@ -1,6 +1,6 @@
 'use strict'
 
-const Trek = require('../dist/trek').default
+const Trek = require('..').Engine
 
 const app = new Trek()
 
