@@ -8,9 +8,7 @@ var _trekMiddleware = require('trek-middleware');
 
 var _trekMiddleware2 = _interopRequireDefault(_trekMiddleware);
 
-var _context = require('../context');
-
-var _context2 = _interopRequireDefault(_context);
+var _trekEngine = require('trek-engine');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34,7 +32,7 @@ Object.assign(_trekMiddleware2.default.prototype, {
     var _this = this;
 
     return _asyncToGenerator(function* () {
-      yield _this.compose(app.raw ? { req, res } : new _context2.default(app, app.config, req, res));
+      yield _this.compose(app.raw ? { req, res } : new _trekEngine.Context(app, app.config, req, res));
     })();
   },
 

@@ -12,9 +12,9 @@ var _onFinished = require('on-finished');
 
 var _onFinished2 = _interopRequireDefault(_onFinished);
 
-var _engine = require('./engine');
+var _trekEngine = require('trek-engine');
 
-var _engine2 = _interopRequireDefault(_engine);
+var _trekEngine2 = _interopRequireDefault(_trekEngine);
 
 var _loader = require('./loader');
 
@@ -38,7 +38,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //    running
 //    ran
 
-class Trek extends _engine2.default {
+class Trek extends _trekEngine2.default {
 
   constructor(root = (0, _path.dirname)(require.main.filename)) {
     super();
@@ -46,7 +46,7 @@ class Trek extends _engine2.default {
     this.root = root;
     this.paths = new _paths2.default(root);
     this.loader = new _loader2.default(this);
-    this.hooks = Object.create(null);
+    this.hooks = {};
     this.plugins = new Map();
   }
 

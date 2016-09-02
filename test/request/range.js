@@ -1,5 +1,5 @@
 import test from 'ava'
-import Request from '../../lib/request'
+import { Request } from 'trek-engine'
 
 function req (ret) {
   return {

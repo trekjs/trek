@@ -1,6 +1,6 @@
 import Stream from 'stream'
+import { Context } from 'trek-engine'
 import Trek from '../../lib/trek'
-import Context from '../../lib/context'
 
 const createContext = async (req, res, app = new Trek()) => {
   const socket = new Stream.Duplex()
