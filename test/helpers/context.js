@@ -15,7 +15,7 @@ const createContext = async (req, res, app = new Trek()) => {
 
   await app.initialize(false)
 
-  return new Context(app, app.config, req, res)
+  return new Context(app, req, res)
 }
 
 export default createContext
