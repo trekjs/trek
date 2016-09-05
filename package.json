@@ -24,7 +24,7 @@
     "clean": "rm -rf coverage .nyc_output",
     "lint": "xo",
     "prepublish": "npm run build",
-    "test": "xo && nyc --reporter=lcov ava -r babel-register",
+    "test": "xo && nyc --reporter=lcov ava -r babel-register -c 5",
     "test:watch": "xo && nyc --reporter=lcov ava -r babel-register --watch"
   },
   "dependencies": {
@@ -35,7 +35,7 @@
     "lodash.has": "4.5.2",
     "lodash.set": "4.3.2",
     "on-finished": "2.3.0",
-    "trek-engine": "0.2.2",
+    "trek-engine": "0.2.3",
     "trek-middleware": "1.0.1",
     "trek-router": "1.1.0"
   },
