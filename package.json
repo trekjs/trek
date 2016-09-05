@@ -80,6 +80,9 @@
     ],
     "semicolon": false,
     "space": true,
+    "ignores": [
+      "benchmarks/*.js"
+    ],
     "rules": {
       "babel/arrow-parens": [
         2,
