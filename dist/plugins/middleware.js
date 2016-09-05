@@ -32,13 +32,13 @@ Object.assign(_trekMiddleware2.default.prototype, {
     var _this = this;
 
     return _asyncToGenerator(function* () {
-      yield _this.compose(app.raw ? { req, res } : new _trekEngine.Context(app, app.config, req, res));
+      yield _this.compose(new _trekEngine.Context(app, req, res));
     })();
   },
 
-  use(fn) {
+  push(fn) {
     if (typeof fn !== 'function') throw new TypeError('middleware must be a function!');
-    this.push(fn);
+    super.push(fn);
     return this;
   }
 
