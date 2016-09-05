@@ -41,6 +41,7 @@ class Config {
     this.set('trust proxy', false);
   }
 
+  // hook: created
   created(app) {
     var _this = this;
 

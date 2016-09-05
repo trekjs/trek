@@ -24,6 +24,7 @@ class Env {
     return env;
   }
 
+  // hook: created
   created(app) {
     var _this = this;
 
