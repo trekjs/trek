@@ -1,20 +1,26 @@
 'use strict'
 
-const Trek = require('..').Engine
+const Trek = require('..').default
 
-const app = new Trek()
+;(async () => {
 
-// number of middleware
+  const app = new Trek()
 
-let n = parseInt(process.env.MW || '1', 10)
-console.log(`  ${n} middleware`)
+  await app.initialize(false)
 
-while (n--) {
-  app.use((ctx, next) => next())
-}
+  // number of middleware
 
-const body = new Buffer('Hello World')
+  let n = parseInt(process.env.MW || '1', 10)
+  console.log(`  ${n} middleware`)
 
-app.use(({ res }, next) => next().then(() => res.end(body)))
+  while (n--) {
+    app.use((ctx, next) => next())
+  }
 
-app.run(3333)
+  const body = new Buffer('Hello World')
+
+  app.use(({ res }, next) => next().then(() => res.end(body)))
+
+  await app.run(3333)
+})()
+  .catch(err => console.log(err))

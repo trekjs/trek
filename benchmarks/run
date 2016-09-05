@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+node="../node_modules/.bin/async-node"
 echo
-MW=$1 node --harmony $2 &
+MW=$1 $node $2 &
 pid=$!
 
 sleep 2
