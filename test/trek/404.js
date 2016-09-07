@@ -1,6 +1,6 @@
 import test from 'ava'
 import request from 'request-promise'
-import Trek from '../../'
+import Trek from '../../lib/trek'
 import { listen } from '../helpers/context'
 
 test('if response not finished should return 404', async t => {

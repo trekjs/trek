@@ -1,6 +1,6 @@
 import test from 'ava'
 import Engine from 'trek-engine'
-import Trek from '../../'
+import Trek from '../../lib/trek'
 
 test('should instanceof Engine', t => {
   const app = new Trek()
