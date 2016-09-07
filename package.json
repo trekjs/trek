@@ -36,7 +36,7 @@
     "lodash.set": "4.3.2",
     "on-finished": "2.3.0",
     "pino": "2.9.0",
-    "trek-engine": "0.3.2",
+    "trek-engine": "0.3.3",
     "trek-middleware": "1.0.1",
     "trek-router": "1.1.0"
   },
