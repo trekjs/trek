@@ -9,14 +9,18 @@ import Trek from '../../lib/trek'
 
   await app.initialize()
 
-  app.use(async ({ logger, rawReq }, next) => {
+  app.use(async ({ logger, rawReq, rawRes }, next) => {
     logger.info(rawReq)
     await next()
+    logger.info(rawRes)
   })
 
   app.use(ctx => {
-    ctx.res.send(200, 'Star Trek!')
-    ctx.logger.info(ctx.rawRes)
+    if (ctx.req.path === '/') {
+      return ctx.res.send(200, 'Star Trek!')
+    }
+    // something else return 404
+    ctx.res.send(404)
   })
 
   await app.run(3000)
