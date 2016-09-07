@@ -112,7 +112,10 @@ class Trek extends _trekEngine2.default {
         _this2.callHook('running', req, res)
         // If not finished, return 404
         .then(function () {
-          return !res.finished && (res.statusCode = 404) && res.end();
+          if (!res.finished) {
+            res.statusCode = 404;
+            res.end();
+          }
         }).catch(onerror);
       });
 
