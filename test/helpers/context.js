@@ -23,3 +23,16 @@ export default createContext
 export const request = async (req, res, app) => (await createContext(req, res, app)).req
 
 export const response = async (req, res, app) => (await createContext(req, res, app)).res
+
+export const listen = app => {
+  return new Promise((resolve, reject) => {
+    app.run(function (err) {
+      if (err) {
+        return reject(err)
+      }
+
+      const { port } = this.address()
+      resolve(`http://localhost:${port}`)
+    })
+  })
+}
