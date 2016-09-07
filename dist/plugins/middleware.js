@@ -29,7 +29,9 @@ class Middleware extends _trekMiddleware2.default {
     var _this = this;
 
     return _asyncToGenerator(function* () {
-      yield _this.compose(new _trekEngine.Context(app, req, res));
+      const context = new _trekEngine.Context(app, req, res);
+      yield app.callHook('context:created', context);
+      yield _this.compose(context);
     })();
   }
 

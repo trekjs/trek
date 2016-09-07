@@ -9,6 +9,16 @@ import Trek from '../../lib/trek'
 
   await app.initialize()
 
+  app.use(async ({ logger, rawReq }, next) => {
+    logger.info(rawReq)
+    await next()
+  })
+
+  app.use(ctx => {
+    ctx.res.send(200, 'Star Trek!')
+    ctx.logger.info(ctx.rawRes)
+  })
+
   await app.run(3000)
 })()
   .catch(err => console.error(err))
