@@ -16,6 +16,8 @@ var _trekEngine = require('trek-engine');
 
 var _trekEngine2 = _interopRequireDefault(_trekEngine);
 
+var _util = require('trek-engine/lib/util');
+
 var _loader = require('./loader');
 
 var _loader2 = _interopRequireDefault(_loader);
@@ -95,17 +97,23 @@ class Trek extends _trekEngine2.default {
         _arguments = arguments;
 
     return _asyncToGenerator(function* () {
+      const DEV = _this2.env.dev;
+      const logger = _this2.logger;
       yield _this2.callHook('beforeRun');
 
       const server = new _http.Server(function (req, res) {
-        (0, _onFinished2.default)(res, function (err) {
-          // handle err
+        const onerror = function (err) {
           if (err) {
-            console.log(err);
+            (0, _util.sendError)(res, err, DEV);
+            logger.error(err);
           }
-        });
-
-        _this2.callHook('running', req, res);
+        };
+        (0, _onFinished2.default)(res, onerror);
+        _this2.callHook('running', req, res)
+        // If not finished, return 404
+        .then(function () {
+          return !res.finished && (res.statusCode = 404) && res.end();
+        }).catch(onerror);
       });
 
       return yield server.listen(..._arguments);
@@ -115,8 +123,7 @@ class Trek extends _trekEngine2.default {
   usePlugin(...args) {
     for (const Plugin of args) {
       if (Plugin.install && !Plugin.installed) {
-        const plugin = Plugin.install(this);
-        this.plugins.set(Plugin.name, plugin);
+        this.plugins.set(Plugin.name, Plugin.install(this));
       }
     }
   }
