@@ -135,12 +135,16 @@ class Trek extends _trekEngine2.default {
     var _this3 = this;
 
     return _asyncToGenerator(function* () {
-      let handlers = _this3.hooks[hook] || [];
+      (_this3.hooks[hook] || []).concat(_this3.findHandlersByHook(hook)).reduce((() => {
+        var _ref = _asyncToGenerator(function* (app, handle) {
+          yield handle(app, ...args);
+          return app;
+        });
 
-      handlers = handlers.concat(_this3.findHandlersByHook(hook));
-      for (const handle of handlers) {
-        yield handle(_this3, ...args); // eslint-disable-line babel/no-await-in-loop
-      }
+        return function (_x, _x2) {
+          return _ref.apply(this, arguments);
+        };
+      })(), _this3);
     })();
   }
 
