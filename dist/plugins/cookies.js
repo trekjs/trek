@@ -33,7 +33,8 @@ exports.default = {
 
 
 function contextCreated(app, context) {
-  this.request = context.rawReq;
-  this.response = context.rawRes;
-  Reflect.defineProperty(context, 'cookies', { value: this });
+  const cookies = Object.create(this);
+  cookies.request = context.rawReq;
+  cookies.response = context.rawRes;
+  Reflect.defineProperty(context, 'cookies', { value: cookies });
 }
