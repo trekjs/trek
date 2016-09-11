@@ -15,11 +15,17 @@ import Trek from '../../lib/trek'
     logger.info(rawRes)
   })
 
+  app.use(async ({ cookies }, next) => {
+    cookies.set('name', 'trek')
+    await next()
+  })
+
   app.use(ctx => {
     if (ctx.req.path === '/') {
       return ctx.res.send(200, 'Star Trek!')
     }
     // something else return 404
+    ctx.cookies.set('name', null)
     ctx.res.send(404)
   })
 

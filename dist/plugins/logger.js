@@ -12,6 +12,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
 
+  // If not a class, it's required.
+  name: 'logger',
+
   install(app) {
     const value = (0, _pino2.default)();
 
