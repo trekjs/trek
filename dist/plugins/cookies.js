@@ -15,26 +15,20 @@ exports.default = {
   // If not a class, it's required.
   name: 'cookies',
 
+  options: {},
+
   install(app) {
-    const options = app.config.get('cookie') || {};
-    const cookies = new _cookies2.default(undefined, undefined, options);
-
-    Reflect.defineProperty(app, 'cookies', { value: cookies });
-
-    // context hook
-    Reflect.defineProperty(cookies, 'context:created', { value: contextCreated });
+    this.options = Object.assign({}, app.config.get('cookie') || {}, this.options);
 
     this.installed = true;
 
-    return cookies;
+    return this;
+  },
+
+  // context hook
+  'context:created'(app, context) {
+    const cookies = new _cookies2.default(context.rawReq, context.rawRes, this.options);
+    Reflect.defineProperty(context, 'cookies', { value: cookies });
   }
 
 };
-
-
-function contextCreated(app, context) {
-  const cookies = Object.create(this);
-  cookies.request = context.rawReq;
-  cookies.response = context.rawRes;
-  Reflect.defineProperty(context, 'cookies', { value: cookies });
-}
