@@ -42,7 +42,7 @@
     "trek-router": "1.1.0"
   },
   "devDependencies": {
-    "async-to-gen": "1.1.0",
+    "async-to-gen": "1.1.1",
     "ava": "0.16.0",
     "babel-cli": "6.14.0",
     "babel-plugin-transform-async-to-generator": "6.8.0",
