@@ -38,7 +38,7 @@
     "on-finished": "2.3.0",
     "pino": "2.10.1",
     "trek-engine": "0.4.0",
-    "trek-middleware": "1.0.1",
+    "trek-middleware": "1.0.2",
     "trek-router": "1.1.0"
   },
   "devDependencies": {
