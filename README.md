@@ -24,7 +24,7 @@
 
 * **Modern**. ES6+, only for Node.js v6
 
-* **Flexible**. Modular Components
+* **Flexible**. Modular and extensible
 
 * **Amiable**. Similar to [Express.js][] and [Koa.js][]
 
