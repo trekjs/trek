@@ -8,15 +8,9 @@ var _path = require('path');
 
 var _http = require('http');
 
-var _onFinished = require('on-finished');
-
-var _onFinished2 = _interopRequireDefault(_onFinished);
-
 var _trekEngine = require('trek-engine');
 
 var _trekEngine2 = _interopRequireDefault(_trekEngine);
-
-var _util = require('trek-engine/lib/util');
 
 var _loader = require('./loader');
 
@@ -32,7 +26,7 @@ var _plugins2 = _interopRequireDefault(_plugins);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 // lifecycle:
 //    created
@@ -92,34 +86,28 @@ class Trek extends _trekEngine2.default {
   }
 
   // rewrite
+  respond(ctx, onError) {
+    return this.callHook('running', ctx, onError).then(() => {
+      if (ctx.res.writable) {
+        ctx.res.status = 404;
+        ctx.res.end();
+      }
+    });
+  }
+
+  // rewrite
   run() {
     var _this2 = this,
         _arguments = arguments;
 
     return _asyncToGenerator(function* () {
-      const DEV = _this2.env.dev;
-      const logger = _this2.logger;
       yield _this2.callHook('beforeRun');
-
-      const server = new _http.Server(function (req, res) {
-        const onerror = function (err) {
-          if (err) {
-            (0, _util.sendError)(res, err, DEV);
-            logger.error(err);
-          }
-        };
-        (0, _onFinished2.default)(res, onerror);
-        _this2.callHook('running', req, res)
-        // If not finished, return 404
-        .then(function () {
-          if (!res.finished) {
-            res.statusCode = 404;
-            res.end();
-          }
-        }).catch(onerror);
+      // return super.run(...arguments)
+      if (!_this2.server) _this2.server = new _http.Server();
+      _this2.server.on('request', function (req, res) {
+        return _this2.handle(req, res);
       });
-
-      return yield server.listen(..._arguments);
+      return _this2.server.listen(..._arguments);
     })();
   }
 

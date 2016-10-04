@@ -1,4 +1,4 @@
-import Trek from '../../lib/trek'
+import Trek from '../../lib'
 
 (async () => {
   const app = new Trek()
@@ -23,10 +23,16 @@ import Trek from '../../lib/trek'
   app.use(ctx => {
     if (ctx.req.path === '/') {
       return ctx.res.send(200, 'Star Trek!')
+    } else if (ctx.req.path === '/error') {
+      throw new Error('Nothing')
     }
     // something else return 404
     ctx.cookies.set('name', null)
     ctx.res.send(404)
+  })
+
+  app.on('error', err => {
+    app.logger.error(err)
   })
 
   await app.run(3000)

@@ -1,4 +1,4 @@
-import { Engine as Trek, Router } from '../..'
+import { Engine as Trek, Router } from '../../lib'
 
 (async () => {
   const app = new Trek()
