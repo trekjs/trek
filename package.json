@@ -28,7 +28,6 @@
     "test:watch": "xo && nyc --reporter=lcov ava -r babel-register --watch"
   },
   "dependencies": {
-    "cookies": "0.6.1",
     "dotenv": "2.0.0",
     "globby": "6.0.0",
     "interop-require": "1.0.0",
@@ -36,7 +35,7 @@
     "lodash.has": "4.5.2",
     "lodash.set": "4.3.2",
     "pino": "2.12.3",
-    "trek-engine": "0.4.4",
+    "trek-engine": "0.4.5",
     "trek-middleware": "1.1.0",
     "trek-router": "1.1.1"
   },
