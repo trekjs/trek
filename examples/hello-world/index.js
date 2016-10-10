@@ -10,6 +10,7 @@ import { Engine as Trek, Router } from '../../lib'
   })
 
   router.get('/startrek', async ({ res }) => {
+    res.type = 'html'
     res.send(200, new Buffer('Hello, Star Trek!'))
   })
 

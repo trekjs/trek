@@ -87,12 +87,7 @@ class Trek extends _trekEngine2.default {
 
   // rewrite
   respond(ctx, onError) {
-    return this.callHook('running', ctx, onError).then(() => {
-      if (ctx.res.writable) {
-        ctx.res.status = 404;
-        ctx.res.end();
-      }
-    });
+    return this.callHook('running', ctx, onError);
   }
 
   // rewrite
@@ -103,11 +98,11 @@ class Trek extends _trekEngine2.default {
     return _asyncToGenerator(function* () {
       yield _this2.callHook('beforeRun');
       // return super.run(...arguments)
-      if (!_this2.server) _this2.server = new _http.Server();
-      _this2.server.on('request', function (req, res) {
+      const server = _this2.server || new _http.Server();
+      server.on('request', function (req, res) {
         return _this2.handle(req, res);
       });
-      return _this2.server.listen(..._arguments);
+      return server.listen(..._arguments);
     })();
   }
 

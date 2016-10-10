@@ -28,7 +28,12 @@ class Middleware extends _trekMiddleware2.default {
 
     return _asyncToGenerator(function* () {
       yield app.callHook('context:created', context);
-      yield _this.compose(context).catch(onError);
+      yield _this.compose(context).then(function () {
+        if (context.res.writable) {
+          context.res.status = 404;
+          context.res.end();
+        }
+      }).catch(onError);
     })();
   }
 

@@ -36,5 +36,4 @@ import Trek from '../../lib'
   })
 
   await app.run(3000)
-})()
-  .catch(err => console.error(err))
+})().catch(console.error)
