@@ -86,7 +86,7 @@ class Trek extends _trekEngine2.default {
   }
 
   // rewrite
-  respond(ctx, onError) {
+  invoke(ctx, onError) {
     return this.callHook('running', ctx, onError);
   }
 
