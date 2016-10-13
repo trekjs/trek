@@ -31,8 +31,8 @@
 
 ## Installation
 
-```sh
-$ npm install trek@next
+```console
+$ npm install trek@next --save
 ```
 
 
@@ -122,14 +122,15 @@ import Trek, { Router } from 'trek'
 
   // start
   await app.run(3000)
-})()
-  .catch(err => console.error(err))
+})().catch(console.error)
 ```
 
 
-## License
+---
 
-  [MIT](LICENSE)
+> [fundon.me](https://fundon.me) &nbsp;&middot;&nbsp;
+> GitHub [@fundon](https://github.com/fundon) &nbsp;&middot;&nbsp;
+> Twitter [@_fundon](https://twitter.com/_fundon)
 
 
 [trek]: https://trekjs.com/
