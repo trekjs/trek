@@ -28,20 +28,21 @@
     "clean": "rm -rf coverage .nyc_output",
     "lint": "xo",
     "prepublish": "npm run build",
-    "test": "xo && nyc --reporter=lcov ava -r babel-register -c 5",
-    "test:watch": "xo && nyc --reporter=lcov ava -r babel-register --watch"
+    "test": "xo && nyc ava",
+    "test:watch": "xo && nyc ava"
   },
   "dependencies": {
     "dotenv": "2.0.0",
-    "globby": "6.0.0",
+    "globby": "6.1.0",
     "interop-require": "1.0.0",
     "lodash.get": "4.4.2",
     "lodash.has": "4.5.2",
     "lodash.set": "4.3.2",
-    "pino": "2.12.3",
+    "pino": "2.15.0",
     "trek-engine": "0.5.0",
     "trek-middleware": "1.1.0",
-    "trek-router": "1.1.1"
+    "trek-router": "1.1.1",
+    "trek-sessions": "0.1.1"
   },
   "devDependencies": {
     "async-to-gen": "1",
@@ -52,7 +53,7 @@
     "babel-plugin-transform-export-extensions": "6",
     "babel-preset-es2016": "6",
     "babel-register": "6",
-    "nyc": "8.3",
+    "nyc": "8.4",
     "parseurl": "1",
     "request": "2",
     "request-promise": "4",
@@ -68,6 +69,10 @@
     "dist",
     "lib"
   ],
+  "ava": {
+    "concurrency": 5,
+    "require": "babel-register"
+  },
   "babel": {
     "plugins": [
       "transform-async-to-generator",
@@ -76,6 +81,12 @@
     ],
     "presets": [
       "es2016"
+    ]
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text"
     ]
   },
   "xo": {
