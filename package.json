@@ -53,7 +53,7 @@
     "babel-plugin-transform-export-extensions": "6",
     "babel-preset-es2016": "6",
     "babel-register": "6",
-    "nyc": "8.4",
+    "nyc": "9",
     "parseurl": "1",
     "request": "2",
     "request-promise": "4",
