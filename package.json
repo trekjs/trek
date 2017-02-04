@@ -38,15 +38,15 @@
     "lodash.get": "4.4.2",
     "lodash.has": "4.5.2",
     "lodash.set": "4.3.2",
-    "pino": "3.1.0",
-    "trek-engine": "0.5.2",
+    "pino": "3.3.2",
+    "trek-engine": "0.5.3",
     "trek-middleware": "1.1.0",
     "trek-router": "1.1.1",
-    "trek-sessions": "0.1.2"
+    "trek-sessions": "0.1.3"
   },
   "devDependencies": {
     "async-to-gen": "1",
-    "ava": "0.17",
+    "ava": "0.18",
     "babel-cli": "6",
     "babel-plugin-transform-async-to-generator": "6",
     "babel-plugin-transform-es2015-modules-commonjs": "6",
