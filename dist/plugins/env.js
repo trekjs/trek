@@ -35,7 +35,7 @@ class Env {
         _dotenv2.default.config({ path: env, silent: true });
       }
 
-      app.paths.set('config/envs', { single: true, glob: `config/envs/${ _this.current }` });
+      app.paths.set('config/envs', { single: true, glob: `config/envs/${_this.current}` });
       env = yield app.paths.get('config/envs', true);
       if (env) {
         _dotenv2.default.config({ path: env, silent: true });

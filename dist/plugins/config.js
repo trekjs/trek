@@ -46,7 +46,7 @@ class Config {
     var _this = this;
 
     return _asyncToGenerator(function* () {
-      app.paths.set('config/env.js', { single: true, glob: `config/${ app.env.current }.js` });
+      app.paths.set('config/env.js', { single: true, glob: `config/${app.env.current}.js` });
 
       const configs = yield Promise.all(['config/defaults.js', 'config/env.js', 'config/local.js'].map(function (path) {
         return app.paths.get(path);
