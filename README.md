@@ -20,7 +20,7 @@
 
 * **Elegant**. Use `async` and `await` for asynchronous programs
 
-* **Fast**. High performance middleware and router
+* **Fast**. High performance [middleware][] and [router][]
 
 * **Modern**. ES6+, only for Node.js v6
 
@@ -136,3 +136,5 @@ import Trek, { Router } from 'trek'
 [trek]: https://trekjs.com/
 [express.js]: http://expressjs.com
 [koa.js]:  http://koajs.com
+[middleware]: https://github.com/trekjs/middleware
+[router]: https://github.com/trekjs/router
