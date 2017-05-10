@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-node="../node_modules/.bin/async-node"
+node=$(which node)
 echo
 MW=$1 $node $2 &
 pid=$!
