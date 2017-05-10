@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 node_js:
-  - "6"
+  - "7"
 
 cache:
   directories:
@@ -10,7 +10,6 @@ before_script:
   - "[ ! -f wrk/bin/wrk ] && rm -rf wrk && git clone https://github.com/wg/wrk.git && make -C wrk && mkdir wrk/bin && mv wrk/wrk wrk/bin || true"
   - export PATH=$PATH:$PWD/wrk/bin/
 script:
-  - npm run build
   - npm run bench
   - npm test
 after_script:

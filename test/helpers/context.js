@@ -13,7 +13,7 @@ const createContext = async (req, res, app = new Trek()) => {
   }
   res.removeHeader = k => delete res._headers[k.toLowerCase()]
 
-  await app.initialize(false)
+  await app.bootUp(false)
 
   return new Context(app, req, res)
 }

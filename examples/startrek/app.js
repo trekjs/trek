@@ -7,7 +7,7 @@ import Trek from '../../lib'
   app.paths.set('app/plugins', { glob: 'app/plugins/index.js', single: true })
   app.paths.set('app/controllers', { glob: 'app/controllers/*.js' })
 
-  await app.initialize()
+  await app.bootUp()
 
   app.use(async ({ logger, rawReq, rawRes }, next) => {
     logger.info(rawReq)
@@ -26,7 +26,7 @@ import Trek from '../../lib'
     } else if (ctx.req.path === '/error') {
       throw new Error('Nothing')
     }
-    // something else return 404
+    // Something else return 404
     ctx.cookies.set('name', null)
     ctx.res.send(404)
   })
@@ -36,4 +36,5 @@ import Trek from '../../lib'
   })
 
   await app.run(3000)
-})().catch(console.error)
+})()
+  .catch(console.error)

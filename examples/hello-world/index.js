@@ -11,7 +11,7 @@ import { Engine as Trek, Router } from '../../lib'
 
   router.get('/startrek', async ({ res }) => {
     res.type = 'html'
-    res.send(200, new Buffer('Hello, Star Trek!'))
+    res.send(200, Buffer.from('Hello, Star Trek!'))
   })
 
   router.post('/', async ({ res }) => {
@@ -33,7 +33,8 @@ import { Engine as Trek, Router } from '../../lib'
     if (route) {
       const [handler] = route
       if (handler !== undefined) {
-        return await handler({ req, res })
+        await handler({ req, res })
+        return
       }
     }
     await next()
@@ -46,4 +47,4 @@ import { Engine as Trek, Router } from '../../lib'
 
   app.run(3000)
 })()
-  .catch(err => console.error(err))
+  .catch(console.error)
