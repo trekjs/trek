@@ -55,7 +55,7 @@
     "xo": "0.18.2"
   },
   "engines": {
-    "node": ">=7.7"
+    "node": ">= 8.0.0"
   },
   "files": [
     "CHANGELOG.md",
@@ -86,6 +86,9 @@
     ]
   },
   "xo": {
-    "extends": "prettier"
+    "extends": "prettier",
+    "rules": {
+      "import/newline-after-import": 0
+    }
   }
 }
