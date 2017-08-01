@@ -1,6 +1,6 @@
 {
   "name": "trek",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Fast Async Web Framework For Modern Node.js",
   "homepage": "https://trekjs.com/",
   "repository": "trekjs/trek",
