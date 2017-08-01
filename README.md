@@ -23,7 +23,7 @@
 
 * **Fast**. High performance [middleware][] and [router][]
 
-* **Modern**. ES6+, only for Node.js v6
+* **Modern**. ES6+, only for Node.js v8+
 
 * **Flexible**. Modular and extensible
 
@@ -33,7 +33,7 @@
 ## Installation
 
 ```console
-$ npm install trek@next --save
+$ npm install trek --save
 ```
 
 
