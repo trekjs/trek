@@ -86,9 +86,9 @@
     ]
   },
   "xo": {
-    "extends": "prettier",
-    "rules": {
-      "import/newline-after-import": 0
-    }
+    "ignores": [
+      "examples/**/*"
+    ],
+    "extends": "prettier"
   }
 }
