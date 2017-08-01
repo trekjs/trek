@@ -26,8 +26,8 @@
     "bench": "cd benchmarks; make all",
     "clean": "rm -rf coverage .nyc_output",
     "lint": "xo",
-    "test": "xo && nyc ava",
-    "test:watch": "xo && nyc ava"
+    "precommit": "lint-staged",
+    "test": "xo && nyc ava"
   },
   "dependencies": {
     "dotenv": "4.0.0",
@@ -36,21 +36,23 @@
     "lodash.get": "4.4.2",
     "lodash.has": "4.5.2",
     "lodash.set": "4.3.2",
-    "pino": "4.5.3",
+    "pino": "4.7.1",
     "trek-engine": "1.0.1",
     "trek-middleware": "1.1.0",
     "trek-router": "1.2.0",
     "trek-sessions": "0.1.6"
   },
   "devDependencies": {
-    "ava": "0.19",
-    "babel-eslint": "7",
-    "eslint-config-trek": "1",
-    "nyc": "10",
+    "ava": "0.21.0",
+    "eslint-config-prettier": "2.3.0",
+    "husky": "0.14.3",
+    "lint-staged": "4.0.2",
+    "nyc": "11.1.0",
     "parseurl": "1",
-    "request": "2",
-    "request-promise": "4",
-    "xo": "0.18"
+    "prettier": "1.5.3",
+    "request": "2.81.0",
+    "request-promise": "4.2.1",
+    "xo": "0.18.2"
   },
   "engines": {
     "node": ">=7.7"
@@ -63,7 +65,18 @@
     "lib"
   ],
   "ava": {
-    "concurrency": 5
+    "concurrency": 5,
+    "failFast": true,
+    "files": [
+      "test/**/*.js"
+    ]
+  },
+  "lint-staged": {
+    "*.js": [
+      "xo",
+      "prettier --single-quote --no-semi --write",
+      "git add"
+    ]
   },
   "nyc": {
     "reporter": [
@@ -73,10 +86,6 @@
     ]
   },
   "xo": {
-    "esnext": true,
-    "semicolon": false,
-    "space": true,
-    "extends": "trek",
-    "parser": "babel-eslint"
+    "extends": "prettier"
   }
 }

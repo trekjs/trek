@@ -1,6 +1,5 @@
 export default class DB {
-
-  static install (app) {
+  static install(app) {
     const db = new DB()
 
     Reflect.defineProperty(app, 'db', { value: db })
@@ -8,12 +7,11 @@ export default class DB {
     return db
   }
 
-  constructor () {
+  constructor() {
     console.log('DB was created.')
   }
 
-  async created () {
+  async created() {
     console.log('Bump while the app was created.')
   }
-
 }

@@ -1,6 +1,6 @@
 import { Engine as Trek, Router } from '../../lib'
 
-(async () => {
+;(async () => {
   const app = new Trek()
 
   const router = new Router()
@@ -46,5 +46,4 @@ import { Engine as Trek, Router } from '../../lib'
   })
 
   app.run(3000)
-})()
-  .catch(console.error)
+})().catch(console.error)
