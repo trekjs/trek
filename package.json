@@ -61,7 +61,6 @@
     "CHANGELOG.md",
     "LICENSE",
     "README.md",
-    "dist",
     "lib"
   ],
   "ava": {
