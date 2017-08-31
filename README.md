@@ -10,7 +10,7 @@
   <a href="https://travis-ci.org/trekjs/trek"><img src="https://img.shields.io/travis/trekjs/trek.svg" alt="Build status"></a>
   <a href="https://codecov.io/gh/trekjs/trek"><img src="https://codecov.io/gh/trekjs/trek/branch/master/graph/badge.svg" alt="Codecov"></a>
   <a href="https://npmjs.org/package/trek"><img src="https://img.shields.io/npm/v/trek.svg" alt="NPM version"></a>
-  <a href="https://github.com/sindresorhus/xo"><img src="https://img.shields.io/badge/code_style-XO-5ed9c7.svg" alt="XO code style"></a>
+  <a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg" alt="Styled with prettier"></a>
   <a href="https://www.npmjs.com/package/trek"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License"></a>
 </p>
 
