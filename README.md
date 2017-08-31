@@ -44,59 +44,29 @@ $ npm install trek --save
 The lightweight app uses with **Engine**. Likes **Koa**.
 
 ```js
-import { Engine as Trek } from 'trek'
+const { Engine: Trek, Router } = require('../../lib')
 
-const app = new Trek()
+async function launch() {
+  const app = new Trek()
 
-app.use(async ({ res }, next) => {
-  const start = new Date()
-  await next()
-  const ms = new Date() - start
-  console.log(`${ms}ms`)
-  res.end('Hello Trek!')
-})
-
-app.run(3000)
-```
-
-### [Star Trek](examples/startrek/app.js)
-
-The richer app, customize and expand your app.
-
-```js
-import Trek, { Router } from 'trek'
-
-(async () => {
-  // router 
   const router = new Router()
 
-  router.get('/', async ({ res }) => {
+  router.add('GET', '/', async ({ res }) => {
     res.send(200, 'Hello, Trek!')
   })
 
-  router.get('/startrek', async ({ res }) => {
-    res.send(200, new Buffer('Hello, Star Trek!'))
+  router.add('GET', '/startrek', async ({ res }) => {
+    res.type = 'html'
+    res.send(200, Buffer.from('Hello, Star Trek!'))
   })
 
-  router.post('/', async ({ res }) => {
+  router.add('POST', '/', async ({ res }) => {
     res.send(200, {
       status: 'ok',
       message: 'success'
     })
   })
 
-  // app
-  const app = new Trek()
-
-  // customize paths of app
-  app.paths.set('app', { single: true })
-  app.paths.set('app/plugins', { glob: 'app/plugins/index.js', single: true })
-  app.paths.set('app/controllers', { glob: 'app/controllers/*.js' })
-
-  // autoload plugins
-  await app.bootUp()
-
-  // middleware
   app.use(async ({ req, res }, next) => {
     const start = new Date()
     await next()
@@ -104,13 +74,13 @@ import Trek, { Router } from 'trek'
     console.log(`${ms}ms`)
   })
 
-  // work with router
   app.use(async ({ req, res }, next) => {
     const route = router.find(req.method, req.path)
     if (route) {
       const [handler] = route
       if (handler !== undefined) {
-        return await handler({ req, res })
+        await handler({ req, res })
+        return
       }
     }
     await next()
@@ -121,9 +91,58 @@ import Trek, { Router } from 'trek'
     res.end()
   })
 
-  // start
+  app.run(3000)
+}
+
+launch().catch(console.error)
+```
+
+### [Star Trek](examples/startrek/app.js)
+
+The richer app, customize and expand your app.
+
+```js
+const Trek = require('../../lib')
+
+async function launch() {
+  const app = new Trek()
+
+  app.paths.set('app', { single: true })
+  app.paths.set('app/plugins', { glob: 'app/plugins/index.js', single: true })
+  app.paths.set('app/controllers', { glob: 'app/controllers/*.js' })
+
+  await app.bootUp()
+
+  app.use(async ({ logger, rawReq, rawRes }, next) => {
+    logger.info(rawReq)
+    await next()
+    logger.info(rawRes)
+  })
+
+  app.use(async ({ cookies }, next) => {
+    cookies.set('name', 'trek')
+    await next()
+  })
+
+  app.use(ctx => {
+    if (ctx.req.path === '/') {
+      return ctx.res.send(200, 'Star Trek!')
+    } else if (ctx.req.path === '/error') {
+      throw new Error('Nothing')
+    }
+    // Something else return 404
+    ctx.cookies.set('name', null)
+    ctx.res.send(404)
+  })
+
+  app.on('error', err => {
+    app.logger.error(err)
+  })
+
   await app.run(3000)
-})().catch(console.error)
+}
+
+launch().catch(console.error)
 ```
 
 

@@ -1,5 +1,6 @@
-import Trek from '../../lib'
-;(async () => {
+const Trek = require('../../lib')
+
+async function launch() {
   const app = new Trek()
 
   app.paths.set('app', { single: true })
@@ -35,4 +36,6 @@ import Trek from '../../lib'
   })
 
   await app.run(3000)
-})().catch(console.error)
+}
+
+launch().catch(console.error)

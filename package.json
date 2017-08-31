@@ -86,7 +86,7 @@
   },
   "xo": {
     "ignores": [
-      "examples/**/*"
+      "examples/**"
     ],
     "extends": "prettier"
   }

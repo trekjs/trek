@@ -1,3 +1,3 @@
-import db from './db'
+const db = require('./db')
 
-export default [db]
+module.exports = db

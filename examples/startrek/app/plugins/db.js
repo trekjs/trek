@@ -1,4 +1,4 @@
-export default class DB {
+module.exports = class DB {
   static install(app) {
     const db = new DB()
 

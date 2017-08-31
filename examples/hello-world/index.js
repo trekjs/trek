@@ -1,19 +1,20 @@
-import { Engine as Trek, Router } from '../../lib'
-;(async () => {
+const { Engine: Trek, Router } = require('../../lib')
+
+async function launch() {
   const app = new Trek()
 
   const router = new Router()
 
-  router.get('/', async ({ res }) => {
+  router.add('GET', '/', async ({ res }) => {
     res.send(200, 'Hello, Trek!')
   })
 
-  router.get('/startrek', async ({ res }) => {
+  router.add('GET', '/startrek', async ({ res }) => {
     res.type = 'html'
     res.send(200, Buffer.from('Hello, Star Trek!'))
   })
 
-  router.post('/', async ({ res }) => {
+  router.add('POST', '/', async ({ res }) => {
     res.send(200, {
       status: 'ok',
       message: 'success'
@@ -45,4 +46,6 @@ import { Engine as Trek, Router } from '../../lib'
   })
 
   app.run(3000)
-})().catch(console.error)
+}
+
+launch().catch(console.error)
