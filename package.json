@@ -32,7 +32,6 @@
   "dependencies": {
     "dotenv": "4.0.0",
     "globby": "6.1.0",
-    "interop-require": "1.0.0",
     "lodash.get": "4.4.2",
     "lodash.has": "4.5.2",
     "lodash.set": "4.3.2",
