@@ -36,14 +36,14 @@
     "lodash.has": "4.5.2",
     "lodash.set": "4.3.2",
     "pino": "4.7.1",
-    "trek-engine": "1.0.3",
+    "trek-engine": "1.0.4",
     "trek-middleware": "1.2.0",
     "trek-router": "1.2.0",
     "trek-sessions": "0.1.6"
   },
   "devDependencies": {
     "ava": "0.22.0",
-    "eslint-config-prettier": "2.3.0",
+    "eslint-config-prettier": "2.4.0",
     "husky": "0.14.3",
     "lint-staged": "4.0.4",
     "nyc": "11.1.0",
