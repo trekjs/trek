@@ -45,7 +45,7 @@ async function launch() {
     res.end()
   })
 
-  app.run(3000)
+  await app.run(3000)
 }
 
 launch().catch(console.error)
