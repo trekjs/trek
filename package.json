@@ -38,15 +38,14 @@
     "pino": "4.7.1",
     "trek-engine": "1.0.4",
     "trek-middleware": "1.2.0",
-    "trek-router": "1.2.0",
-    "trek-sessions": "0.1.6"
+    "trek-router": "1.2.0"
   },
   "devDependencies": {
     "ava": "0.22.0",
     "eslint-config-prettier": "2.4.0",
     "husky": "0.14.3",
-    "lint-staged": "4.0.4",
-    "nyc": "11.1.0",
+    "lint-staged": "4.1.3",
+    "nyc": "11.2.1",
     "parseurl": "1",
     "prettier": "1.6.1",
     "request": "2.81.0",
