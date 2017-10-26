@@ -35,7 +35,7 @@
     "lodash.get": "4.4.2",
     "lodash.has": "4.5.2",
     "lodash.set": "4.3.2",
-    "pino": "4.8.0",
+    "pino": "4.8.1",
     "trek-engine": "1.0.5",
     "trek-middleware": "1.2.0",
     "trek-router": "1.2.0"
